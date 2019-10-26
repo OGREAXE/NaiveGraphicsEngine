@@ -1,0 +1,684 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D4085B622361A14A00ACDC70 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B612361A14A00ACDC70 /* AppDelegate.m */; };
+		D4085B652361A14A00ACDC70 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B642361A14A00ACDC70 /* SceneDelegate.m */; };
+		D4085B682361A14A00ACDC70 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B672361A14A00ACDC70 /* ViewController.m */; };
+		D4085B6B2361A14A00ACDC70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4085B692361A14A00ACDC70 /* Main.storyboard */; };
+		D4085B6D2361A14C00ACDC70 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4085B6C2361A14C00ACDC70 /* Assets.xcassets */; };
+		D4085B702361A14C00ACDC70 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4085B6E2361A14C00ACDC70 /* LaunchScreen.storyboard */; };
+		D4085B732361A14C00ACDC70 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B722361A14C00ACDC70 /* main.m */; };
+		D4085B7D2361A14C00ACDC70 /* My3DEngineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B7C2361A14C00ACDC70 /* My3DEngineTests.m */; };
+		D4085B882361A14C00ACDC70 /* My3DEngineUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B872361A14C00ACDC70 /* My3DEngineUITests.m */; };
+		D4085B9A2361A38200ACDC70 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4085B982361A38200ACDC70 /* OpenGLES.framework */; };
+		D4085B9B2361A38200ACDC70 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4085B992361A38200ACDC70 /* GLKit.framework */; };
+		D4085BF12361A70F00ACDC70 /* MECamera.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF02361A70F00ACDC70 /* MECamera.m */; };
+		D4085BF52361A82200ACDC70 /* MEPolygonLine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF42361A82200ACDC70 /* MEPolygonLine.m */; };
+		D4085BF92361CB6600ACDC70 /* MEScene.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF82361CB6600ACDC70 /* MEScene.m */; };
+		D4085BFC2361CBA600ACDC70 /* MEPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFB2361CBA600ACDC70 /* MEPolygon.m */; };
+		D4085BFF2361CC2300ACDC70 /* MEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFE2361CC2300ACDC70 /* MEObject.m */; };
+		D4085C032361CE4C00ACDC70 /* MELine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C022361CE4C00ACDC70 /* MELine.m */; };
+		D4085C072361D00600ACDC70 /* MERenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C062361D00600ACDC70 /* MERenderView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D4085B792361A14C00ACDC70 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D4085B552361A14A00ACDC70 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D4085B5C2361A14A00ACDC70;
+			remoteInfo = My3DEngine;
+		};
+		D4085B842361A14C00ACDC70 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D4085B552361A14A00ACDC70 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D4085B5C2361A14A00ACDC70;
+			remoteInfo = My3DEngine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D4085B5D2361A14A00ACDC70 /* My3DEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = My3DEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4085B602361A14A00ACDC70 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		D4085B612361A14A00ACDC70 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		D4085B632361A14A00ACDC70 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		D4085B642361A14A00ACDC70 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		D4085B662361A14A00ACDC70 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		D4085B672361A14A00ACDC70 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D4085B6A2361A14A00ACDC70 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D4085B6C2361A14C00ACDC70 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D4085B6F2361A14C00ACDC70 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D4085B712361A14C00ACDC70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4085B722361A14C00ACDC70 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D4085B782361A14C00ACDC70 /* My3DEngineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = My3DEngineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4085B7C2361A14C00ACDC70 /* My3DEngineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = My3DEngineTests.m; sourceTree = "<group>"; };
+		D4085B7E2361A14C00ACDC70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4085B832361A14C00ACDC70 /* My3DEngineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = My3DEngineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4085B872361A14C00ACDC70 /* My3DEngineUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = My3DEngineUITests.m; sourceTree = "<group>"; };
+		D4085B892361A14C00ACDC70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4085B962361A2FE00ACDC70 /* MyVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyVector.h; sourceTree = "<group>"; };
+		D4085B982361A38200ACDC70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		D4085B992361A38200ACDC70 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		D4085BEF2361A70F00ACDC70 /* MECamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MECamera.h; sourceTree = "<group>"; };
+		D4085BF02361A70F00ACDC70 /* MECamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MECamera.m; sourceTree = "<group>"; };
+		D4085BF32361A82200ACDC70 /* MEPolygonLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEPolygonLine.h; sourceTree = "<group>"; };
+		D4085BF42361A82200ACDC70 /* MEPolygonLine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEPolygonLine.m; sourceTree = "<group>"; };
+		D4085BF62361A84100ACDC70 /* MECommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MECommon.h; sourceTree = "<group>"; };
+		D4085BF72361CB6600ACDC70 /* MEScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEScene.h; sourceTree = "<group>"; };
+		D4085BF82361CB6600ACDC70 /* MEScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEScene.m; sourceTree = "<group>"; };
+		D4085BFA2361CBA600ACDC70 /* MEPolygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEPolygon.h; sourceTree = "<group>"; };
+		D4085BFB2361CBA600ACDC70 /* MEPolygon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEPolygon.m; sourceTree = "<group>"; };
+		D4085BFD2361CC2300ACDC70 /* MEObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEObject.h; sourceTree = "<group>"; };
+		D4085BFE2361CC2300ACDC70 /* MEObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEObject.m; sourceTree = "<group>"; };
+		D4085C012361CE4C00ACDC70 /* MELine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MELine.h; sourceTree = "<group>"; };
+		D4085C022361CE4C00ACDC70 /* MELine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MELine.m; sourceTree = "<group>"; };
+		D4085C052361D00500ACDC70 /* MERenderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MERenderView.h; sourceTree = "<group>"; };
+		D4085C062361D00600ACDC70 /* MERenderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MERenderView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D4085B5A2361A14A00ACDC70 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4085B9A2361A38200ACDC70 /* OpenGLES.framework in Frameworks */,
+				D4085B9B2361A38200ACDC70 /* GLKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4085B752361A14C00ACDC70 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4085B802361A14C00ACDC70 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D4085B542361A14A00ACDC70 = {
+			isa = PBXGroup;
+			children = (
+				D4085B5F2361A14A00ACDC70 /* My3DEngine */,
+				D4085B7B2361A14C00ACDC70 /* My3DEngineTests */,
+				D4085B862361A14C00ACDC70 /* My3DEngineUITests */,
+				D4085B5E2361A14A00ACDC70 /* Products */,
+				D4085B972361A38200ACDC70 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D4085B5E2361A14A00ACDC70 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D4085B5D2361A14A00ACDC70 /* My3DEngine.app */,
+				D4085B782361A14C00ACDC70 /* My3DEngineTests.xctest */,
+				D4085B832361A14C00ACDC70 /* My3DEngineUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D4085B5F2361A14A00ACDC70 /* My3DEngine */ = {
+			isa = PBXGroup;
+			children = (
+				D4085C042361CFE400ACDC70 /* my3dview */,
+				D4085B952361A24200ACDC70 /* graphic */,
+				D4085B602361A14A00ACDC70 /* AppDelegate.h */,
+				D4085B612361A14A00ACDC70 /* AppDelegate.m */,
+				D4085B632361A14A00ACDC70 /* SceneDelegate.h */,
+				D4085B642361A14A00ACDC70 /* SceneDelegate.m */,
+				D4085B662361A14A00ACDC70 /* ViewController.h */,
+				D4085B672361A14A00ACDC70 /* ViewController.m */,
+				D4085B692361A14A00ACDC70 /* Main.storyboard */,
+				D4085B6C2361A14C00ACDC70 /* Assets.xcassets */,
+				D4085B6E2361A14C00ACDC70 /* LaunchScreen.storyboard */,
+				D4085B712361A14C00ACDC70 /* Info.plist */,
+				D4085B722361A14C00ACDC70 /* main.m */,
+			);
+			path = My3DEngine;
+			sourceTree = "<group>";
+		};
+		D4085B7B2361A14C00ACDC70 /* My3DEngineTests */ = {
+			isa = PBXGroup;
+			children = (
+				D4085B7C2361A14C00ACDC70 /* My3DEngineTests.m */,
+				D4085B7E2361A14C00ACDC70 /* Info.plist */,
+			);
+			path = My3DEngineTests;
+			sourceTree = "<group>";
+		};
+		D4085B862361A14C00ACDC70 /* My3DEngineUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D4085B872361A14C00ACDC70 /* My3DEngineUITests.m */,
+				D4085B892361A14C00ACDC70 /* Info.plist */,
+			);
+			path = My3DEngineUITests;
+			sourceTree = "<group>";
+		};
+		D4085B952361A24200ACDC70 /* graphic */ = {
+			isa = PBXGroup;
+			children = (
+				D4085C002361CE3B00ACDC70 /* object */,
+				D4085BF22361A80F00ACDC70 /* polygon */,
+				D4085B962361A2FE00ACDC70 /* MyVector.h */,
+				D4085BEF2361A70F00ACDC70 /* MECamera.h */,
+				D4085BF02361A70F00ACDC70 /* MECamera.m */,
+				D4085BF62361A84100ACDC70 /* MECommon.h */,
+				D4085BF72361CB6600ACDC70 /* MEScene.h */,
+				D4085BF82361CB6600ACDC70 /* MEScene.m */,
+			);
+			path = graphic;
+			sourceTree = "<group>";
+		};
+		D4085B972361A38200ACDC70 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D4085B992361A38200ACDC70 /* GLKit.framework */,
+				D4085B982361A38200ACDC70 /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D4085BF22361A80F00ACDC70 /* polygon */ = {
+			isa = PBXGroup;
+			children = (
+				D4085BF32361A82200ACDC70 /* MEPolygonLine.h */,
+				D4085BF42361A82200ACDC70 /* MEPolygonLine.m */,
+				D4085BFA2361CBA600ACDC70 /* MEPolygon.h */,
+				D4085BFB2361CBA600ACDC70 /* MEPolygon.m */,
+			);
+			path = polygon;
+			sourceTree = "<group>";
+		};
+		D4085C002361CE3B00ACDC70 /* object */ = {
+			isa = PBXGroup;
+			children = (
+				D4085BFD2361CC2300ACDC70 /* MEObject.h */,
+				D4085BFE2361CC2300ACDC70 /* MEObject.m */,
+				D4085C012361CE4C00ACDC70 /* MELine.h */,
+				D4085C022361CE4C00ACDC70 /* MELine.m */,
+			);
+			path = object;
+			sourceTree = "<group>";
+		};
+		D4085C042361CFE400ACDC70 /* my3dview */ = {
+			isa = PBXGroup;
+			children = (
+				D4085C052361D00500ACDC70 /* MERenderView.h */,
+				D4085C062361D00600ACDC70 /* MERenderView.m */,
+			);
+			path = my3dview;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D4085B5C2361A14A00ACDC70 /* My3DEngine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4085B8C2361A14C00ACDC70 /* Build configuration list for PBXNativeTarget "My3DEngine" */;
+			buildPhases = (
+				D4085B592361A14A00ACDC70 /* Sources */,
+				D4085B5A2361A14A00ACDC70 /* Frameworks */,
+				D4085B5B2361A14A00ACDC70 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = My3DEngine;
+			productName = My3DEngine;
+			productReference = D4085B5D2361A14A00ACDC70 /* My3DEngine.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D4085B772361A14C00ACDC70 /* My3DEngineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4085B8F2361A14C00ACDC70 /* Build configuration list for PBXNativeTarget "My3DEngineTests" */;
+			buildPhases = (
+				D4085B742361A14C00ACDC70 /* Sources */,
+				D4085B752361A14C00ACDC70 /* Frameworks */,
+				D4085B762361A14C00ACDC70 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D4085B7A2361A14C00ACDC70 /* PBXTargetDependency */,
+			);
+			name = My3DEngineTests;
+			productName = My3DEngineTests;
+			productReference = D4085B782361A14C00ACDC70 /* My3DEngineTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D4085B822361A14C00ACDC70 /* My3DEngineUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4085B922361A14C00ACDC70 /* Build configuration list for PBXNativeTarget "My3DEngineUITests" */;
+			buildPhases = (
+				D4085B7F2361A14C00ACDC70 /* Sources */,
+				D4085B802361A14C00ACDC70 /* Frameworks */,
+				D4085B812361A14C00ACDC70 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D4085B852361A14C00ACDC70 /* PBXTargetDependency */,
+			);
+			name = My3DEngineUITests;
+			productName = My3DEngineUITests;
+			productReference = D4085B832361A14C00ACDC70 /* My3DEngineUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D4085B552361A14A00ACDC70 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1110;
+				ORGANIZATIONNAME = "Liang,Zhiyuan(MTD)";
+				TargetAttributes = {
+					D4085B5C2361A14A00ACDC70 = {
+						CreatedOnToolsVersion = 11.1;
+					};
+					D4085B772361A14C00ACDC70 = {
+						CreatedOnToolsVersion = 11.1;
+						TestTargetID = D4085B5C2361A14A00ACDC70;
+					};
+					D4085B822361A14C00ACDC70 = {
+						CreatedOnToolsVersion = 11.1;
+						TestTargetID = D4085B5C2361A14A00ACDC70;
+					};
+				};
+			};
+			buildConfigurationList = D4085B582361A14A00ACDC70 /* Build configuration list for PBXProject "My3DEngine" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D4085B542361A14A00ACDC70;
+			productRefGroup = D4085B5E2361A14A00ACDC70 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D4085B5C2361A14A00ACDC70 /* My3DEngine */,
+				D4085B772361A14C00ACDC70 /* My3DEngineTests */,
+				D4085B822361A14C00ACDC70 /* My3DEngineUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D4085B5B2361A14A00ACDC70 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4085B702361A14C00ACDC70 /* LaunchScreen.storyboard in Resources */,
+				D4085B6D2361A14C00ACDC70 /* Assets.xcassets in Resources */,
+				D4085B6B2361A14A00ACDC70 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4085B762361A14C00ACDC70 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4085B812361A14C00ACDC70 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D4085B592361A14A00ACDC70 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4085BFF2361CC2300ACDC70 /* MEObject.m in Sources */,
+				D4085BFC2361CBA600ACDC70 /* MEPolygon.m in Sources */,
+				D4085BF12361A70F00ACDC70 /* MECamera.m in Sources */,
+				D4085C072361D00600ACDC70 /* MERenderView.m in Sources */,
+				D4085B682361A14A00ACDC70 /* ViewController.m in Sources */,
+				D4085B622361A14A00ACDC70 /* AppDelegate.m in Sources */,
+				D4085B732361A14C00ACDC70 /* main.m in Sources */,
+				D4085BF92361CB6600ACDC70 /* MEScene.m in Sources */,
+				D4085BF52361A82200ACDC70 /* MEPolygonLine.m in Sources */,
+				D4085B652361A14A00ACDC70 /* SceneDelegate.m in Sources */,
+				D4085C032361CE4C00ACDC70 /* MELine.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4085B742361A14C00ACDC70 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4085B7D2361A14C00ACDC70 /* My3DEngineTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4085B7F2361A14C00ACDC70 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4085B882361A14C00ACDC70 /* My3DEngineUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D4085B7A2361A14C00ACDC70 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D4085B5C2361A14A00ACDC70 /* My3DEngine */;
+			targetProxy = D4085B792361A14C00ACDC70 /* PBXContainerItemProxy */;
+		};
+		D4085B852361A14C00ACDC70 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D4085B5C2361A14A00ACDC70 /* My3DEngine */;
+			targetProxy = D4085B842361A14C00ACDC70 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D4085B692361A14A00ACDC70 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D4085B6A2361A14A00ACDC70 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D4085B6E2361A14C00ACDC70 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D4085B6F2361A14C00ACDC70 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D4085B8A2361A14C00ACDC70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		D4085B8B2361A14C00ACDC70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D4085B8D2361A14C00ACDC70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KLS72L88F6;
+				INFOPLIST_FILE = My3DEngine/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-1.My3DEngine";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = 20190109;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D4085B8E2361A14C00ACDC70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KLS72L88F6;
+				INFOPLIST_FILE = My3DEngine/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-1.My3DEngine";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = 20190109;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D4085B902361A14C00ACDC70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = My3DEngineTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-1.My3DEngineTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My3DEngine.app/My3DEngine";
+			};
+			name = Debug;
+		};
+		D4085B912361A14C00ACDC70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = My3DEngineTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-1.My3DEngineTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My3DEngine.app/My3DEngine";
+			};
+			name = Release;
+		};
+		D4085B932361A14C00ACDC70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = My3DEngineUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-1.My3DEngineUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = My3DEngine;
+			};
+			name = Debug;
+		};
+		D4085B942361A14C00ACDC70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = My3DEngineUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-1.My3DEngineUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = My3DEngine;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D4085B582361A14A00ACDC70 /* Build configuration list for PBXProject "My3DEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4085B8A2361A14C00ACDC70 /* Debug */,
+				D4085B8B2361A14C00ACDC70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4085B8C2361A14C00ACDC70 /* Build configuration list for PBXNativeTarget "My3DEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4085B8D2361A14C00ACDC70 /* Debug */,
+				D4085B8E2361A14C00ACDC70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4085B8F2361A14C00ACDC70 /* Build configuration list for PBXNativeTarget "My3DEngineTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4085B902361A14C00ACDC70 /* Debug */,
+				D4085B912361A14C00ACDC70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4085B922361A14C00ACDC70 /* Build configuration list for PBXNativeTarget "My3DEngineUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4085B932361A14C00ACDC70 /* Debug */,
+				D4085B942361A14C00ACDC70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D4085B552361A14A00ACDC70 /* Project object */;
+}
