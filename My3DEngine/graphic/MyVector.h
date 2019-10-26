@@ -11,7 +11,7 @@
 
 #import <GLKit/GLKit.h>
 
-typedef GLKVector3 MEVector3;
-typedef GLKVector4 MEVector4;
+typedef GLKVector3 NEVector3;
+typedef GLKVector4 NEVector4;
 
 #endif /* MyVector_h */

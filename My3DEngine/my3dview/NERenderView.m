@@ -6,28 +6,28 @@
 //  Copyright © 2019 Liang,Zhiyuan(MTD). All rights reserved.
 //
 
-#import "MERenderView.h"
-#import "MECommon.h"
-#import "MEPolygonLine.h"
+#import "NERenderView.h"
+#import "NECommon.h"
+#import "NEPolygonLine.h"
 #import <math.h>
 
-MEVector3 getPositionInCameraCoordinateSystem(MEVector3 worldPosition, MEVector3 cameraPositionInWorld, MEVector3 cameraLookAt, MEVector3 cameraYAxisInWorld){
-    
+NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld){
+    return worldPosition;
 }
 
-@interface MERenderView()
+@interface NERenderView()
 
 @property (nonatomic) NSArray<NSValue*>* vectices;
 
-@property (nonatomic) MECamera* camera;
+@property (nonatomic) NECamera* camera;
 
-@property (nonatomic) MEPolygonLine* xAxis;
-@property (nonatomic) MEPolygonLine* yAxis;
-@property (nonatomic) MEPolygonLine* zAxis;
+@property (nonatomic) NEPolygonLine* xAxis;
+@property (nonatomic) NEPolygonLine* yAxis;
+@property (nonatomic) NEPolygonLine* zAxis;
 
 @end
 
-@implementation MERenderView
+@implementation NERenderView
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -38,20 +38,20 @@ MEVector3 getPositionInCameraCoordinateSystem(MEVector3 worldPosition, MEVector3
 }
 
 - (void)doInit{
-    MECamera * camera = [[MECamera alloc] init];
+    NECamera * camera = [[NECamera alloc] init];
     camera.position = GLKVector3Make(1, 1, 1);
     [camera lookAt:GLKVector3Make(0, 0, 0)];
     self.camera = camera;
     
-    MEPolygonLine * xAxis = [[MEPolygonLine alloc] init];
+    NEPolygonLine * xAxis = [[NEPolygonLine alloc] init];
     xAxis.startPosition = GLKVector3Make(0, 0, 0);
     xAxis.endPosition = GLKVector3Make(1, 0, 0);
    
-    MEPolygonLine * yAxis = [[MEPolygonLine alloc] init];
+    NEPolygonLine * yAxis = [[NEPolygonLine alloc] init];
     yAxis.startPosition = GLKVector3Make(0, 0, 0);
     yAxis.endPosition = GLKVector3Make(0, 1, 0);
    
-    MEPolygonLine * zAxis = [[MEPolygonLine alloc] init];
+    NEPolygonLine * zAxis = [[NEPolygonLine alloc] init];
     zAxis.startPosition = GLKVector3Make(0, 0, 0);
     zAxis.endPosition = GLKVector3Make(0, 0, 1);
     

@@ -1,13 +1,17 @@
 //
-//  MEPolygon.m
+//  NEPolygon.h
 //  My3DEngine
 //
 //  Created by Liang,Zhiyuan(MTD) on 2019/10/24.
 //  Copyright © 2019 Liang,Zhiyuan(MTD). All rights reserved.
 //
 
-#import "MEPolygon.h"
+#import <Foundation/Foundation.h>
 
-@implementation MEPolygon
+NS_ASSUME_NONNULL_BEGIN
+
+@interface NEPolygon : NSObject
 
 @end
+
+NS_ASSUME_NONNULL_END

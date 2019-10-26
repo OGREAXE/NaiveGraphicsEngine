@@ -1,5 +1,5 @@
 //
-//  MEPolygonLine.h
+//  NEObject.h
 //  My3DEngine
 //
 //  Created by Liang,Zhiyuan(MTD) on 2019/10/24.
@@ -7,16 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MECommon.h"
-#import "MEPolygon.h"
+#import "NEPolygon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MEPolygonLine : MEPolygon
+@interface NEObject : NSObject
 
-@property (nonatomic) MEVector3 startPosition;
-
-@property (nonatomic) MEVector3 endPosition;
+@property (nonatomic) NEPolygon * polygon;
 
 @end
 

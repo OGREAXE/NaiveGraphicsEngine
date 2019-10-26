@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import "MEScene.h"
+#import "NEScene.h"
 
 @interface ViewController ()
 
-@property (nonatomic) MEScene * scene;
+@property (nonatomic) NEScene * scene;
 
 @end
 
@@ -23,7 +23,7 @@
 }
 
 - (void)createScene{
-    _scene = [[MEScene alloc] init];
+    _scene = [[NEScene alloc] init];
 }
 
 @end

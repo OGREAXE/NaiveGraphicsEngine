@@ -1,16 +1,16 @@
 //
-//  MECommon.h
+//  NECommon.h
 //  My3DEngine
 //
 //  Created by Liang,Zhiyuan(MTD) on 2019/10/24.
 //  Copyright © 2019 Liang,Zhiyuan(MTD). All rights reserved.
 //
 
-#ifndef MECommon_h
-#define MECommon_h
+#ifndef NECommon_h
+#define NECommon_h
 
 #import "MyVector.h"
-#import "MEObject.h"
-#import "MECamera.h"
+#import "NEObject.h"
+#import "NECamera.h"
 
 #endif /* MECommon_h */

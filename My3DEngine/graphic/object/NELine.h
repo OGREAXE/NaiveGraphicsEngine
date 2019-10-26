@@ -1,19 +1,19 @@
 //
-//  MELine.h
+//  NELine.h
 //  My3DEngine
 //
 //  Created by Liang,Zhiyuan(MTD) on 2019/10/24.
 //  Copyright © 2019 Liang,Zhiyuan(MTD). All rights reserved.
 //
 
-#import "MEObject.h"
-#import "MECommon.h"
+#import "NEObject.h"
+#import "NECommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MELine : MEObject
+@interface NELine : NEObject
 
-- (id)initWithStart:(MEVector3)start end:(MEVector3)end;
+- (id)initWithStart:(NEVector3)start end:(NEVector3)end;
 
 @end
 

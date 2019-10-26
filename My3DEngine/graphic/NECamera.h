@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MECommon.h"
+#import "NECommon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MECamera : NSObject
+@interface NECamera : NSObject
 
-@property (nonatomic) MEVector3 position;
+@property (nonatomic) NEVector3 position;
 
-@property (nonatomic) MEVector3 lookAtPosition; //the direction the Z axis pointing in world coordinate system
+@property (nonatomic) NEVector3 lookAtPosition; //the direction the Z axis pointing in world coordinate system
 
-- (void)lookAt:(MEVector3)position;
+- (void)lookAt:(NEVector3)position;
 
 @end
 

@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MECommon.h"
-#import "MECamera.h"
-#import "MEPolygon.h"
+#import "NECommon.h"
+#import "NECamera.h"
+#import "NEPolygon.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MEScene : NSObject
+@interface NEScene : NSObject
 
-@property (nonatomic) MECamera * camera;
+@property (nonatomic) NECamera * camera;
 
-@property (nonatomic) NSArray<MEObject* >* objects;
+@property (nonatomic) NSArray<NEObject* >* objects;
 
 @end
 

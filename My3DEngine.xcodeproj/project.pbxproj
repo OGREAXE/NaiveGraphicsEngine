@@ -18,13 +18,13 @@
 		D4085B882361A14C00ACDC70 /* My3DEngineUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B872361A14C00ACDC70 /* My3DEngineUITests.m */; };
 		D4085B9A2361A38200ACDC70 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4085B982361A38200ACDC70 /* OpenGLES.framework */; };
 		D4085B9B2361A38200ACDC70 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4085B992361A38200ACDC70 /* GLKit.framework */; };
-		D4085BF12361A70F00ACDC70 /* MECamera.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF02361A70F00ACDC70 /* MECamera.m */; };
-		D4085BF52361A82200ACDC70 /* MEPolygonLine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF42361A82200ACDC70 /* MEPolygonLine.m */; };
-		D4085BF92361CB6600ACDC70 /* MEScene.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF82361CB6600ACDC70 /* MEScene.m */; };
-		D4085BFC2361CBA600ACDC70 /* MEPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFB2361CBA600ACDC70 /* MEPolygon.m */; };
-		D4085BFF2361CC2300ACDC70 /* MEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFE2361CC2300ACDC70 /* MEObject.m */; };
-		D4085C032361CE4C00ACDC70 /* MELine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C022361CE4C00ACDC70 /* MELine.m */; };
-		D4085C072361D00600ACDC70 /* MERenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C062361D00600ACDC70 /* MERenderView.m */; };
+		D4085BF12361A70F00ACDC70 /* NECamera.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF02361A70F00ACDC70 /* NECamera.m */; };
+		D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF42361A82200ACDC70 /* NEPolygonLine.m */; };
+		D4085BF92361CB6600ACDC70 /* NEScene.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF82361CB6600ACDC70 /* NEScene.m */; };
+		D4085BFC2361CBA600ACDC70 /* NEPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFB2361CBA600ACDC70 /* NEPolygon.m */; };
+		D4085BFF2361CC2300ACDC70 /* NEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFE2361CC2300ACDC70 /* NEObject.m */; };
+		D4085C032361CE4C00ACDC70 /* NELine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C022361CE4C00ACDC70 /* NELine.m */; };
+		D4085C072361D00600ACDC70 /* NERenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C062361D00600ACDC70 /* NERenderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,21 +66,21 @@
 		D4085B962361A2FE00ACDC70 /* MyVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyVector.h; sourceTree = "<group>"; };
 		D4085B982361A38200ACDC70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D4085B992361A38200ACDC70 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		D4085BEF2361A70F00ACDC70 /* MECamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MECamera.h; sourceTree = "<group>"; };
-		D4085BF02361A70F00ACDC70 /* MECamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MECamera.m; sourceTree = "<group>"; };
-		D4085BF32361A82200ACDC70 /* MEPolygonLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEPolygonLine.h; sourceTree = "<group>"; };
-		D4085BF42361A82200ACDC70 /* MEPolygonLine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEPolygonLine.m; sourceTree = "<group>"; };
-		D4085BF62361A84100ACDC70 /* MECommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MECommon.h; sourceTree = "<group>"; };
-		D4085BF72361CB6600ACDC70 /* MEScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEScene.h; sourceTree = "<group>"; };
-		D4085BF82361CB6600ACDC70 /* MEScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEScene.m; sourceTree = "<group>"; };
-		D4085BFA2361CBA600ACDC70 /* MEPolygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEPolygon.h; sourceTree = "<group>"; };
-		D4085BFB2361CBA600ACDC70 /* MEPolygon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEPolygon.m; sourceTree = "<group>"; };
-		D4085BFD2361CC2300ACDC70 /* MEObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MEObject.h; sourceTree = "<group>"; };
-		D4085BFE2361CC2300ACDC70 /* MEObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEObject.m; sourceTree = "<group>"; };
-		D4085C012361CE4C00ACDC70 /* MELine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MELine.h; sourceTree = "<group>"; };
-		D4085C022361CE4C00ACDC70 /* MELine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MELine.m; sourceTree = "<group>"; };
-		D4085C052361D00500ACDC70 /* MERenderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MERenderView.h; sourceTree = "<group>"; };
-		D4085C062361D00600ACDC70 /* MERenderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MERenderView.m; sourceTree = "<group>"; };
+		D4085BEF2361A70F00ACDC70 /* NECamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NECamera.h; sourceTree = "<group>"; };
+		D4085BF02361A70F00ACDC70 /* NECamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NECamera.m; sourceTree = "<group>"; };
+		D4085BF32361A82200ACDC70 /* NEPolygonLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEPolygonLine.h; sourceTree = "<group>"; };
+		D4085BF42361A82200ACDC70 /* NEPolygonLine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEPolygonLine.m; sourceTree = "<group>"; };
+		D4085BF62361A84100ACDC70 /* NECommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NECommon.h; sourceTree = "<group>"; };
+		D4085BF72361CB6600ACDC70 /* NEScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEScene.h; sourceTree = "<group>"; };
+		D4085BF82361CB6600ACDC70 /* NEScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEScene.m; sourceTree = "<group>"; };
+		D4085BFA2361CBA600ACDC70 /* NEPolygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEPolygon.h; sourceTree = "<group>"; };
+		D4085BFB2361CBA600ACDC70 /* NEPolygon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEPolygon.m; sourceTree = "<group>"; };
+		D4085BFD2361CC2300ACDC70 /* NEObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEObject.h; sourceTree = "<group>"; };
+		D4085BFE2361CC2300ACDC70 /* NEObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEObject.m; sourceTree = "<group>"; };
+		D4085C012361CE4C00ACDC70 /* NELine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NELine.h; sourceTree = "<group>"; };
+		D4085C022361CE4C00ACDC70 /* NELine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NELine.m; sourceTree = "<group>"; };
+		D4085C052361D00500ACDC70 /* NERenderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NERenderView.h; sourceTree = "<group>"; };
+		D4085C062361D00600ACDC70 /* NERenderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NERenderView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,11 +175,11 @@
 				D4085C002361CE3B00ACDC70 /* object */,
 				D4085BF22361A80F00ACDC70 /* polygon */,
 				D4085B962361A2FE00ACDC70 /* MyVector.h */,
-				D4085BEF2361A70F00ACDC70 /* MECamera.h */,
-				D4085BF02361A70F00ACDC70 /* MECamera.m */,
-				D4085BF62361A84100ACDC70 /* MECommon.h */,
-				D4085BF72361CB6600ACDC70 /* MEScene.h */,
-				D4085BF82361CB6600ACDC70 /* MEScene.m */,
+				D4085BEF2361A70F00ACDC70 /* NECamera.h */,
+				D4085BF02361A70F00ACDC70 /* NECamera.m */,
+				D4085BF62361A84100ACDC70 /* NECommon.h */,
+				D4085BF72361CB6600ACDC70 /* NEScene.h */,
+				D4085BF82361CB6600ACDC70 /* NEScene.m */,
 			);
 			path = graphic;
 			sourceTree = "<group>";
@@ -196,10 +196,10 @@
 		D4085BF22361A80F00ACDC70 /* polygon */ = {
 			isa = PBXGroup;
 			children = (
-				D4085BF32361A82200ACDC70 /* MEPolygonLine.h */,
-				D4085BF42361A82200ACDC70 /* MEPolygonLine.m */,
-				D4085BFA2361CBA600ACDC70 /* MEPolygon.h */,
-				D4085BFB2361CBA600ACDC70 /* MEPolygon.m */,
+				D4085BF32361A82200ACDC70 /* NEPolygonLine.h */,
+				D4085BF42361A82200ACDC70 /* NEPolygonLine.m */,
+				D4085BFA2361CBA600ACDC70 /* NEPolygon.h */,
+				D4085BFB2361CBA600ACDC70 /* NEPolygon.m */,
 			);
 			path = polygon;
 			sourceTree = "<group>";
@@ -207,10 +207,10 @@
 		D4085C002361CE3B00ACDC70 /* object */ = {
 			isa = PBXGroup;
 			children = (
-				D4085BFD2361CC2300ACDC70 /* MEObject.h */,
-				D4085BFE2361CC2300ACDC70 /* MEObject.m */,
-				D4085C012361CE4C00ACDC70 /* MELine.h */,
-				D4085C022361CE4C00ACDC70 /* MELine.m */,
+				D4085BFD2361CC2300ACDC70 /* NEObject.h */,
+				D4085BFE2361CC2300ACDC70 /* NEObject.m */,
+				D4085C012361CE4C00ACDC70 /* NELine.h */,
+				D4085C022361CE4C00ACDC70 /* NELine.m */,
 			);
 			path = object;
 			sourceTree = "<group>";
@@ -218,8 +218,8 @@
 		D4085C042361CFE400ACDC70 /* my3dview */ = {
 			isa = PBXGroup;
 			children = (
-				D4085C052361D00500ACDC70 /* MERenderView.h */,
-				D4085C062361D00600ACDC70 /* MERenderView.m */,
+				D4085C052361D00500ACDC70 /* NERenderView.h */,
+				D4085C062361D00600ACDC70 /* NERenderView.m */,
 			);
 			path = my3dview;
 			sourceTree = "<group>";
@@ -354,17 +354,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4085BFF2361CC2300ACDC70 /* MEObject.m in Sources */,
-				D4085BFC2361CBA600ACDC70 /* MEPolygon.m in Sources */,
-				D4085BF12361A70F00ACDC70 /* MECamera.m in Sources */,
-				D4085C072361D00600ACDC70 /* MERenderView.m in Sources */,
+				D4085BFF2361CC2300ACDC70 /* NEObject.m in Sources */,
+				D4085BFC2361CBA600ACDC70 /* NEPolygon.m in Sources */,
+				D4085BF12361A70F00ACDC70 /* NECamera.m in Sources */,
+				D4085C072361D00600ACDC70 /* NERenderView.m in Sources */,
 				D4085B682361A14A00ACDC70 /* ViewController.m in Sources */,
 				D4085B622361A14A00ACDC70 /* AppDelegate.m in Sources */,
 				D4085B732361A14C00ACDC70 /* main.m in Sources */,
-				D4085BF92361CB6600ACDC70 /* MEScene.m in Sources */,
-				D4085BF52361A82200ACDC70 /* MEPolygonLine.m in Sources */,
+				D4085BF92361CB6600ACDC70 /* NEScene.m in Sources */,
+				D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */,
 				D4085B652361A14A00ACDC70 /* SceneDelegate.m in Sources */,
-				D4085C032361CE4C00ACDC70 /* MELine.m in Sources */,
+				D4085C032361CE4C00ACDC70 /* NELine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

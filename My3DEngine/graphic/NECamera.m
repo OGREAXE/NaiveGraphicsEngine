@@ -6,8 +6,8 @@
 //  Copyright © 2019 Liang,Zhiyuan(MTD). All rights reserved.
 //
 
-#import "MECamera.h"
+#import "NECamera.h"
 
-@implementation MECamera
+@implementation NECamera
 
 @end
