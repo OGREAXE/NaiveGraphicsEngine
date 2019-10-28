@@ -9,7 +9,7 @@
 #ifndef NECommon_h
 #define NECommon_h
 
-#import "MyVector.h"
+#import "NEMath.h"
 #import "NEObject.h"
 #import "NECamera.h"
 

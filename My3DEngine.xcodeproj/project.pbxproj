@@ -25,6 +25,7 @@
 		D4085BFF2361CC2300ACDC70 /* NEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFE2361CC2300ACDC70 /* NEObject.m */; };
 		D4085C032361CE4C00ACDC70 /* NELine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C022361CE4C00ACDC70 /* NELine.m */; };
 		D4085C072361D00600ACDC70 /* NERenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085C062361D00600ACDC70 /* NERenderView.m */; };
+		F329F7762366DC2B000CA7F7 /* NEMath.mm in Sources */ = {isa = PBXBuildFile; fileRef = F329F7752366DC2A000CA7F7 /* NEMath.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +64,7 @@
 		D4085B832361A14C00ACDC70 /* My3DEngineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = My3DEngineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4085B872361A14C00ACDC70 /* My3DEngineUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = My3DEngineUITests.m; sourceTree = "<group>"; };
 		D4085B892361A14C00ACDC70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D4085B962361A2FE00ACDC70 /* MyVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyVector.h; sourceTree = "<group>"; };
+		D4085B962361A2FE00ACDC70 /* NEMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMath.h; sourceTree = "<group>"; };
 		D4085B982361A38200ACDC70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D4085B992361A38200ACDC70 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		D4085BEF2361A70F00ACDC70 /* NECamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NECamera.h; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 		D4085C022361CE4C00ACDC70 /* NELine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NELine.m; sourceTree = "<group>"; };
 		D4085C052361D00500ACDC70 /* NERenderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NERenderView.h; sourceTree = "<group>"; };
 		D4085C062361D00600ACDC70 /* NERenderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NERenderView.m; sourceTree = "<group>"; };
+		F329F7752366DC2A000CA7F7 /* NEMath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NEMath.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +176,8 @@
 			children = (
 				D4085C002361CE3B00ACDC70 /* object */,
 				D4085BF22361A80F00ACDC70 /* polygon */,
-				D4085B962361A2FE00ACDC70 /* MyVector.h */,
+				D4085B962361A2FE00ACDC70 /* NEMath.h */,
+				F329F7752366DC2A000CA7F7 /* NEMath.mm */,
 				D4085BEF2361A70F00ACDC70 /* NECamera.h */,
 				D4085BF02361A70F00ACDC70 /* NECamera.m */,
 				D4085BF62361A84100ACDC70 /* NECommon.h */,
@@ -360,6 +363,7 @@
 				D4085C072361D00600ACDC70 /* NERenderView.m in Sources */,
 				D4085B682361A14A00ACDC70 /* ViewController.m in Sources */,
 				D4085B622361A14A00ACDC70 /* AppDelegate.m in Sources */,
+				F329F7762366DC2B000CA7F7 /* NEMath.mm in Sources */,
 				D4085B732361A14C00ACDC70 /* main.m in Sources */,
 				D4085BF92361CB6600ACDC70 /* NEScene.m in Sources */,
 				D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */,

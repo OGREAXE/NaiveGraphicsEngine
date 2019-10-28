@@ -9,11 +9,6 @@
 #import "NERenderView.h"
 #import "NECommon.h"
 #import "NEPolygonLine.h"
-#import <math.h>
-
-NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld){
-    return worldPosition;
-}
 
 @interface NERenderView()
 
