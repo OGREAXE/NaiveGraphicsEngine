@@ -56,6 +56,15 @@ NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix){
     return GLKMatrix3MultiplyVector3(rotationMatrix, aPoint);
 }
 
+NEVector3 crossVectors(NEVector3 vec0, NEVector3 vec1){
+    NEVector3 cv = {
+        vec0.y * vec1.z - vec0.z * vec1.y,
+        vec0.z * vec1.x - vec0.x * vec1.z,
+        vec0.x * vec1.y - vec0.y * vec1.x
+    };
+    return cv;
+}
+
 NEVector3 reverseVector(NEVector3 vec){
     return GLKVector3Make(- vec.x, - vec.y, - vec.z);
 }
@@ -77,7 +86,7 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
     
     //now rotate z axis
-    NEVector3 rotAxis = GLKVector3Make(1,  coordZAxis.x?(- coordZAxis.y / coordZAxis.x):0, 0);
+    NEVector3 rotAxis = crossVectors(coordZAxis, GLKVector3Make(0,0,1));
     
     float rotZAngle = getAngleBetweenVectors(GLKVector3Make(0, 0, 1), coordZAxis);
     

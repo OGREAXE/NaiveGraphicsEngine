@@ -13,11 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NECamera : NSObject
 
-@property (nonatomic) NEVector3 position;
+@property (nonatomic) NEVector3 position; //position in world coordinate
 
-@property (nonatomic) NEVector3 lookAtPosition; //the direction the Z axis pointing in world coordinate system
+@property (nonatomic) NEVector3 lookAtDirection; //actually is the Z axis vector, world coordinate
 
-- (void)lookAt:(NEVector3)position;
+@property (nonatomic) NEVector3 yAxis; //y axis vector, world coordinate
+
+- (void)lookAt:(NEVector3)direction;
 
 @end
 
