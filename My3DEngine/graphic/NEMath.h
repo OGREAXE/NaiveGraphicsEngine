@@ -11,6 +11,8 @@
 
 #import <GLKit/GLKit.h>
 
+#define EXPORT_PREFIX extern "C"
+
 ///vector definitions
 typedef GLKVector3 NEVector3;
 typedef GLKVector4 NEVector4;
@@ -37,6 +39,6 @@ NEVector3 translationByVector(NEVector3 aPoint, NEVector3 translationVector);
 
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
-NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
+ NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
 
 #endif /* NEMath_h */

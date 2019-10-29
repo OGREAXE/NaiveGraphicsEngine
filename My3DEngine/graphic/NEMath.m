@@ -11,6 +11,8 @@
 #include "NEMath.h"
 
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle){
+   return GLKMatrix3MakeRotation(angle, rotationAxis.x, rotationAxis.y, rotationAxis.z);
+    
     float cos_a = cosf(angle);
     float sin_a = sinf(angle);
     float Ux = rotationAxis.x;
@@ -21,7 +23,7 @@ NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle){
     GLKMatrix3Make(/*row0*/
                    cos_a +  Ux * Ux * (1 - cos_a),
                    Ux * Uy * (1 - cos_a) - Uz * sin_a,
-                   Ux * Uz * (1 - cos_a) + Uz * sin_a,
+                   Ux * Uz * (1 - cos_a) + Uy * sin_a,
                    /*row1*/
                    Uy * Ux * (1 - cos_a) + Uz * sin_a,
                    cos_a +  Uy * Uy * (1 - cos_a),
@@ -70,12 +72,18 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     // the axi z-axis will rotate around is (1, b, c)
     // the angle between the 2 z-axis is
     // cos(angle) = ab/|a||b|
-    NEVector3 rotAxis = GLKVector3Make(1,  - coordZAxis.y / coordZAxis.x, 0);
+    
+    //firstly we translate the target origin to world
+    NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
+    
+    //now rotate z axis
+    NEVector3 rotAxis = GLKVector3Make(1,  coordZAxis.x?(- coordZAxis.y / coordZAxis.x):0, 0);
     
     float rotZAngle = getAngleBetweenVectors(GLKVector3Make(0, 0, 1), coordZAxis);
     
     NEMatrix3 rotZMat = makeRotationMatrix(rotAxis, rotZAngle);
-    NEVector3 newPosition = rotationByMatrix(targetOldPosition, rotZMat);
+    
+    newPosition = rotationByMatrix(newPosition, rotZMat);
     
     //now that we have rotated z axis, time to rotate y axis
     NEVector3 newCoordYAxis = rotationByMatrix(coordYAxis, rotZMat);
