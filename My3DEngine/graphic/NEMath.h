@@ -14,12 +14,19 @@
 #define EXPORT_PREFIX extern "C"
 
 ///vector definitions
+typedef GLKVector2 NEVector2;
 typedef GLKVector3 NEVector3;
 typedef GLKVector4 NEVector4;
 
 ///matrix definitions
 typedef GLKMatrix3 NEMatrix3;
 typedef GLKMatrix4 NEMatrix4;
+
+typedef struct tagNEFrustum{
+    float near;
+    float far;
+    float l; //1/2 height of the near window
+} NEFrustum;
 
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 
@@ -39,6 +46,8 @@ NEVector3 translationByVector(NEVector3 aPoint, NEVector3 translationVector);
 
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
- NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
+NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
+
+NEVector2 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum);
 
 #endif /* NEMath_h */
