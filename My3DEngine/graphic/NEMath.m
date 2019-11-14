@@ -107,3 +107,35 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
 NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld){
     return convertPositionFromOriginalCoordSystem(worldPosition, cameraPositionInWorld, cameraLookAt, cameraYAxisInWorld);
 }
+
+NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
+    NEMatrix4 rotm =
+    GLKMatrix4Make(/*row0*/
+                   frustum.near/frustum.r,
+                   0,
+                   0,
+                   0,
+                   /*row1*/
+                   0,
+                   frustum.near/frustum.t,
+                   0,
+                   0,
+                   /*row2*/
+                   0,
+                   0,
+                   - (frustum.far + frustum.near) / (frustum.far - frustum.near),
+                   - 2 * frustum.far * frustum.near / (frustum.far - frustum.near),
+                   /*row3*/
+                   0,
+                   0,
+                   1,
+                   0);
+    
+    NEVector4 point4 = GLKVector4MakeWithVector3(pointInCameraSpace, 1);
+    
+    NEVector4 res = GLKMatrix4MultiplyVector4(rotm, point4);
+    
+    NEVector3 res3 = GLKVector3Make(res.x / res.w, res.y / res.w, res.z / res.w);
+    
+    return res3;
+}

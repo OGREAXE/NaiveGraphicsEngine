@@ -10,4 +10,23 @@
 
 @implementation NECamera
 
+- (id)init{
+    self = [super init];
+    if (self) {
+        NEFrustum fru;
+        fru.r = 0.5;
+        fru.t = 0.5;
+        
+        fru.near = 0.5;
+        fru.far = 100;
+        
+        self.frustum = fru;
+    }
+    return self;
+}
+
+- (void)lookAt:(NEVector3)direction{
+    self.lookAtDirection = direction;
+}
+
 @end

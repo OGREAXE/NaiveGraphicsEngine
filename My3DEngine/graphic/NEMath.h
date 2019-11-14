@@ -25,7 +25,8 @@ typedef GLKMatrix4 NEMatrix4;
 typedef struct tagNEFrustum{
     float near;
     float far;
-    float l; //1/2 height of the near window
+    float t;  //1/2 height of the near window
+    float r;  //1/2 width of the near window
 } NEFrustum;
 
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
@@ -48,6 +49,6 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
 
 NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
 
-NEVector2 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum);
+NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum);
 
 #endif /* NEMath_h */
