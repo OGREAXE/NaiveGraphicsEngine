@@ -38,28 +38,32 @@
 //    [camera lookAt:GLKVector3Make(-1, -1, -2)];
 //    camera.yAxis = GLKVector3Make(-1, -1, 1);
     
-    camera.position = GLKVector3Make(2, 2, 2);
-    NEVector3 pointToLookAt = GLKVector3Make(0, 2, 0);
+    camera.position = GLKVector3Make(20, 20, 15);
+    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 5);
     [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
 //    [camera lookAt:GLKVector3Make(-5, -1, -3)];
     
-    float yAxis_x = -1, yAxis_y = -1;
-//    camera.yAxis = GLKVector3Make(-1, -1, 2);
-    camera.yAxis = getVerticalVec(camera.lookAtDirection, &yAxis_x, &yAxis_y, NULL);
+//    float yAxis_x = -0.7, yAxis_y = 1;
+//    camera.yAxis = getVerticalVec(camera.lookAtDirection, &yAxis_x, &yAxis_y, NULL);
+////    camera.yAxis = GLKVector3Make(0, 0, 2);
+    //find y axis which together with z form a plane vertical to xy plane
+    NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
+    NEVector3 cam_yAxis = crossVectors(camera.lookAtDirection, lookAtRotated_90);
+    camera.yAxis = cam_yAxis;
     
     self.camera = camera;
     
     NEPolygonLine * xAxis = [[NEPolygonLine alloc] init];
     xAxis.startPosition = GLKVector3Make(0, 0, 0);
-    xAxis.endPosition = GLKVector3Make(100, 0, 0);
+    xAxis.endPosition = GLKVector3Make(5, 0, 0);
    
     NEPolygonLine * yAxis = [[NEPolygonLine alloc] init];
     yAxis.startPosition = GLKVector3Make(0, 0, 0);
-    yAxis.endPosition = GLKVector3Make(0, 100, 0);
+    yAxis.endPosition = GLKVector3Make(0, 5, 0);
    
     NEPolygonLine * zAxis = [[NEPolygonLine alloc] init];
     zAxis.startPosition = GLKVector3Make(0, 0, 0);
-    zAxis.endPosition = GLKVector3Make(0, 0, 100);
+    zAxis.endPosition = GLKVector3Make(0, 0, 5);
     
     self.xAxis = xAxis;
     self.yAxis = yAxis;
@@ -74,8 +78,8 @@
     
     NEVector3 point_tran = perspetiveProjectPoint(point, self.camera.frustum);
     
-    CGFloat screen_x = (1 -  point_tran.x)* width/2;
-    CGFloat screen_y = height - ( 1 +  point_tran.y)* height/2;
+    CGFloat screen_x = (1 +  point_tran.x)* width/2;
+    CGFloat screen_y = ( 1 -  point_tran.y)* height/2;
     
     return CGPointMake(screen_x, screen_y);
 }

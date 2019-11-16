@@ -105,30 +105,34 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
 }
 
 NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld){
-    return convertPositionFromOriginalCoordSystem(worldPosition, cameraPositionInWorld, cameraLookAt, cameraYAxisInWorld);
+    NEVector3 pos = convertPositionFromOriginalCoordSystem(worldPosition, cameraPositionInWorld, cameraLookAt, cameraYAxisInWorld);
+    
+    //rotate it by 180 degrees around y axis to turn into eye space (in accordance with opengl frustum)
+    NEVector3 ret = { - pos.x, pos.y, - pos.z};
+    return ret;
 }
 
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
     NEMatrix4 rotm =
     GLKMatrix4Make(/*row0*/
-                   - frustum.near/frustum.r,
+                   frustum.near/frustum.r,
                    0,
                    0,
                    0,
                    /*row1*/
                    0,
-                   - frustum.near/frustum.t,
+                   frustum.near/frustum.t,
                    0,
                    0,
                    /*row2*/
                    0,
                    0,
                   - (frustum.far + frustum.near) / (frustum.far - frustum.near),
-                   2 * frustum.far * frustum.near / (frustum.far - frustum.near),
+                  - 2 * frustum.far * frustum.near / (frustum.far - frustum.near),
                    /*row3*/
                    0,
                    0,
-                   1,
+                   - 1,
                    0);
     
     NEVector4 point4 = GLKVector4MakeWithVector3(pointInCameraSpace, 1);

@@ -34,6 +34,8 @@ NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 ///a*b
 float vectorMultiply(GLKVector3 vec0,GLKVector3 vec1);
 
+NEVector3 crossVectors(NEVector3 vec0, NEVector3 vec1);
+
 ///||a||
 float vectorMagnitude(GLKVector3 vec);
 

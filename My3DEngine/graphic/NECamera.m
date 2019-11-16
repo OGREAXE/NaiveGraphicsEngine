@@ -14,8 +14,8 @@
     self = [super init];
     if (self) {
         NEFrustum fru;
-        fru.r = 0.5;
-        fru.t = 0.5;
+        fru.r = 0.12;
+        fru.t = 0.12;
         
         fru.near = 0.5;
         fru.far = 100;
