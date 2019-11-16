@@ -24,12 +24,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    _renderView = [[NERenderView alloc] initWithFrame:self.view.bounds];
+//    _renderView = [[NERenderView alloc] initWithFrame:self.view.bounds];
+    _renderView = [[NERenderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width)];
     [self.view addSubview:_renderView];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
-    _renderView.frame = self.view.bounds;
+    _renderView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);
 }
 
 - (void)debugShowInfo{

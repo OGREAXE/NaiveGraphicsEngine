@@ -111,20 +111,20 @@ NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
     NEMatrix4 rotm =
     GLKMatrix4Make(/*row0*/
-                   frustum.near/frustum.r,
+                   - frustum.near/frustum.r,
                    0,
                    0,
                    0,
                    /*row1*/
                    0,
-                   frustum.near/frustum.t,
+                   - frustum.near/frustum.t,
                    0,
                    0,
                    /*row2*/
                    0,
                    0,
-                   - (frustum.far + frustum.near) / (frustum.far - frustum.near),
-                   - 2 * frustum.far * frustum.near / (frustum.far - frustum.near),
+                  - (frustum.far + frustum.near) / (frustum.far - frustum.near),
+                   2 * frustum.far * frustum.near / (frustum.far - frustum.near),
                    /*row3*/
                    0,
                    0,
@@ -138,4 +138,31 @@ NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum
     NEVector3 res3 = GLKVector3Make(res.x / res.w, res.y / res.w, res.z / res.w);
     
     return res3;
+}
+
+NEVector3 getVerticalVec(NEVector3 vec, float *px, float *py, float *pz){
+    if (!px) {
+        if (vec.x != 0) {
+            float x = - (vec.y * *py + vec.z * *pz)/vec.x;
+            return GLKVector3Make(x, *py, *pz);
+        } else {
+            return GLKVector3Make(1, 0, 0);
+        }
+    } else if (!py) {
+        if (vec.y != 0) {
+            float y = - (vec.x * *px + vec.z * *pz)/vec.y;
+            return GLKVector3Make(*px, y, *pz);
+        } else {
+            return GLKVector3Make(0, 1, 0);
+        }
+    } else if (!pz) {
+       if (vec.z != 0) {
+           float z = - (vec.x * *px + vec.y * *py)/vec.z;
+           return GLKVector3Make(*px, *py, z);
+       } else {
+           return GLKVector3Make(0, 0, 1);
+       }
+    } else {
+        return GLKVector3Make(0, 0, 0);
+    }
 }
