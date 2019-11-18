@@ -56,6 +56,8 @@ NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle)
 
 NEVector3 rotationByAngleAroundLine(NEVector3 aPoint, NELine line, float angle);
 
+NEVector3 rotationByAngleAroundLine2(NEVector3 aPoint, NEVector3 lineVec, NEVector3 aPointInLine, float angle);
+
 NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix);
 
 NEVector3 reverseVector(NEVector3 vec);

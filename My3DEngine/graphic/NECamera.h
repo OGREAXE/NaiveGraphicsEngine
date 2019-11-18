@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)normalize;
 
+- (void)rotateByNearHorizontallyByDegree:(float)degree;
+
+- (void)rotateByNearVerticallyByDegree:(float)degree;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -316,31 +316,41 @@
 
 - (void)lookUp{
     float angleDiff = - _rotationRate;
-    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
-    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
+//    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
+//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
+    
+    [_camera rotateByNearVerticallyByDegree:angleDiff];
     
     [self redraw];
 }
 - (void)lookDown{
     float angleDiff = _rotationRate;
-    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
-    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
+//    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
+//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
+    
+    [_camera rotateByNearVerticallyByDegree:angleDiff];
     
     [self redraw];
 }
 - (void)turnLeft{
     float angleDiff = _rotationRate;
-    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
-    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
+//    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
+//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
-    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
+    [_camera rotateByNearHorizontallyByDegree:angleDiff];
+    
+//    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
+    
+    NSLog(@"rotation rate %.5f", _rotationRate);
     
     [self redraw];
 }
 - (void)turnRight{
     float angleDiff = - _rotationRate;
-    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
-    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
+//    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
+//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
+    
+    [_camera rotateByNearHorizontallyByDegree:angleDiff];
     
     [self redraw];
 }

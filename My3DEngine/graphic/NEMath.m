@@ -66,8 +66,16 @@ NEVector3 rotationByAngleAroundLine(NEVector3 aPoint, NELine line, float angle){
     NEVector3 pointTrans = GLKVector3Make(aPoint.x - line.pointInLine.x, aPoint.y - line.pointInLine.y, aPoint.z - line.pointInLine.z);
     
     NEVector3 rotated = rotationByAngle(pointTrans, line.vector, angle);
-    NEVector3 ret = GLKVector3Make(rotated.x - line.pointInLine.x, rotated.y - line.pointInLine.y, rotated.z - line.pointInLine.z);
+    NEVector3 ret = GLKVector3Make(rotated.x + line.pointInLine.x, rotated.y + line.pointInLine.y, rotated.z + line.pointInLine.z);
     return ret;
+}
+
+NEVector3 rotationByAngleAroundLine2(NEVector3 aPoint, NEVector3 lineVec, NEVector3 aPointInLine, float angle){
+    NELine line;
+    line.pointInLine = aPointInLine;
+    line.vector = lineVec;
+    
+    return rotationByAngleAroundLine(aPoint, line, angle);
 }
 
 NEVector3 crossVectors(NEVector3 vec0, NEVector3 vec1){
@@ -186,7 +194,7 @@ NEVector3 getVerticalVec(NEVector3 vec, float *px, float *py, float *pz){
 }
 
 void safeIncreaseSize(NEVector3 * pointsBuf, int maxBufSize, int * bufSize, float x, float y, float z){
-    if (*bufSize <= maxBufSize) {
+    if (*bufSize < maxBufSize) {
         pointsBuf[*bufSize] = GLKVector3Make(x, y, z);
         *bufSize = *bufSize + 1;
     }
