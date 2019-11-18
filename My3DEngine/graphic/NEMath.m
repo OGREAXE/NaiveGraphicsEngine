@@ -56,6 +56,12 @@ NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix){
     return GLKMatrix3MultiplyVector3(rotationMatrix, aPoint);
 }
 
+NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle){
+    NEMatrix3 rotm = makeRotationMatrix(rotationAxis, angle);
+    NEVector3 ret = rotationByMatrix(aPoint, rotm);
+    return ret;
+}
+
 NEVector3 crossVectors(NEVector3 vec0, NEVector3 vec1){
     NEVector3 cv = {
         vec0.y * vec1.z - vec0.z * vec1.y,

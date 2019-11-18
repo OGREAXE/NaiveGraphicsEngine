@@ -42,10 +42,6 @@ DepthInfo NEDepthBuffer::getInfo(int x, int y){
         return {-2, 0};
     }
     
-    if (x == 187 && y == 105) {
-        int i = 0;
-    }
-    
     DepthInfo info = m_depthInfoMap[y][x];
     return info;
 }

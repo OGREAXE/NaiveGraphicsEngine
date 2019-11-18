@@ -47,6 +47,8 @@ float vectorMagnitude(GLKVector3 vec);
 
 float getAngleBetweenVectors(GLKVector3 vec0,GLKVector3 vec1);
 
+NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle);
+
 NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix);
 
 NEVector3 reverseVector(NEVector3 vec);

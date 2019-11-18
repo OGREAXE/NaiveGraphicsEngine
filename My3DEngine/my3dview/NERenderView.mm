@@ -10,6 +10,7 @@
 #import "NECommon.h"
 #import "NEPolygonLine.h"
 #import "NEDepthBuffer.hpp"
+#include <math.h>
 
 // 创建颜色
 #define RGBACOLOR(r,g,b,a)    ([UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)])
@@ -37,7 +38,7 @@
 
 @end
 
-#define MAX_LINE_BUF 2048
+#define MAX_LINE_BUF 4096
 
 #define COORD_AMPLIFY_FACTOR 1
 
@@ -64,7 +65,7 @@
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
-    camera.position = GLKVector3Make(20, 10, 15);
+    camera.position = GLKVector3Make(6, 6, 3);
     NEVector3 pointToLookAt = GLKVector3Make(0, 0, 3);
     
 //    camera.position = GLKVector3Make(10, 0, 0);
@@ -81,7 +82,9 @@
     
     self.camera = camera;
     
-    self.moveSpeed = 0.1;
+    self.moveSpeed = 0.2;
+    
+    self.rotationRate = M_PI_2/100;
 }
 
 - (void)initLineFrame{
@@ -211,7 +214,7 @@
 
 
 - (void)drawPointsForLine:(NEPolygonLine *)line color:(long)color {
-    
+
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
     NEVector3 p0Tran, p1Tran;
@@ -225,18 +228,32 @@
     int bufSize;
     getPointsArrayInLine(p0Tran, p1Tran, _lineBuffer, MAX_LINE_BUF, &bufSize);
     
+    if (bufSize >= MAX_LINE_BUF) {
+        return;
+    }
+    
+    if (p0Tran.x < -1.5 || p0Tran.x > 1.5 || p1Tran.y < -1.5 || p1Tran.y > 1.5) {
+        return;
+    }
+    
     for (int i = 0; i < bufSize; i++) {
         NEVector3 point = _lineBuffer[i];
         CGPoint pointInVew = [self pointInVewForVector3:point];
         
-        DepthInfo info = _depthBuffer.getInfo((int)pointInVew.x, (int)pointInVew.y);
+        int posx = (int)pointInVew.x, posy = (int)pointInVew.y;
+        
+        if (posx > _depthBuffer.getWidth() || posx < 0 || posy > _depthBuffer.getHeight() || posy < 0) {
+            continue;
+        }
+        
+        DepthInfo info = _depthBuffer.getInfo(posx, posy);
         float oldZ = info.z;
         if (point.z <= oldZ) {
             CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
-            CGContextFillRect(context, CGRectMake((int)pointInVew.x / COORD_AMPLIFY_FACTOR - fillWidth/2, (int)pointInVew.y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
+            CGContextFillRect(context, CGRectMake(posx / COORD_AMPLIFY_FACTOR - fillWidth/2, posy / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
             info.z = point.z;
             info.color = color;
-            _depthBuffer.setInfo(info, (int)pointInVew.x, (int)pointInVew.y);
+            _depthBuffer.setInfo(info, posx, posy);
         } else if(info.color != color){
 //            NSLog(@"i");
 //            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(info.color).CGColor);
@@ -298,16 +315,34 @@
 }
 
 - (void)lookUp{
+    float angleDiff = - _rotationRate;
+    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
+    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
     
+    [self redraw];
 }
 - (void)lookDown{
+    float angleDiff = _rotationRate;
+    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
+    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
     
+    [self redraw];
 }
 - (void)turnLeft{
+    float angleDiff = _rotationRate;
+    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
+    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
+    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
+    
+    [self redraw];
 }
 - (void)turnRight{
+    float angleDiff = - _rotationRate;
+    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
+    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
+    [self redraw];
 }
 
 @end

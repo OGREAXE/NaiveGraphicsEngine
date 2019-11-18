@@ -66,19 +66,19 @@
 }
 
 - (IBAction)didTapLookUp{
-    
+    [_renderView lookUp];
 }
 
 - (IBAction)didTapLookDown{
-    
+    [_renderView lookDown];
 }
 
 - (IBAction)didTapTurnLeft{
-    
+    [_renderView turnLeft];
 }
 
 - (IBAction)didTapTurnRight{
-    
+    [_renderView turnRight];
 }
 
 @end
