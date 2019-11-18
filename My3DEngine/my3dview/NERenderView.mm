@@ -273,15 +273,23 @@
     _depthBuffer.resetSize();
     
     for (NEPolygonLine * line in _geometries) {
-        [self drawLine:line color:0xffff00]; //yellow
+//        [self drawLine:line color:0xffff00]; //yellow
     }
     
-    [self drawLine:self.xAxis color:0xff0000];
-    [self drawLine:self.yAxis color:0x00ff00];
+//    [self drawLine:self.xAxis color:0xff0000];
+//    [self drawLine:self.yAxis color:0x00ff00];
     [self drawLine:self.zAxis color:0x0000ff];
 }
 
 - (void)redraw{
+//    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
+    
+//    NSLog(@" y axis %.5f, %.5f, %.5f", _camera.yAxis.x, _camera.yAxis.y, _camera.yAxis.z);
+    
+//    NSLog(@" x axis %.5f, %.5f, %.5f", _camera.xAxis.x, _camera.xAxis.y, _camera.xAxis.z);
+    
+//    NSLog(@"x * y = %.5f, x * z = %.5f, y * z = %.5f", vectorMultiply(_camera.xAxis, _camera.yAxis),vectorMultiply(_camera.xAxis, _camera.lookAtDirection), vectorMultiply(_camera.yAxis, _camera.lookAtDirection));
+    
     [self setNeedsDisplay];
 }
 
@@ -338,10 +346,6 @@
 //    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
     [_camera rotateByNearHorizontallyByDegree:angleDiff];
-    
-//    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
-    
-    NSLog(@"rotation rate %.5f", _rotationRate);
     
     [self redraw];
 }
