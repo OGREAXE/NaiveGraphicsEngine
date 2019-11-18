@@ -75,8 +75,13 @@
     NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
     NEVector3 cam_yAxis = crossVectors(camera.lookAtDirection, lookAtRotated_90);
     camera.yAxis = cam_yAxis;
+    camera.xAxis = lookAtRotated_90;
+    
+    [camera normalize];
     
     self.camera = camera;
+    
+    self.moveSpeed = 0.1;
 }
 
 - (void)initLineFrame{
@@ -107,7 +112,7 @@
         NSArray<NSNumber*> * endPoint = points3[2 * i];
         NSArray<NSNumber*> * startPoint = points3[2 * i + 1];
         
-        NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(startPoint[0].floatValue, startPoint[1].floatValue, startPoint[2].floatValue) end:GLKVector3Make(endPoint[0].floatValue, endPoint[1].floatValue, endPoint[2].floatValue)];
+        NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(startPoint[0].floatValue, startPoint[1].floatValue - 2, startPoint[2].floatValue -2 ) end:GLKVector3Make(endPoint[0].floatValue, endPoint[1].floatValue - 2, endPoint[2].floatValue - 2)];
         [geometries addObject:line];
     }
     
@@ -233,7 +238,7 @@
             info.color = color;
             _depthBuffer.setInfo(info, (int)pointInVew.x, (int)pointInVew.y);
         } else if(info.color != color){
-            NSLog(@"i");
+//            NSLog(@"i");
 //            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(info.color).CGColor);
 //            CGContextFillRect(context, CGRectMake((int)pointInVew.x / COORD_AMPLIFY_FACTOR - fillWidth/2, (int)pointInVew.y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
 //            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
@@ -245,6 +250,11 @@
 - (void)drawRect:(CGRect)rect{
 //    [self drawOrigin];
     
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextClearRect(context, self.bounds);
+    
+    _depthBuffer.resetSize();
+    
     for (NEPolygonLine * line in _geometries) {
         [self drawLine:line color:0xffff00]; //yellow
     }
@@ -252,7 +262,51 @@
     [self drawLine:self.xAxis color:0xff0000];
     [self drawLine:self.yAxis color:0x00ff00];
     [self drawLine:self.zAxis color:0x0000ff];
+}
+
+- (void)redraw{
+    [self setNeedsDisplay];
+}
+
+- (void)moveUp{
+    float moveDistance = _moveSpeed;
+    NEVector3 translation = GLKVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
+    _camera.position = translationByVector(_camera.position, translation);
     
+    [self redraw];
+}
+- (void)moveDown{
+    float moveDistance = - _moveSpeed;
+    NEVector3 translation = GLKVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
+    _camera.position = translationByVector(_camera.position, translation);
+    
+    [self redraw];
+}
+- (void)moveLeft{
+    float moveDistance = _moveSpeed;
+    NEVector3 translation = GLKVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
+    _camera.position = translationByVector(_camera.position, translation);
+    
+    [self redraw];
+}
+- (void)moveRight{
+    float moveDistance = - _moveSpeed;
+    NEVector3 translation = GLKVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
+    _camera.position = translationByVector(_camera.position, translation);
+    
+    [self redraw];
+}
+
+- (void)lookUp{
+    
+}
+- (void)lookDown{
+    
+}
+- (void)turnLeft{
+    
+}
+- (void)turnRight{
     
 }
 

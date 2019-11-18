@@ -63,6 +63,8 @@ NEVector3 getVerticalVec(NEVector3 vec, float *x, float *y, float *z);
 
 NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize);
 
+NEVector3 getNormalizedVector(NEVector3  original);
+
 #ifdef __cplusplus
 }
 #endif

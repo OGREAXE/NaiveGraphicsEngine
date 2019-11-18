@@ -12,6 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NERenderView : UIView
 
+@property (nonatomic) float moveSpeed;
+
+- (void)moveUp;
+- (void)moveDown;
+- (void)moveLeft;
+- (void)moveRight;
+
+- (void)lookUp;
+- (void)lookDown;
+- (void)turnLeft;
+- (void)turnRight;
+
 @end
 
 NS_ASSUME_NONNULL_END

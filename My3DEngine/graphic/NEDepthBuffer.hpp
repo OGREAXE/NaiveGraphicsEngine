@@ -45,6 +45,7 @@ public:
     void clear(){m_depthInfoMap.clear(); m_width = 0; m_height = 0;}
     
     void resetSize(int width, int height) {m_width = width; m_height = height; initMap();}
+    void resetSize() {m_depthInfoMap.clear(); initMap();}
 };
 
 #endif /* NEDepthBuffer_hpp */

@@ -19,9 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NEVector3 yAxis; //y axis vector, world coordinate
 
+@property (nonatomic) NEVector3 xAxis; //y axis vector, world coordinate
+
 @property (nonatomic) NEFrustum frustum;
 
 - (void)lookAt:(NEVector3)direction;
+
+- (void)normalize;
 
 @end
 

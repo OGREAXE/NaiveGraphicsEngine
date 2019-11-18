@@ -48,4 +48,37 @@
     _scene = [[NEScene alloc] init];
 }
 
+///////
+- (IBAction)didTapMoveUp{
+    [_renderView moveUp];
+}
+
+- (IBAction)didTapMoveDown{
+    [_renderView moveDown];
+}
+
+- (IBAction)didTapMoveLeft{
+    [_renderView moveLeft];
+}
+
+- (IBAction)didTapMoveRight{
+    [_renderView moveRight];
+}
+
+- (IBAction)didTapLookUp{
+    
+}
+
+- (IBAction)didTapLookDown{
+    
+}
+
+- (IBAction)didTapTurnLeft{
+    
+}
+
+- (IBAction)didTapTurnRight{
+    
+}
+
 @end

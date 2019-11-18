@@ -29,4 +29,10 @@
     self.lookAtDirection = direction;
 }
 
+- (void)normalize{
+    _lookAtDirection = getNormalizedVector(_lookAtDirection);
+    _xAxis = getNormalizedVector(_xAxis);
+    _yAxis = getNormalizedVector(_yAxis);
+}
+
 @end

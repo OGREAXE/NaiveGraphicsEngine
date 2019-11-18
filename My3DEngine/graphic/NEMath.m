@@ -254,3 +254,12 @@ NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * point
     return NE_RESULT_FAIL;
     
 }
+
+NEVector3 getNormalizedVector(NEVector3  original){
+    NEVector3 n;
+    float d = sqrtf(powf(original.x, 2) + powf(original.y, 2) + powf(original.z, 2));
+    n.x = original.x/d;
+    n.y = original.y/d;
+    n.z = original.z/d;
+    return n;
+}
