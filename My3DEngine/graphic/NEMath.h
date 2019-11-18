@@ -35,6 +35,11 @@ typedef struct tagNEFrustum{
     float r;  //1/2 width of the near window
 } NEFrustum;
 
+typedef struct tagNELine{
+    NEVector3 vector;
+    NEVector3 pointInLine;
+} NELine;
+
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 
 ///a*b
@@ -48,6 +53,8 @@ float vectorMagnitude(GLKVector3 vec);
 float getAngleBetweenVectors(GLKVector3 vec0,GLKVector3 vec1);
 
 NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle);
+
+NEVector3 rotationByAngleAroundLine(NEVector3 aPoint, NELine line, float angle);
 
 NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix);
 
@@ -66,6 +73,8 @@ NEVector3 getVerticalVec(NEVector3 vec, float *x, float *y, float *z);
 NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize);
 
 NEVector3 getNormalizedVector(NEVector3  original);
+
+NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint);
 
 #ifdef __cplusplus
 }

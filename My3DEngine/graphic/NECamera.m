@@ -17,7 +17,7 @@
         fru.r = 0.2;
         fru.t = 0.2;
         
-        fru.near = 3;
+        fru.near = 1;
         fru.far = 10;
         
         self.frustum = fru;
