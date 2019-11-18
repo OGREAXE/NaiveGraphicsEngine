@@ -29,7 +29,7 @@
 
 //@property (nonatomic) NEPolygonLine* line0;
 
-@property (nonatomic) NEPolygonLine* line0;
+@property (nonatomic) NSArray<NEPolygonLine*> *geometries;
 
 @property (nonatomic) NEDepthBuffer depthBuffer;
 
@@ -64,8 +64,8 @@
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
-    camera.position = GLKVector3Make(20, 20, 15);
-    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 5);
+    camera.position = GLKVector3Make(20, 10, 15);
+    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 3);
     
 //    camera.position = GLKVector3Make(10, 0, 0);
 //    NEVector3 pointToLookAt = GLKVector3Make(-10, 0, 0);
@@ -81,9 +81,41 @@
 
 - (void)initLineFrame{
     [self initAxis];
+    
+    NSMutableArray * geometries = [NSMutableArray array];
         
     //_line0 = [NEPolygonLine lineWithStart:GLKVector3Make(1, -2, 1) end:GLKVector3Make(1, 2, 1)];
-    _line0 = [NEPolygonLine lineWithStart:GLKVector3Make(3, 1, 1) end:GLKVector3Make(1, 3, 1)];
+    NSArray * points3 = @[
+    @[@(1), @(1) ,@(1)], @[@(1), @(3) ,@(1)],
+    @[@(1), @(3) ,@(1)], @[@(3), @(3) ,@(1)],
+    @[@(3), @(3) ,@(1)],@[@(3), @(1) ,@(1)],
+    @[@(3), @(1) ,@(1)],@[@(1), @(1) ,@(1)],
+    
+    @[@(1), @(1) ,@(3)], @[@(1), @(3) ,@(3)],
+    @[@(1), @(3) ,@(3)], @[@(3), @(3) ,@(3)],
+    @[@(3), @(3) ,@(3)],@[@(3), @(1) ,@(3)],
+    @[@(3), @(1) ,@(3)],@[@(1), @(1) ,@(3)],
+    
+    @[@(1), @(1) ,@(1)], @[@(1), @(1) ,@(3)],
+    @[@(1), @(3) ,@(1)], @[@(1), @(3) ,@(3)],
+    @[@(3), @(3) ,@(1)],@[@(3), @(3) ,@(3)],
+    @[@(3), @(1) ,@(1)],@[@(3), @(1) ,@(3)],
+    
+    ];
+    
+    for (int i = 0; i < points3.count/2; i++) {
+        NSArray<NSNumber*> * endPoint = points3[2 * i];
+        NSArray<NSNumber*> * startPoint = points3[2 * i + 1];
+        
+        NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(startPoint[0].floatValue, startPoint[1].floatValue, startPoint[2].floatValue) end:GLKVector3Make(endPoint[0].floatValue, endPoint[1].floatValue, endPoint[2].floatValue)];
+        [geometries addObject:line];
+    }
+    
+    self.geometries = geometries;
+    
+//    NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(3, 1, 1) end:GLKVector3Make(1, 3, 1)];
+//    [geometries addObject:line];
+    
 }
 
 - (void)initAxis{
@@ -212,7 +244,10 @@
 
 - (void)drawRect:(CGRect)rect{
 //    [self drawOrigin];
-    [self drawLine:self.line0 color:0xffff00]; //yellow
+    
+    for (NEPolygonLine * line in _geometries) {
+        [self drawLine:line color:0xffff00]; //yellow
+    }
     
     [self drawLine:self.xAxis color:0xff0000];
     [self drawLine:self.yAxis color:0x00ff00];
