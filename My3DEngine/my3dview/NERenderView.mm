@@ -27,7 +27,9 @@
 
 @end
 
-#define MAX_LINE_BUF 512
+#define MAX_LINE_BUF 2048
+
+#define COORD_AMPLIFY_FACTOR 3
 
 @implementation NERenderView{
     NEVector3 _lineBuffer[MAX_LINE_BUF];
@@ -86,8 +88,8 @@
 }
 
 - (CGPoint)positionInView:(NEVector3)originalPoint projectResultNDC:(NEVector3 *)pointTran{
-    CGFloat width = self.frame.size.width;
-    CGFloat height = self.frame.size.height;
+    CGFloat width = self.frame.size.width * COORD_AMPLIFY_FACTOR;
+    CGFloat height = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
     NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
     
@@ -104,8 +106,8 @@
 }
 
 - (CGPoint)pointInVewForVector3:(NEVector3)vector{
-    CGFloat width = self.frame.size.width;
-    CGFloat height = self.frame.size.height;
+    CGFloat width = self.frame.size.width * COORD_AMPLIFY_FACTOR;
+    CGFloat height = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
     CGFloat screen_x = (1 +  vector.x)* width/2;
     CGFloat screen_y = ( 1 -  vector.y)* height/2;
@@ -130,31 +132,31 @@
     [self drawPointsForLine:line color:color];
     return;
     
-    CGPoint p0 = [self positionInView:line.startPosition];
-    CGPoint p1 = [self positionInView:line.endPosition];
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
-
-    // Draw them with a 2.0 stroke width so they are a bit more visible.
-    CGContextSetLineWidth(context, 2.0f);
-    
-    CGContextSetStrokeColorWithColor(context, color.CGColor);
-
-    CGContextMoveToPoint(context, p0.x, p0.y); //start at this point
-
-    CGContextAddLineToPoint(context, p1.x, p1.y); //draw to this point
-
-    // and now draw the Path!
-    CGContextStrokePath(context);
+//    CGPoint p0 = [self positionInView:line.startPosition];
+//    CGPoint p1 = [self positionInView:line.endPosition];
+//
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
+//
+//    // Draw them with a 2.0 stroke width so they are a bit more visible.
+//    CGContextSetLineWidth(context, 2.0f);
+//
+//    CGContextSetStrokeColorWithColor(context, color.CGColor);
+//
+//    CGContextMoveToPoint(context, p0.x, p0.y); //start at this point
+//
+//    CGContextAddLineToPoint(context, p1.x, p1.y); //draw to this point
+//
+//    // and now draw the Path!
+//    CGContextStrokePath(context);
 }
 
 
 - (void)drawPointsForLine:(NEPolygonLine *)line color:(UIColor *)color {
     NEVector3 p0Tran, p1Tran;
     
-    CGPoint p0 = [self positionInView:line.startPosition projectResultNDC:&p0Tran];
-    CGPoint p1 = [self positionInView:line.endPosition projectResultNDC:&p1Tran];
+    [self positionInView:line.startPosition projectResultNDC:&p0Tran];
+    [self positionInView:line.endPosition projectResultNDC:&p1Tran];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, color.CGColor);
@@ -169,7 +171,7 @@
         float oldZ = _depthBuffer.getZ((int)pointInVew.x, (int)pointInVew.y);
         if (point.z > oldZ) {
             
-            CGContextFillRect(context, CGRectMake(pointInVew.x, pointInVew.y, 1, 1));
+            CGContextFillRect(context, CGRectMake(pointInVew.x / COORD_AMPLIFY_FACTOR, pointInVew.y / COORD_AMPLIFY_FACTOR, 1, 1));
             _depthBuffer.setZ(point.z, (int)pointInVew.x, (int)pointInVew.y);
         }
     }

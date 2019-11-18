@@ -174,7 +174,7 @@ NEVector3 getVerticalVec(NEVector3 vec, float *px, float *py, float *pz){
 NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize){
     *bufSize = 0;
     
-    CGFloat step = 0.002;
+    CGFloat step = 0.001;
     
     if (start.x == end.x && start.y != end.y) {
         float k_yz = (end.z - start.z)/( end.y - start.y);
@@ -207,23 +207,46 @@ NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * point
     }
     
     if (start.x != end.x && start.y != end.y) {
-        float k = (end.y - start.y)/( end.x - start.x);
-        float k_xz = (end.z - start.z)/( end.x - start.x);
         
-        for (float s =  MIN(start.x, end.x) ; s < MAX(start.x, end.x) ; s += step) {
-            float y = k * ( s - start.x) + start.y;
-            float z = k_xz * ( s - start.x) + start.z;
-            pointsBuf[*bufSize] = GLKVector3Make(s, y, z);
-            *bufSize = *bufSize + 1;
-        }
-        
-        if (start. x < end.x) {
-            pointsBuf[*bufSize] = GLKVector3Make(end.x, end.y, end.z);
-            *bufSize = *bufSize + 1;
+        if (fabs(end.x - start.x) > fabs(end.y - start.y)) {
+            //always use the longest diff of coord
+            float k = (end.y - start.y)/( end.x - start.x);
+            float k_xz = (end.z - start.z)/( end.x - start.x);
+            
+            for (float s =  MIN(start.x, end.x) ; s < MAX(start.x, end.x) ; s += step) {
+                float y = k * ( s - start.x) + start.y;
+                float z = k_xz * ( s - start.x) + start.z;
+                pointsBuf[*bufSize] = GLKVector3Make(s, y, z);
+                *bufSize = *bufSize + 1;
+            }
+            
+            if (start. x < end.x) {
+                pointsBuf[*bufSize] = GLKVector3Make(end.x, end.y, end.z);
+                *bufSize = *bufSize + 1;
+            } else {
+                pointsBuf[*bufSize] = GLKVector3Make(start.x, start.y, start.z);
+                *bufSize = *bufSize + 1;
+            }
         } else {
-            pointsBuf[*bufSize] = GLKVector3Make(start.x, start.y, start.z);
-            *bufSize = *bufSize + 1;
+            float k = ( end.x - start.x) / (end.y - start.y);
+            float k_yz = (end.z - start.z)/( end.y - start.y);
+            
+            for (float s =  MIN(start.y, end.y) ; s < MAX(start.y, end.y) ; s += step) {
+                float x = k * ( s - start.y) + start.x;
+                float z = k_yz * ( s - start.y) + start.z;
+                pointsBuf[*bufSize] = GLKVector3Make(x, s, z);
+                *bufSize = *bufSize + 1;
+            }
+            
+            if (start. x < end.x) {
+                pointsBuf[*bufSize] = GLKVector3Make(end.x, end.y, end.z);
+                *bufSize = *bufSize + 1;
+            } else {
+                pointsBuf[*bufSize] = GLKVector3Make(start.x, start.y, start.z);
+                *bufSize = *bufSize + 1;
+            }
         }
+        
         
         return NE_RESULT_OK;
     }
