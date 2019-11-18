@@ -11,6 +11,12 @@
 #import "NEPolygonLine.h"
 #import "NEDepthBuffer.hpp"
 
+// 创建颜色
+#define RGBACOLOR(r,g,b,a)    ([UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)])
+#define RGBCOLOR(r,g,b)       RGBACOLOR(r,g,b,1)
+#define HEXRGBACOLOR(h,a)     RGBACOLOR(((h>>16)&0xFF), ((h>>8)&0xFF), (h&0xFF), a)
+#define HEXRGBCOLOR(h)        HEXRGBACOLOR(h,1)
+
 @interface NERenderView()
 
 @property (nonatomic) NSArray<NSValue*>* vectices;
@@ -21,6 +27,10 @@
 @property (nonatomic) NEPolygonLine* yAxis;
 @property (nonatomic) NEPolygonLine* zAxis;
 
+//@property (nonatomic) NEPolygonLine* line0;
+
+@property (nonatomic) NEPolygonLine* line0;
+
 @property (nonatomic) NEDepthBuffer depthBuffer;
 
 //@property (nonatomic) NEVector2 lineBuffer[];
@@ -29,7 +39,7 @@
 
 #define MAX_LINE_BUF 2048
 
-#define COORD_AMPLIFY_FACTOR 3
+#define COORD_AMPLIFY_FACTOR 1
 
 @implementation NERenderView{
     NEVector3 _lineBuffer[MAX_LINE_BUF];
@@ -44,43 +54,54 @@
 }
 
 - (void)doInit{
-    NECamera * camera = [[NECamera alloc] init];
-//    camera.position = GLKVector3Make(2, 2, 2);
-//    [camera lookAt:GLKVector3Make(-1, -1, -2)];
-//    camera.yAxis = GLKVector3Make(-1, -1, 1);
+    [self initCamera];
     
+    [self initLineFrame];
+    
+    _depthBuffer.resetSize(self.frame.size.width * COORD_AMPLIFY_FACTOR, self.frame.size.height * COORD_AMPLIFY_FACTOR);
+}
+
+- (void)initCamera{
+    NECamera * camera = [[NECamera alloc] init];
+        
     camera.position = GLKVector3Make(20, 20, 15);
     NEVector3 pointToLookAt = GLKVector3Make(0, 0, 5);
-    [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
-//    [camera lookAt:GLKVector3Make(-5, -1, -3)];
     
-//    float yAxis_x = -0.7, yAxis_y = 1;
-//    camera.yAxis = getVerticalVec(camera.lookAtDirection, &yAxis_x, &yAxis_y, NULL);
-////    camera.yAxis = GLKVector3Make(0, 0, 2);
+//    camera.position = GLKVector3Make(10, 0, 0);
+//    NEVector3 pointToLookAt = GLKVector3Make(-10, 0, 0);
+    
+    [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
     //find y axis which together with z form a plane vertical to xy plane
     NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
     NEVector3 cam_yAxis = crossVectors(camera.lookAtDirection, lookAtRotated_90);
     camera.yAxis = cam_yAxis;
     
     self.camera = camera;
-    
+}
+
+- (void)initLineFrame{
+    [self initAxis];
+        
+    //_line0 = [NEPolygonLine lineWithStart:GLKVector3Make(1, -2, 1) end:GLKVector3Make(1, 2, 1)];
+    _line0 = [NEPolygonLine lineWithStart:GLKVector3Make(3, 1, 1) end:GLKVector3Make(1, 3, 1)];
+}
+
+- (void)initAxis{
     NEPolygonLine * xAxis = [[NEPolygonLine alloc] init];
-    xAxis.startPosition = GLKVector3Make(0, 0, 0);
-    xAxis.endPosition = GLKVector3Make(5, 0, 0);
-   
-    NEPolygonLine * yAxis = [[NEPolygonLine alloc] init];
-    yAxis.startPosition = GLKVector3Make(0, 0, 0);
-    yAxis.endPosition = GLKVector3Make(0, 5, 0);
-   
-    NEPolygonLine * zAxis = [[NEPolygonLine alloc] init];
-    zAxis.startPosition = GLKVector3Make(0, 0, 0);
-    zAxis.endPosition = GLKVector3Make(0, 0, 5);
+     xAxis.startPosition = GLKVector3Make(0, 0, 0);
+     xAxis.endPosition = GLKVector3Make(5, 0, 0);
     
-    self.xAxis = xAxis;
-    self.yAxis = yAxis;
-    self.zAxis = zAxis;
+     NEPolygonLine * yAxis = [[NEPolygonLine alloc] init];
+     yAxis.startPosition = GLKVector3Make(0, 0, 0);
+     yAxis.endPosition = GLKVector3Make(0, 5, 0);
     
-    _depthBuffer.resetSize(self.frame.size.width, self.frame.size.height);
+     NEPolygonLine * zAxis = [[NEPolygonLine alloc] init];
+     zAxis.startPosition = GLKVector3Make(0, 0, 0);
+     zAxis.endPosition = GLKVector3Make(0, 0, 5);
+     
+     self.xAxis = xAxis;
+     self.yAxis = yAxis;
+     self.zAxis = zAxis;
 }
 
 - (CGPoint)positionInView:(NEVector3)originalPoint{
@@ -128,7 +149,7 @@
     CGContextFillPath(context);
 }
 
-- (void)drawLine:(NEPolygonLine *)line color:(UIColor *)color {
+- (void)drawLine:(NEPolygonLine *)line color:(long)color {
     [self drawPointsForLine:line color:color];
     return;
     
@@ -152,15 +173,17 @@
 }
 
 
-- (void)drawPointsForLine:(NEPolygonLine *)line color:(UIColor *)color {
+- (void)drawPointsForLine:(NEPolygonLine *)line color:(long)color {
+    
+    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
+    
     NEVector3 p0Tran, p1Tran;
     
     [self positionInView:line.startPosition projectResultNDC:&p0Tran];
     [self positionInView:line.endPosition projectResultNDC:&p1Tran];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, color.CGColor);
-
+    
     // Draw them with a 2.0 stroke width so they are a bit more visible.
     int bufSize;
     getPointsArrayInLine(p0Tran, p1Tran, _lineBuffer, MAX_LINE_BUF, &bufSize);
@@ -168,22 +191,34 @@
     for (int i = 0; i < bufSize; i++) {
         NEVector3 point = _lineBuffer[i];
         CGPoint pointInVew = [self pointInVewForVector3:point];
-        float oldZ = _depthBuffer.getZ((int)pointInVew.x, (int)pointInVew.y);
-        if (point.z > oldZ) {
-            
-            CGContextFillRect(context, CGRectMake(pointInVew.x / COORD_AMPLIFY_FACTOR, pointInVew.y / COORD_AMPLIFY_FACTOR, 1, 1));
-            _depthBuffer.setZ(point.z, (int)pointInVew.x, (int)pointInVew.y);
+        
+        DepthInfo info = _depthBuffer.getInfo((int)pointInVew.x, (int)pointInVew.y);
+        float oldZ = info.z;
+        if (point.z <= oldZ) {
+            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
+            CGContextFillRect(context, CGRectMake((int)pointInVew.x / COORD_AMPLIFY_FACTOR - fillWidth/2, (int)pointInVew.y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
+            info.z = point.z;
+            info.color = color;
+            _depthBuffer.setInfo(info, (int)pointInVew.x, (int)pointInVew.y);
+        } else if(info.color != color){
+            NSLog(@"i");
+//            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(info.color).CGColor);
+//            CGContextFillRect(context, CGRectMake((int)pointInVew.x / COORD_AMPLIFY_FACTOR - fillWidth/2, (int)pointInVew.y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
+//            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
         }
     }
 
 }
 
 - (void)drawRect:(CGRect)rect{
-    [self drawOrigin];
+//    [self drawOrigin];
+    [self drawLine:self.line0 color:0xffff00]; //yellow
     
-    [self drawLine:self.xAxis color:[UIColor redColor]];
-    [self drawLine:self.yAxis color:[UIColor greenColor]];
-    [self drawLine:self.zAxis color:[UIColor blueColor]];
+    [self drawLine:self.xAxis color:0xff0000];
+    [self drawLine:self.yAxis color:0x00ff00];
+    [self drawLine:self.zAxis color:0x0000ff];
+    
+    
 }
 
 @end

@@ -10,4 +10,11 @@
 
 @implementation NEPolygonLine
 
++ (NEPolygonLine *)lineWithStart:(NEVector3)start end:(NEVector3)end{
+    NEPolygonLine * line = [[NEPolygonLine alloc] init];
+    line.startPosition = start;
+    line.endPosition = end;
+    return line;
+}
+
 @end

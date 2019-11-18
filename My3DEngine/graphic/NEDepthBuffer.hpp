@@ -17,6 +17,7 @@ extern int NE_DEPTHBUFFER_PARAM_ERROR;
 
 typedef struct tagDepthInfo{
     float z;
+    long color;
 } DepthInfo;
 
 class NEDepthBuffer {
@@ -32,10 +33,14 @@ public:
     
     int setZ(float zVal, int x, int y);
     
+    int setInfo(DepthInfo & info, int x, int y);
+    
     /// upon failure return something out of range (-1, 1), such as -2
     /// @param x <#x description#>
     /// @param y <#y description#>
     float getZ(int x, int y);
+    
+    DepthInfo getInfo(int x, int y);
     
     void clear(){m_depthInfoMap.clear(); m_width = 0; m_height = 0;}
     

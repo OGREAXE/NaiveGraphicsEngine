@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NEVector3 endPosition;
 
++ (NEPolygonLine *)lineWithStart:(NEVector3)start end:(NEVector3)end;
+
 @end
 
 NS_ASSUME_NONNULL_END
