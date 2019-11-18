@@ -23,9 +23,15 @@
 
 @property (nonatomic) NEDepthBuffer depthBuffer;
 
+//@property (nonatomic) NEVector2 lineBuffer[];
+
 @end
 
-@implementation NERenderView
+#define MAX_LINE_BUF 512
+
+@implementation NERenderView{
+    NEVector3 _lineBuffer[MAX_LINE_BUF];
+}
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -76,6 +82,10 @@
 }
 
 - (CGPoint)positionInView:(NEVector3)originalPoint{
+    return [self positionInView:originalPoint projectResultNDC:nil];
+}
+
+- (CGPoint)positionInView:(NEVector3)originalPoint projectResultNDC:(NEVector3 *)pointTran{
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
     
@@ -83,8 +93,22 @@
     
     NEVector3 point_tran = perspetiveProjectPoint(point, self.camera.frustum);
     
+    if (pointTran) {
+        *pointTran = point_tran;
+    }
+    
     CGFloat screen_x = (1 +  point_tran.x)* width/2;
     CGFloat screen_y = ( 1 -  point_tran.y)* height/2;
+    
+    return CGPointMake(screen_x, screen_y);
+}
+
+- (CGPoint)pointInVewForVector3:(NEVector3)vector{
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    
+    CGFloat screen_x = (1 +  vector.x)* width/2;
+    CGFloat screen_y = ( 1 -  vector.y)* height/2;
     
     return CGPointMake(screen_x, screen_y);
 }
@@ -103,6 +127,9 @@
 }
 
 - (void)drawLine:(NEPolygonLine *)line color:(UIColor *)color {
+    [self drawPointsForLine:line color:color];
+    return;
+    
     CGPoint p0 = [self positionInView:line.startPosition];
     CGPoint p1 = [self positionInView:line.endPosition];
     
@@ -120,6 +147,33 @@
 
     // and now draw the Path!
     CGContextStrokePath(context);
+}
+
+
+- (void)drawPointsForLine:(NEPolygonLine *)line color:(UIColor *)color {
+    NEVector3 p0Tran, p1Tran;
+    
+    CGPoint p0 = [self positionInView:line.startPosition projectResultNDC:&p0Tran];
+    CGPoint p1 = [self positionInView:line.endPosition projectResultNDC:&p1Tran];
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+
+    // Draw them with a 2.0 stroke width so they are a bit more visible.
+    int bufSize;
+    getPointsArrayInLine(p0Tran, p1Tran, _lineBuffer, MAX_LINE_BUF, &bufSize);
+    
+    for (int i = 0; i < bufSize; i++) {
+        NEVector3 point = _lineBuffer[i];
+        CGPoint pointInVew = [self pointInVewForVector3:point];
+        float oldZ = _depthBuffer.getZ((int)pointInVew.x, (int)pointInVew.y);
+        if (point.z > oldZ) {
+            
+            CGContextFillRect(context, CGRectMake(pointInVew.x, pointInVew.y, 1, 1));
+            _depthBuffer.setZ(point.z, (int)pointInVew.x, (int)pointInVew.y);
+        }
+    }
+
 }
 
 - (void)drawRect:(CGRect)rect{

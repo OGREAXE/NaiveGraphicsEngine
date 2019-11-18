@@ -170,3 +170,64 @@ NEVector3 getVerticalVec(NEVector3 vec, float *px, float *py, float *pz){
         return GLKVector3Make(0, 0, 0);
     }
 }
+
+NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize){
+    *bufSize = 0;
+    
+    CGFloat step = 0.002;
+    
+    if (start.x == end.x && start.y != end.y) {
+        float k_yz = (end.z - start.z)/( end.y - start.y);
+        for (float s =  MIN(start.y, end.y) ; s < MAX(start.y, end.y) ; s += step) {
+            float z = k_yz * ( s - start.y) + start.z;
+            pointsBuf[*bufSize] = GLKVector3Make(start.x, s, z);
+            *bufSize = *bufSize + 1;
+        }
+        
+        float max_y = MAX(start.y, end.y);
+        pointsBuf[*bufSize] = GLKVector3Make(start.x, max_y, max_y == start.y?start.z:end.z);
+        *bufSize = *bufSize + 1;
+        
+        return NE_RESULT_OK;
+    }
+    
+    if (start.y == end.y && start.x != end.x) {
+        float k_xz = (end.z - start.z)/( end.x - start.x);
+        for (float s =  MIN(start.x, end.x) ; s < MAX(start.x, end.x) ; s += step) {
+            float z = k_xz * ( s - start.x) + start.z;
+            pointsBuf[*bufSize] = GLKVector3Make(s, start.y, z);
+            *bufSize = *bufSize + 1;
+        }
+        
+        float max_x = MAX(start.x, end.x);
+        pointsBuf[*bufSize] = GLKVector3Make(max_x, start.y, max_x == start.x?start.z:end.z);
+        *bufSize = *bufSize + 1;
+        
+        return NE_RESULT_OK;
+    }
+    
+    if (start.x != end.x && start.y != end.y) {
+        float k = (end.y - start.y)/( end.x - start.x);
+        float k_xz = (end.z - start.z)/( end.x - start.x);
+        
+        for (float s =  MIN(start.x, end.x) ; s < MAX(start.x, end.x) ; s += step) {
+            float y = k * ( s - start.x) + start.y;
+            float z = k_xz * ( s - start.x) + start.z;
+            pointsBuf[*bufSize] = GLKVector3Make(s, y, z);
+            *bufSize = *bufSize + 1;
+        }
+        
+        if (start. x < end.x) {
+            pointsBuf[*bufSize] = GLKVector3Make(end.x, end.y, end.z);
+            *bufSize = *bufSize + 1;
+        } else {
+            pointsBuf[*bufSize] = GLKVector3Make(start.x, start.y, start.z);
+            *bufSize = *bufSize + 1;
+        }
+        
+        return NE_RESULT_OK;
+    }
+    
+    return NE_RESULT_FAIL;
+    
+}
