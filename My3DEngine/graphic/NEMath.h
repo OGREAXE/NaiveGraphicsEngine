@@ -11,7 +11,9 @@
 
 #import <GLKit/GLKit.h>
 
-#define EXPORT_PREFIX extern "C"
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 ///vector definitions
 typedef GLKVector2 NEVector2;
@@ -54,5 +56,9 @@ NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum);
 
 NEVector3 getVerticalVec(NEVector3 vec, float *x, float *y, float *z);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* NEMath_h */

@@ -9,6 +9,7 @@
 #import "NERenderView.h"
 #import "NECommon.h"
 #import "NEPolygonLine.h"
+#import "NEDepthBuffer.hpp"
 
 @interface NERenderView()
 
@@ -19,6 +20,8 @@
 @property (nonatomic) NEPolygonLine* xAxis;
 @property (nonatomic) NEPolygonLine* yAxis;
 @property (nonatomic) NEPolygonLine* zAxis;
+
+@property (nonatomic) NEDepthBuffer depthBuffer;
 
 @end
 
@@ -68,6 +71,8 @@
     self.xAxis = xAxis;
     self.yAxis = yAxis;
     self.zAxis = zAxis;
+    
+    _depthBuffer.resetSize(self.frame.size.width, self.frame.size.height);
 }
 
 - (CGPoint)positionInView:(NEVector3)originalPoint{
