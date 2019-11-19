@@ -68,8 +68,11 @@
 //    camera.position = GLKVector3Make(7, 7, 2);
 //    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 2);
     
-    camera.position = GLKVector3Make(-0, 12, 0);
-    NEVector3 pointToLookAt = GLKVector3Make(0, 1, 0);
+//    camera.position = GLKVector3Make(-0, 12, 0);
+//    NEVector3 pointToLookAt = GLKVector3Make(0, 1, 0);
+    
+    camera.position = GLKVector3Make(0, 10, 0);
+    NEVector3 pointToLookAt = GLKVector3Make(0, 12, 0);
     
     [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
     //find y axis which together with z form a plane vertical to xy plane

@@ -95,6 +95,8 @@ NEVector3 translationByVector(NEVector3 aPoint, NEVector3 translationVector){
     return GLKVector3Make(aPoint.x + translationVector.x, aPoint.y + translationVector.y, aPoint.z + translationVector.z);
 }
 
+#define FLOAT_EQUAL(a, b) (fabs(a - b) <= 0.0000002)
+
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis){
 //    return targetOldPosition;
     // 0 + b* 0 + c = 0
@@ -120,9 +122,17 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     NEVector3 newCoordYAxis = rotationByMatrix(coordYAxis, rotZMat);
     //angle between coordY axis and world y axis
     float rotYAngle = getAngleBetweenVectors(GLKVector3Make(0, 1., 0), newCoordYAxis);
-    NEVector3 rotYAxis = crossVectors(newCoordYAxis, GLKVector3Make(0, 1., 0));
-    NEMatrix3 rotYMat = makeRotationMatrix(rotYAxis, rotYAngle);
-    newPosition = rotationByMatrix(newPosition, rotYMat);
+    
+    if (!FLOAT_EQUAL(rotYAngle, M_PI)) {
+        NEVector3 rotYAxis = crossVectors(newCoordYAxis, GLKVector3Make(0, 1., 0));
+        NEMatrix3 rotYMat = makeRotationMatrix(rotYAxis, rotYAngle);
+        newPosition = rotationByMatrix(newPosition, rotYMat);
+    } else {
+        //when angle is 180, the vector cross result is a plane rather than a vector, so handle otherwise
+        NEVector3 rotYAxis = GLKVector3Make(0, 0, 1);
+        NEMatrix3 rotYMat = makeRotationMatrix(rotYAxis, rotYAngle);
+        newPosition = rotationByMatrix(newPosition, rotYMat);
+    }
     
     return newPosition;
 }
