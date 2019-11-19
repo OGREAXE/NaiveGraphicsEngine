@@ -78,6 +78,8 @@ NEVector3 getNormalizedVector(NEVector3  original);
 
 NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint);
 
+bool shoudTrimPoint(NEVector3 point, NEFrustum frustum);
+
 #ifdef __cplusplus
 }
 #endif

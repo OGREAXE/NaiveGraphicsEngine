@@ -108,9 +108,9 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
     
     //now rotate z axis
-    NEVector3 rotAxis = crossVectors(coordZAxis, GLKVector3Make(0,0,1));
+    NEVector3 rotAxis = crossVectors(coordZAxis, GLKVector3Make(0, 0, 1.));
     
-    float rotZAngle = getAngleBetweenVectors(GLKVector3Make(0, 0, 1), coordZAxis);
+    float rotZAngle = getAngleBetweenVectors(GLKVector3Make(0, 0, 1.), coordZAxis);
     
     NEMatrix3 rotZMat = makeRotationMatrix(rotAxis, rotZAngle);
     
@@ -119,8 +119,9 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     //now that we have rotated z axis, time to rotate y axis
     NEVector3 newCoordYAxis = rotationByMatrix(coordYAxis, rotZMat);
     //angle between coordY axis and world y axis
-    float rotYAngle = getAngleBetweenVectors(GLKVector3Make(0, 1, 0), newCoordYAxis);
-    NEMatrix3 rotYMat = makeRotationMatrix(GLKVector3Make(0, 0, 1), rotYAngle);
+    float rotYAngle = getAngleBetweenVectors(GLKVector3Make(0, 1., 0), newCoordYAxis);
+    NEVector3 rotYAxis = crossVectors(newCoordYAxis, GLKVector3Make(0, 1., 0));
+    NEMatrix3 rotYMat = makeRotationMatrix(rotYAxis, rotYAngle);
     newPosition = rotationByMatrix(newPosition, rotYMat);
     
     return newPosition;
@@ -132,6 +133,14 @@ NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3
     //rotate it by 180 degrees around y axis to turn into eye space (in accordance with opengl frustum)
     NEVector3 ret = { - pos.x, pos.y, - pos.z};
     return ret;
+}
+
+bool shoudTrimPoint(NEVector3 point, NEFrustum frustum){
+    if (point.z > - frustum.near || point.z < - frustum.far) {
+        return true;
+    }
+    
+    return false;
 }
 
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){

@@ -18,7 +18,7 @@
         fru.t = 0.2;
         
         fru.near = 1;
-        fru.far = 10;
+        fru.far = 100;
         
         self.frustum = fru;
     }

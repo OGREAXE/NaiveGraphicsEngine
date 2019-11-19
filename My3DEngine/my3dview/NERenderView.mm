@@ -65,11 +65,11 @@
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
-    camera.position = GLKVector3Make(6, 6, 3);
-    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 3);
+//    camera.position = GLKVector3Make(7, 7, 2);
+//    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 2);
     
-//    camera.position = GLKVector3Make(10, 0, 0);
-//    NEVector3 pointToLookAt = GLKVector3Make(-10, 0, 0);
+    camera.position = GLKVector3Make(-0, 12, 0);
+    NEVector3 pointToLookAt = GLKVector3Make(0, 1, 0);
     
     [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
     //find y axis which together with z form a plane vertical to xy plane
@@ -84,7 +84,9 @@
     
     self.moveSpeed = 0.2;
     
-    self.rotationRate = M_PI_2/100;
+//    self.rotationRate = M_PI_2/100;
+    
+    self.rotationRate = M_PI_2 /16;
 }
 
 - (void)initLineFrame{
@@ -154,6 +156,15 @@
     
     NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
     
+    if (shoudTrimPoint(point, _camera.frustum)) {
+        if (pointTran) {
+            (*pointTran).x = 2;
+            (*pointTran).y = 2;
+        }
+        
+        return CGPointZero;
+    }
+    
     NEVector3 point_tran = perspetiveProjectPoint(point, self.camera.frustum);
     
     if (pointTran) {
@@ -222,17 +233,18 @@
     [self positionInView:line.startPosition projectResultNDC:&p0Tran];
     [self positionInView:line.endPosition projectResultNDC:&p1Tran];
     
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // Draw them with a 2.0 stroke width so they are a bit more visible.
-    int bufSize;
-    getPointsArrayInLine(p0Tran, p1Tran, _lineBuffer, MAX_LINE_BUF, &bufSize);
-    
-    if (bufSize >= MAX_LINE_BUF) {
+    if (p0Tran.x < -1.5 || p0Tran.x > 1.5 || p1Tran.y < -1.5 || p1Tran.y > 1.5) {
         return;
     }
     
-    if (p0Tran.x < -1.5 || p0Tran.x > 1.5 || p1Tran.y < -1.5 || p1Tran.y > 1.5) {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    
+    int bufSize;
+    
+    getPointsArrayInLine(p0Tran, p1Tran, _lineBuffer, MAX_LINE_BUF, &bufSize);
+    
+    if (bufSize >= MAX_LINE_BUF) {
         return;
     }
     
@@ -273,20 +285,24 @@
     _depthBuffer.resetSize();
     
     for (NEPolygonLine * line in _geometries) {
-//        [self drawLine:line color:0xffff00]; //yellow
+        [self drawLine:line color:0xffff00]; //yellow
     }
     
-//    [self drawLine:self.xAxis color:0xff0000];
-//    [self drawLine:self.yAxis color:0x00ff00];
+    [self drawLine:self.xAxis color:0xff0000];
+    [self drawLine:self.yAxis color:0x00ff00];
     [self drawLine:self.zAxis color:0x0000ff];
 }
 
 - (void)redraw{
-//    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
+    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
     
-//    NSLog(@" y axis %.5f, %.5f, %.5f", _camera.yAxis.x, _camera.yAxis.y, _camera.yAxis.z);
+    NSLog(@" y axis %.5f, %.5f, %.5f", _camera.yAxis.x, _camera.yAxis.y, _camera.yAxis.z);
     
-//    NSLog(@" x axis %.5f, %.5f, %.5f", _camera.xAxis.x, _camera.xAxis.y, _camera.xAxis.z);
+    NSLog(@" x axis %.5f, %.5f, %.5f", _camera.xAxis.x, _camera.xAxis.y, _camera.xAxis.z);
+    
+    NSLog(@" position %.5f, %.5f, %.5f", _camera.position.x, _camera.position.y, _camera.position.z);
+    
+    NSLog(@"--------------------------");
     
 //    NSLog(@"x * y = %.5f, x * z = %.5f, y * z = %.5f", vectorMultiply(_camera.xAxis, _camera.yAxis),vectorMultiply(_camera.xAxis, _camera.lookAtDirection), vectorMultiply(_camera.yAxis, _camera.lookAtDirection));
     
