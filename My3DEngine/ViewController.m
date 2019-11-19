@@ -49,6 +49,15 @@
 }
 
 ///////
+
+- (IBAction)didTapMoveFoward{
+    [_renderView moveForward];
+}
+
+- (IBAction)didTapMoveBack{
+    [_renderView moveBack];
+}
+
 - (IBAction)didTapMoveUp{
     [_renderView moveUp];
 }

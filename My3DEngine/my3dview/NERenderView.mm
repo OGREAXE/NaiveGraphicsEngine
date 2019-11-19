@@ -65,14 +65,14 @@
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
-//    camera.position = GLKVector3Make(7, 7, 2);
-//    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 2);
+    camera.position = GLKVector3Make(7, 7, 2);
+    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 2);
     
 //    camera.position = GLKVector3Make(-0, 12, 0);
 //    NEVector3 pointToLookAt = GLKVector3Make(0, 1, 0);
     
-    camera.position = GLKVector3Make(0, 10, 0);
-    NEVector3 pointToLookAt = GLKVector3Make(0, 12, 0);
+//    camera.position = GLKVector3Make(0, 10, 0);
+//    NEVector3 pointToLookAt = GLKVector3Make(0, 12, 0);
     
     [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
     //find y axis which together with z form a plane vertical to xy plane
@@ -310,6 +310,24 @@
 //    NSLog(@"x * y = %.5f, x * z = %.5f, y * z = %.5f", vectorMultiply(_camera.xAxis, _camera.yAxis),vectorMultiply(_camera.xAxis, _camera.lookAtDirection), vectorMultiply(_camera.yAxis, _camera.lookAtDirection));
     
     [self setNeedsDisplay];
+}
+
+#pragma mark cam action
+
+- (void)moveForward{
+    float moveDistance = _moveSpeed;
+    NEVector3 translation = GLKVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
+    _camera.position = translationByVector(_camera.position, translation);
+    
+    [self redraw];
+}
+
+- (void)moveBack{
+    float moveDistance = - _moveSpeed;
+    NEVector3 translation = GLKVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
+    _camera.position = translationByVector(_camera.position, translation);
+    
+    [self redraw];
 }
 
 - (void)moveUp{

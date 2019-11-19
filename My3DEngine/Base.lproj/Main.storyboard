@@ -29,16 +29,16 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7kB-2a-Fba">
                                 <rect key="frame" x="166" y="404" width="82" height="54"/>
-                                <state key="normal" title="move up"/>
+                                <state key="normal" title="forward"/>
                                 <connections>
-                                    <action selector="didTapMoveUp" destination="BYZ-38-t0r" eventType="touchUpInside" id="Gwm-fe-qG8"/>
+                                    <action selector="didTapMoveFoward" destination="BYZ-38-t0r" eventType="touchUpInside" id="5U8-9e-rln"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVF-3c-S6N">
                                 <rect key="frame" x="166" y="466" width="82" height="54"/>
-                                <state key="normal" title="move down"/>
+                                <state key="normal" title="back"/>
                                 <connections>
-                                    <action selector="didTapMoveDown" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jed-ww-638"/>
+                                    <action selector="didTapMoveBack" destination="BYZ-38-t0r" eventType="touchUpInside" id="r7E-ow-pvW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Do-9y-vo0">
@@ -50,28 +50,36 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iv4-No-34o">
                                 <rect key="frame" x="38" y="569" width="82" height="54"/>
-                                <state key="normal" title="turn left"/>
+                                <state key="normal" title="turn left">
+                                    <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="didTapTurnLeft" destination="BYZ-38-t0r" eventType="touchUpInside" id="0S4-wg-vSE"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8h-8Z-okV">
                                 <rect key="frame" x="166" y="542" width="82" height="54"/>
-                                <state key="normal" title="look up"/>
+                                <state key="normal" title="look up">
+                                    <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="didTapLookUp" destination="BYZ-38-t0r" eventType="touchUpInside" id="MLN-Kq-n8F"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Adq-UI-cW5">
                                 <rect key="frame" x="166" y="604" width="82" height="54"/>
-                                <state key="normal" title="look down"/>
+                                <state key="normal" title="look down">
+                                    <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="didTapLookDown" destination="BYZ-38-t0r" eventType="touchUpInside" id="bmM-hU-XJE"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrA-u1-Nfw">
                                 <rect key="frame" x="292" y="569" width="82" height="54"/>
-                                <state key="normal" title="turn right"/>
+                                <state key="normal" title="turn right">
+                                    <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="didTapTurnRight" destination="BYZ-38-t0r" eventType="touchUpInside" id="0y4-lE-UVA"/>
                                 </connections>

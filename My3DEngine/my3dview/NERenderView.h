@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) float rotationRate;
 
+- (void)moveForward;
+- (void)moveBack;
+
 - (void)moveUp;
 - (void)moveDown;
 - (void)moveLeft;
