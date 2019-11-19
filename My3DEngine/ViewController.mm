@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "NEScene.h"
 #import "NERenderView.h"
+#import "NEAssLoader.h"
 
 @interface ViewController ()
 
@@ -27,6 +28,10 @@
 //    _renderView = [[NERenderView alloc] initWithFrame:self.view.bounds];
     _renderView = [[NERenderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width)];
     [self.view addSubview:_renderView];
+    
+    NEAssLoader * loader = [[NEAssLoader alloc] init];
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
