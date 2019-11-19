@@ -17,4 +17,20 @@
     return line;
 }
 
++ (NEPolygonLine *)lineWithStartArray:(NSArray<NSNumber*>*)start endArray:(NSArray<NSNumber*>*)end{
+    NEVector3 v0 = {
+        start[0].floatValue,
+        start[1].floatValue,
+        start[2].floatValue
+    };
+    
+    NEVector3 v1 = {
+        end[0].floatValue,
+        end[1].floatValue,
+        end[2].floatValue
+    };
+    
+    return [NEPolygonLine lineWithStart:v0 end:v1];
+}
+
 @end

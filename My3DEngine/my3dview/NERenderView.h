@@ -10,11 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class NEPolygonLine;
+
 @interface NERenderView : UIView
 
 @property (nonatomic) float moveSpeed;
 
 @property (nonatomic) float rotationRate;
+
+@property (nonatomic) NSArray<NEPolygonLine*> *frameLines;
 
 - (void)moveForward;
 - (void)moveBack;

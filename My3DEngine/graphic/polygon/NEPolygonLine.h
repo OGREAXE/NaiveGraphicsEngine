@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NEPolygonLine *)lineWithStart:(NEVector3)start end:(NEVector3)end;
 
++ (NEPolygonLine *)lineWithStartArray:(NSArray*)start endArray:(NSArray*)end;
+
 @end
 
 NS_ASSUME_NONNULL_END

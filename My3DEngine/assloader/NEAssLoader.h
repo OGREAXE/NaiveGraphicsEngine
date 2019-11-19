@@ -7,10 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NEMath.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class NEAssLoader;
+
+@protocol NEAssLoaderDelegate <NSObject>
+
+@end
+
+@class NEPolygonLine;
+
 @interface NEAssLoader : NSObject
+
+@property (nonatomic, weak) id<NEAssLoaderDelegate> delegate;
+
+- (NSArray<NEPolygonLine*>*)lineFrameFromMeshAt:(int)meshIndex range:(float)range;
 
 @end
 

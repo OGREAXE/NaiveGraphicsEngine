@@ -31,8 +31,9 @@
     
     NEAssLoader * loader = [[NEAssLoader alloc] init];
     
-    
+    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
 }
+
 
 - (void)viewDidAppear:(BOOL)animated{
     _renderView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width);

@@ -12,13 +12,16 @@
 #import "NEDepthBuffer.hpp"
 #include <math.h>
 
+#include "CNEAssReader.hpp"
+#import "NEAssLoader.h"
+
 // 创建颜色
 #define RGBACOLOR(r,g,b,a)    ([UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)])
 #define RGBCOLOR(r,g,b)       RGBACOLOR(r,g,b,1)
 #define HEXRGBACOLOR(h,a)     RGBACOLOR(((h>>16)&0xFF), ((h>>8)&0xFF), (h&0xFF), a)
 #define HEXRGBCOLOR(h)        HEXRGBACOLOR(h,1)
 
-@interface NERenderView()
+@interface NERenderView()<NEAssLoaderDelegate>
 
 @property (nonatomic) NSArray<NSValue*>* vectices;
 
@@ -62,6 +65,11 @@
     _depthBuffer.resetSize(self.frame.size.width * COORD_AMPLIFY_FACTOR, self.frame.size.height * COORD_AMPLIFY_FACTOR);
 }
 
+- (void)setFrameLines:(NSArray<NEPolygonLine *> *)frameLines{
+    _frameLines = frameLines;
+    [self initLineFrame];
+}
+
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
@@ -95,6 +103,9 @@
 - (void)initLineFrame{
     [self initAxis];
     
+    self.geometries = self.frameLines;
+    
+    /*
     NSMutableArray * geometries = [NSMutableArray array];
         
     //_line0 = [NEPolygonLine lineWithStart:GLKVector3Make(1, -2, 1) end:GLKVector3Make(1, 2, 1)];
@@ -128,7 +139,7 @@
     
 //    NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(3, 1, 1) end:GLKVector3Make(1, 3, 1)];
 //    [geometries addObject:line];
-    
+    */
 }
 
 - (void)initAxis{
@@ -394,6 +405,10 @@
     [_camera rotateByNearHorizontallyByDegree:angleDiff];
     
     [self redraw];
+}
+
+- (void)loader:(NEAssLoader*)loader didLoadMesh:(NEMesh)mesh{
+    
 }
 
 @end
