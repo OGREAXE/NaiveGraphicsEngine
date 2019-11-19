@@ -42,6 +42,7 @@
 		F309EE1A2383F107007344F8 /* libzlibstatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F309EE182383F106007344F8 /* libzlibstatic.a */; };
 		F309EE1D2383F2FD007344F8 /* CNEAssReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */; };
 		F329F7762366DC2B000CA7F7 /* NEMath.m in Sources */ = {isa = PBXBuildFile; fileRef = F329F7752366DC2A000CA7F7 /* NEMath.m */; };
+		F3542CD3238445890090DD92 /* Cinema4D.fbx in Resources */ = {isa = PBXBuildFile; fileRef = F3542CD2238445890090DD92 /* Cinema4D.fbx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,6 +194,7 @@
 		F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CNEAssReader.cpp; sourceTree = "<group>"; };
 		F309EE1C2383F2FD007344F8 /* CNEAssReader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CNEAssReader.hpp; sourceTree = "<group>"; };
 		F329F7752366DC2A000CA7F7 /* NEMath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEMath.m; sourceTree = "<group>"; };
+		F3542CD2238445890090DD92 /* Cinema4D.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cinema4D.fbx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -489,6 +491,7 @@
 		F309ECA22383D5F1007344F8 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				F3542CD2238445890090DD92 /* Cinema4D.fbx */,
 				F309ECA52383D653007344F8 /* box.fbx */,
 				F309ECA32383D5F1007344F8 /* duck.fbx */,
 			);
@@ -618,6 +621,7 @@
 				F309ECA42383D5F1007344F8 /* duck.fbx in Resources */,
 				F309EC9B2383D0F0007344F8 /* matrix4x4.inl in Resources */,
 				F309ECA62383D653007344F8 /* box.fbx in Resources */,
+				F3542CD3238445890090DD92 /* Cinema4D.fbx in Resources */,
 				F309EC952383D0F0007344F8 /* quaternion.inl in Resources */,
 				D4085B6D2361A14C00ACDC70 /* Assets.xcassets in Resources */,
 				D4085B6B2361A14A00ACDC70 /* Main.storyboard in Resources */,

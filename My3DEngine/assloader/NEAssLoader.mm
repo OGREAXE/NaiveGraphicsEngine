@@ -36,6 +36,7 @@
     _reader = new CNEAssReader();
     
     [self loadFbx:@"duck"];
+//    [self loadFbx:@"Cinema4D"];
 }
 
 - (void)loadFbx:(NSString *)modelName{
@@ -48,6 +49,7 @@
     NEMesh & mesh = _reader->mMeshes[meshIndex];
     
     NSMutableArray<NEPolygonLine*>* lines = [NSMutableArray array];
+    
     for (NEFace & aFace : mesh.faces) {
         NEVertice &v0 = mesh.vertices[aFace.aIndex];
         NEVertice &v1 = mesh.vertices[aFace.bIndex];
@@ -67,6 +69,8 @@
         [lines addObject:line1];
         [lines addObject:line2];
     }
+    
+    NSLog(@"faces count is %d", lines.count/3);
     
     return lines;
 }

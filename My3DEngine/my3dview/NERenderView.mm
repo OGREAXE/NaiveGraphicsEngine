@@ -93,11 +93,11 @@
     
     self.camera = camera;
     
-    self.moveSpeed = 0.2;
+    self.moveSpeed = 2;
     
 //    self.rotationRate = M_PI_2/100;
     
-    self.rotationRate = M_PI_2 /16;
+    self.rotationRate = M_PI_2 /32;
 }
 
 - (void)initLineFrame{
@@ -253,6 +253,7 @@
     
     CGContextRef context = UIGraphicsGetCurrentContext();
 
+    CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
     
     int bufSize;
     
@@ -262,11 +263,19 @@
         return;
     }
     
+    int last_posx = -100000, last_posy = -100000;
+    
     for (int i = 0; i < bufSize; i++) {
         NEVector3 point = _lineBuffer[i];
         CGPoint pointInVew = [self pointInVewForVector3:point];
         
         int posx = (int)pointInVew.x, posy = (int)pointInVew.y;
+        
+        if (posx == last_posx && posy == last_posy) {
+            continue;
+        }
+        last_posx = posx;
+        last_posy = posy;
         
         if (posx > _depthBuffer.getWidth() || posx < 0 || posy > _depthBuffer.getHeight() || posy < 0) {
             continue;
@@ -274,8 +283,8 @@
         
         DepthInfo info = _depthBuffer.getInfo(posx, posy);
         float oldZ = info.z;
-        if (point.z <= oldZ) {
-            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
+        if (point.z < oldZ) {
+//            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(color).CGColor);
             CGContextFillRect(context, CGRectMake(posx / COORD_AMPLIFY_FACTOR - fillWidth/2, posy / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
             info.z = point.z;
             info.color = color;
@@ -405,10 +414,6 @@
     [_camera rotateByNearHorizontallyByDegree:angleDiff];
     
     [self redraw];
-}
-
-- (void)loader:(NEAssLoader*)loader didLoadMesh:(NEMesh)mesh{
-    
 }
 
 @end
