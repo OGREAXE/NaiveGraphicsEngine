@@ -85,7 +85,7 @@
     [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
     //find y axis which together with z form a plane vertical to xy plane
     NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
-    NEVector3 cam_yAxis = crossVectors(camera.lookAtDirection, lookAtRotated_90);
+    NEVector3 cam_yAxis = vectorCrossMultiply(camera.lookAtDirection, lookAtRotated_90);
     camera.yAxis = cam_yAxis;
     camera.xAxis = lookAtRotated_90;
     
@@ -170,7 +170,7 @@
     
     NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
     
-    if (shoudTrimPoint(point, _camera.frustum)) {
+    if (shouldTrimPoint(point, _camera.frustum)) {
         if (pointTran) {
             (*pointTran).x = 2;
             (*pointTran).y = 2;

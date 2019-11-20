@@ -43,14 +43,14 @@ typedef struct tagNELine{
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 
 ///a*b
-float vectorMultiply(GLKVector3 vec0,GLKVector3 vec1);
+float vectorDotMultiply(NEVector3 vec0,NEVector3 vec1);
 
-NEVector3 crossVectors(NEVector3 vec0, NEVector3 vec1);
+NEVector3 vectorCrossMultiply(NEVector3 vec0, NEVector3 vec1);
 
 ///||a||
-float vectorMagnitude(GLKVector3 vec);
+float vectorMagnitude(NEVector3 vec);
 
-float getAngleBetweenVectors(GLKVector3 vec0,GLKVector3 vec1);
+float getAngleBetweenVectors(NEVector3 vec0,NEVector3 vec1);
 
 NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle);
 
@@ -78,7 +78,18 @@ NEVector3 getNormalizedVector(NEVector3  original);
 
 NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint);
 
-bool shoudTrimPoint(NEVector3 point, NEFrustum frustum);
+bool shouldTrimPoint(NEVector3 point, NEFrustum frustum);
+
+
+/// if result > 0 then point is to the right of line
+/// if result == 0 then point is in the line
+/// if result < 0 then point is to the left of line
+/// @param point <#point description#>
+/// @param start <#start description#>
+/// @param end <#end description#>
+int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end);
+
+NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointInPlane);
 
 #ifdef __cplusplus
 }

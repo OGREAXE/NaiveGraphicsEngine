@@ -37,7 +37,7 @@ NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle){
 }
 
 ///a*b
-float vectorMultiply(GLKVector3 vec0,GLKVector3 vec1){
+float vectorDotMultiply(GLKVector3 vec0,GLKVector3 vec1){
     return vec0.x * vec1.x + vec0.y * vec1.y + vec0.z * vec1.z;
 }
 
@@ -47,7 +47,7 @@ float vectorMagnitude(GLKVector3 vec){
 }
 
 float getAngleBetweenVectors(GLKVector3 vec0,GLKVector3 vec1){
-    float result = vectorMultiply(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
+    float result = vectorDotMultiply(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
     result = acosf(result);
     return  result;
 }
@@ -78,7 +78,7 @@ NEVector3 rotationByAngleAroundLine2(NEVector3 aPoint, NEVector3 lineVec, NEVect
     return rotationByAngleAroundLine(aPoint, line, angle);
 }
 
-NEVector3 crossVectors(NEVector3 vec0, NEVector3 vec1){
+NEVector3 vectorCrossMultiply(NEVector3 vec0, NEVector3 vec1){
     NEVector3 cv = {
         vec0.y * vec1.z - vec0.z * vec1.y,
         vec0.z * vec1.x - vec0.x * vec1.z,
@@ -110,7 +110,7 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
     
     //now rotate z axis
-    NEVector3 rotAxis = crossVectors(coordZAxis, GLKVector3Make(0, 0, 1.));
+    NEVector3 rotAxis = vectorCrossMultiply(coordZAxis, GLKVector3Make(0, 0, 1.));
     
     float rotZAngle = getAngleBetweenVectors(GLKVector3Make(0, 0, 1.), coordZAxis);
     
@@ -124,7 +124,7 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     float rotYAngle = getAngleBetweenVectors(GLKVector3Make(0, 1., 0), newCoordYAxis);
     
     if (!FLOAT_EQUAL(rotYAngle, M_PI)) {
-        NEVector3 rotYAxis = crossVectors(newCoordYAxis, GLKVector3Make(0, 1., 0));
+        NEVector3 rotYAxis = vectorCrossMultiply(newCoordYAxis, GLKVector3Make(0, 1., 0));
         NEMatrix3 rotYMat = makeRotationMatrix(rotYAxis, rotYAngle);
         newPosition = rotationByMatrix(newPosition, rotYMat);
     } else {
@@ -145,12 +145,32 @@ NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3
     return ret;
 }
 
-bool shoudTrimPoint(NEVector3 point, NEFrustum frustum){
+bool shouldTrimPoint(NEVector3 point, NEFrustum frustum){
     if (point.z > - frustum.near || point.z < - frustum.far) {
         return true;
     }
     
     return false;
+}
+
+int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end){
+    NEVector2 v0 = GLKVector2Subtract(point, start);
+    NEVector2 v1 = GLKVector2Subtract(end, start);
+    
+    return v0.x * v1.y - v1.x * v0.y;
+}
+
+NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointInPlane){
+    if (normal.z == 0) {
+        return GLKVector3Make(x, y, aPointInPlane.z);
+    }
+    
+    float vx = x - aPointInPlane.x;
+    float vy = y - aPointInPlane.y;
+    
+    float z = - (vx * normal.x + vy * normal.y) / normal.z + aPointInPlane.z;
+    
+    return GLKVector3Make(x, y, z);
 }
 
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
