@@ -43,9 +43,9 @@ typedef struct tagNELine{
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 
 ///a*b
-float vectorDotMultiply(NEVector3 vec0,NEVector3 vec1);
+float vectorDotProduct(NEVector3 vec0,NEVector3 vec1);
 
-NEVector3 vectorCrossMultiply(NEVector3 vec0, NEVector3 vec1);
+NEVector3 vectorCrossProduct(NEVector3 vec0, NEVector3 vec1);
 
 ///||a||
 float vectorMagnitude(NEVector3 vec);

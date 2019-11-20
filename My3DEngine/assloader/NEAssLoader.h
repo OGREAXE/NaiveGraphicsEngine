@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "NEMath.h"
+#include "CNEAssReader.hpp"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class NEAssLoader;
 
 @protocol NEAssLoaderDelegate <NSObject>
+
+- (void)loader:(NEAssLoader *)loader didLoadMesses:(std::vector<NEMesh> &)meshes;
 
 @end
 

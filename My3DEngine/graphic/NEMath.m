@@ -37,7 +37,7 @@ NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle){
 }
 
 ///a*b
-float vectorDotMultiply(GLKVector3 vec0,GLKVector3 vec1){
+float vectorDotProduct(GLKVector3 vec0,GLKVector3 vec1){
     return vec0.x * vec1.x + vec0.y * vec1.y + vec0.z * vec1.z;
 }
 
@@ -47,7 +47,7 @@ float vectorMagnitude(GLKVector3 vec){
 }
 
 float getAngleBetweenVectors(GLKVector3 vec0,GLKVector3 vec1){
-    float result = vectorDotMultiply(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
+    float result = vectorDotProduct(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
     result = acosf(result);
     return  result;
 }
@@ -78,7 +78,7 @@ NEVector3 rotationByAngleAroundLine2(NEVector3 aPoint, NEVector3 lineVec, NEVect
     return rotationByAngleAroundLine(aPoint, line, angle);
 }
 
-NEVector3 vectorCrossMultiply(NEVector3 vec0, NEVector3 vec1){
+NEVector3 vectorCrossProduct(NEVector3 vec0, NEVector3 vec1){
     NEVector3 cv = {
         vec0.y * vec1.z - vec0.z * vec1.y,
         vec0.z * vec1.x - vec0.x * vec1.z,
@@ -110,7 +110,7 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
     
     //now rotate z axis
-    NEVector3 rotAxis = vectorCrossMultiply(coordZAxis, GLKVector3Make(0, 0, 1.));
+    NEVector3 rotAxis = vectorCrossProduct(coordZAxis, GLKVector3Make(0, 0, 1.));
     
     float rotZAngle = getAngleBetweenVectors(GLKVector3Make(0, 0, 1.), coordZAxis);
     
@@ -124,7 +124,7 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     float rotYAngle = getAngleBetweenVectors(GLKVector3Make(0, 1., 0), newCoordYAxis);
     
     if (!FLOAT_EQUAL(rotYAngle, M_PI)) {
-        NEVector3 rotYAxis = vectorCrossMultiply(newCoordYAxis, GLKVector3Make(0, 1., 0));
+        NEVector3 rotYAxis = vectorCrossProduct(newCoordYAxis, GLKVector3Make(0, 1., 0));
         NEMatrix3 rotYMat = makeRotationMatrix(rotYAxis, rotYAngle);
         newPosition = rotationByMatrix(newPosition, rotYMat);
     } else {
