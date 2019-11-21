@@ -42,7 +42,9 @@
 - (void)loadFbx:(NSString *)modelName{
     NSString *fileName = [[NSBundle mainBundle] pathForResource:modelName ofType:@"fbx"];
     
-    _reader->LoadMesh(fileName.UTF8String);
+    if (_reader->LoadMesh(fileName.UTF8String)){
+        [self.delegate loader:self didLoadMeshes:_reader->mMeshes];
+    }
 }
 
 - (NSArray<NEPolygonLine*>*)lineFrameFromMeshAt:(int)meshIndex range:(float)range{

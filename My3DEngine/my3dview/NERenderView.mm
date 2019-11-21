@@ -416,4 +416,10 @@
     [self redraw];
 }
 
+#pragma mark ass loader
+
+- (void)loader:(NEAssLoader *)loader didLoadMeshes:(std::vector<NEMesh> &)meshes{
+    
+}
+
 @end
