@@ -73,16 +73,16 @@
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
-    camera.position = GLKVector3Make(7, 7, 2);
-    NEVector3 pointToLookAt = GLKVector3Make(0, 0, 2);
+    camera.position = NEVector3Make(7, 7, 2);
+    NEVector3 pointToLookAt = NEVector3Make(0, 0, 2);
     
-//    camera.position = GLKVector3Make(-0, 12, 0);
-//    NEVector3 pointToLookAt = GLKVector3Make(0, 1, 0);
+//    camera.position = NEVector3Make(-0, 12, 0);
+//    NEVector3 pointToLookAt = NEVector3Make(0, 1, 0);
     
-//    camera.position = GLKVector3Make(0, 10, 0);
-//    NEVector3 pointToLookAt = GLKVector3Make(0, 12, 0);
+//    camera.position = NEVector3Make(0, 10, 0);
+//    NEVector3 pointToLookAt = NEVector3Make(0, 12, 0);
     
-    [camera lookAt:GLKVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
+    [camera lookAt:NEVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
     //find y axis which together with z form a plane vertical to xy plane
     NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
     NEVector3 cam_yAxis = vectorCrossProduct(camera.lookAtDirection, lookAtRotated_90);
@@ -108,7 +108,7 @@
     /*
     NSMutableArray * geometries = [NSMutableArray array];
         
-    //_line0 = [NEPolygonLine lineWithStart:GLKVector3Make(1, -2, 1) end:GLKVector3Make(1, 2, 1)];
+    //_line0 = [NEPolygonLine lineWithStart:NEVector3Make(1, -2, 1) end:NEVector3Make(1, 2, 1)];
     NSArray * points3 = @[
     @[@(1), @(1) ,@(1)], @[@(1), @(3) ,@(1)],
     @[@(1), @(3) ,@(1)], @[@(3), @(3) ,@(1)],
@@ -131,29 +131,29 @@
         NSArray<NSNumber*> * endPoint = points3[2 * i];
         NSArray<NSNumber*> * startPoint = points3[2 * i + 1];
         
-        NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(startPoint[0].floatValue, startPoint[1].floatValue - 2, startPoint[2].floatValue -2 ) end:GLKVector3Make(endPoint[0].floatValue, endPoint[1].floatValue - 2, endPoint[2].floatValue - 2)];
+        NEPolygonLine * line = [NEPolygonLine lineWithStart:NEVector3Make(startPoint[0].floatValue, startPoint[1].floatValue - 2, startPoint[2].floatValue -2 ) end:NEVector3Make(endPoint[0].floatValue, endPoint[1].floatValue - 2, endPoint[2].floatValue - 2)];
         [geometries addObject:line];
     }
     
     self.geometries = geometries;
     
-//    NEPolygonLine * line = [NEPolygonLine lineWithStart:GLKVector3Make(3, 1, 1) end:GLKVector3Make(1, 3, 1)];
+//    NEPolygonLine * line = [NEPolygonLine lineWithStart:NEVector3Make(3, 1, 1) end:NEVector3Make(1, 3, 1)];
 //    [geometries addObject:line];
     */
 }
 
 - (void)initAxis{
     NEPolygonLine * xAxis = [[NEPolygonLine alloc] init];
-     xAxis.startPosition = GLKVector3Make(0, 0, 0);
-     xAxis.endPosition = GLKVector3Make(5, 0, 0);
+     xAxis.startPosition = NEVector3Make(0, 0, 0);
+     xAxis.endPosition = NEVector3Make(5, 0, 0);
     
      NEPolygonLine * yAxis = [[NEPolygonLine alloc] init];
-     yAxis.startPosition = GLKVector3Make(0, 0, 0);
-     yAxis.endPosition = GLKVector3Make(0, 5, 0);
+     yAxis.startPosition = NEVector3Make(0, 0, 0);
+     yAxis.endPosition = NEVector3Make(0, 5, 0);
     
      NEPolygonLine * zAxis = [[NEPolygonLine alloc] init];
-     zAxis.startPosition = GLKVector3Make(0, 0, 0);
-     zAxis.endPosition = GLKVector3Make(0, 0, 5);
+     zAxis.startPosition = NEVector3Make(0, 0, 0);
+     zAxis.endPosition = NEVector3Make(0, 0, 5);
      
      self.xAxis = xAxis;
      self.yAxis = yAxis;
@@ -202,7 +202,7 @@
 }
 
 - (void)drawOrigin{
-    CGPoint p0 = [self positionInView:GLKVector3Make(0, 0, 0)];
+    CGPoint p0 = [self positionInView:NEVector3Make(0, 0, 0)];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
 
@@ -336,7 +336,7 @@
 
 - (void)moveForward{
     float moveDistance = _moveSpeed;
-    NEVector3 translation = GLKVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
+    NEVector3 translation = NEVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
     _camera.position = translationByVector(_camera.position, translation);
     
     [self redraw];
@@ -344,7 +344,7 @@
 
 - (void)moveBack{
     float moveDistance = - _moveSpeed;
-    NEVector3 translation = GLKVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
+    NEVector3 translation = NEVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
     _camera.position = translationByVector(_camera.position, translation);
     
     [self redraw];
@@ -352,28 +352,28 @@
 
 - (void)moveUp{
     float moveDistance = _moveSpeed;
-    NEVector3 translation = GLKVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
+    NEVector3 translation = NEVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
     _camera.position = translationByVector(_camera.position, translation);
     
     [self redraw];
 }
 - (void)moveDown{
     float moveDistance = - _moveSpeed;
-    NEVector3 translation = GLKVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
+    NEVector3 translation = NEVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
     _camera.position = translationByVector(_camera.position, translation);
     
     [self redraw];
 }
 - (void)moveLeft{
     float moveDistance = _moveSpeed;
-    NEVector3 translation = GLKVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
+    NEVector3 translation = NEVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
     _camera.position = translationByVector(_camera.position, translation);
     
     [self redraw];
 }
 - (void)moveRight{
     float moveDistance = - _moveSpeed;
-    NEVector3 translation = GLKVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
+    NEVector3 translation = NEVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
     _camera.position = translationByVector(_camera.position, translation);
     
     [self redraw];
@@ -416,10 +416,24 @@
     [self redraw];
 }
 
+NEVector3 vectorFromVertice(NEVertice & vert){
+    NEVector3 v = {vert.x, vert.y, vert.z};
+    return v;
+}
+
 #pragma mark ass loader
 
 - (void)loader:(NEAssLoader *)loader didLoadMeshes:(std::vector<NEMesh> &)meshes{
-    
+    NEMesh & mesh = meshes[0];
+    for (NEFace & aface : mesh.faces) {
+        NEVertice & _v0 = mesh.vertices[aface.aIndex];
+        NEVertice & _v1 = mesh.vertices[aface.bIndex];
+        NEVertice & _v2 = mesh.vertices[aface.cIndex];
+        
+        NEVector3 v0 = vectorFromVertice(_v0);
+        NEVector3 v1 = vectorFromVertice(_v1);
+        NEVector3 v2 = vectorFromVertice(_v2);
+    }
 }
 
 @end

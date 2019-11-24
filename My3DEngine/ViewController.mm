@@ -41,11 +41,11 @@
 
 - (void)debugShowInfo{
         
-    //    NEVector3 positionInCam = getPositionInCameraCoordinateSystem(GLKVector3Make(2, 2, 1), GLKVector3Make(1, 1, 0), GLKVector3Make(0, 1, 0), GLKVector3Make(0, 0, 1));
+    //    NEVector3 positionInCam = getPositionInCameraCoordinateSystem(NEVector3Make(2, 2, 1), NEVector3Make(1, 1, 0), NEVector3Make(0, 1, 0), NEVector3Make(0, 0, 1));
         //should be (-1, 1, 1)
     //    NSLog(@"result is %f, %f, %f",positionInCam.x, positionInCam.y, positionInCam.z);
         
-        NEVector3 positionInCam = getPositionInCameraCoordinateSystem(GLKVector3Make(3, 3, 2), GLKVector3Make(2, 2, 0), GLKVector3Make(1, 1, 1), GLKVector3Make(-1, -1, 2));
+        NEVector3 positionInCam = getPositionInCameraCoordinateSystem(NEVector3Make(3, 3, 2), NEVector3Make(2, 2, 0), NEVector3Make(1, 1, 1), NEVector3Make(-1, -1, 2));
         
         NSLog(@"result is %f, %f, %f",positionInCam.x, positionInCam.y, positionInCam.z);
 }

@@ -16,25 +16,8 @@
 #include <assimp/mesh.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "NEMesh.h"
 
-typedef struct tagNEVertice{
-    float x;
-    float y;
-    float z;
-} NEVertice;
-
-typedef struct tagNEFace{
-    int aIndex;
-    int bIndex;
-    int cIndex;
-} NEFace;
-
-typedef struct tagNEMesh{
-    std::vector<NEVertice> vertices;
-    std::vector<NEFace> faces;
-    
-    float range;
-} NEMesh;
 
 class CNEAssReader {
     bool InitFromScene(const aiScene* pScene, const std::string& Filename);

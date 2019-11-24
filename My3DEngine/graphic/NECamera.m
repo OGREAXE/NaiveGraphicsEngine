@@ -40,7 +40,7 @@
     [self normalize];
     
     float nearDistance = _frustum.near * NEAR_FACTOR;
-    NEVector3 pointInRotatedAxis = GLKVector3Make(self.position.x + nearDistance * self.lookAtDirection.x, self.position.y + nearDistance * self.lookAtDirection.y, self.position.z + nearDistance * self.lookAtDirection.z);
+    NEVector3 pointInRotatedAxis = NEVector3Make(self.position.x + nearDistance * self.lookAtDirection.x, self.position.y + nearDistance * self.lookAtDirection.y, self.position.z + nearDistance * self.lookAtDirection.z);
     
     self.xAxis = rotationByAngle(self.xAxis, self.yAxis, degree);
     self.lookAtDirection = rotationByAngle(self.lookAtDirection, self.yAxis, degree);
@@ -52,7 +52,7 @@
     [self normalize];
     
     float nearDistance = _frustum.near * NEAR_FACTOR;
-    NEVector3 pointInRotatedAxis = GLKVector3Make(self.position.x + nearDistance * self.lookAtDirection.x, self.position.y + nearDistance * self.lookAtDirection.y, self.position.z + nearDistance * self.lookAtDirection.z);
+    NEVector3 pointInRotatedAxis = NEVector3Make(self.position.x + nearDistance * self.lookAtDirection.x, self.position.y + nearDistance * self.lookAtDirection.y, self.position.z + nearDistance * self.lookAtDirection.z);
     
     self.yAxis = rotationByAngle(self.yAxis, self.xAxis, degree);
     self.lookAtDirection = rotationByAngle(self.lookAtDirection, self.xAxis, degree);
