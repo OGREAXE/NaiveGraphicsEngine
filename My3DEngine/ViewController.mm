@@ -11,11 +11,13 @@
 #import "NERenderView.h"
 #import "NEAssLoader.h"
 
-@interface ViewController ()
+@interface ViewController () <NEAssLoaderDelegate>
 
 @property (nonatomic) NEScene *scene;
 
 @property (nonatomic) NERenderView *renderView;
+
+@property (nonatomic) BOOL lineFrameMode;
 
 @end
 
@@ -23,6 +25,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _lineFrameMode = YES;
     // Do any additional setup after loading the view.
     
 //    _renderView = [[NERenderView alloc] initWithFrame:self.view.bounds];
@@ -30,8 +34,16 @@
     [self.view addSubview:_renderView];
     
     NEAssLoader * loader = [[NEAssLoader alloc] init];
+    loader.delegate = self;
     
-    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
+    if (_lineFrameMode) {
+        [loader loadFbx:@"duck"];
+    } else {
+        [loader loadDefaultFile];
+    }
+    
+    
+//    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
 }
 
 
@@ -52,6 +64,15 @@
 
 - (void)createScene{
     _scene = [[NEScene alloc] init];
+}
+
+- (void)loader:(NEAssLoader *)loader didLoadMeshes:(std::vector<NEMesh> &)meshes{
+    
+    if (_lineFrameMode) {
+        _renderView.frameLines = [loader lineFrameFromMesh:meshes[0] range:20];
+    } else {
+        [_renderView loadMeshes:meshes];
+    }
 }
 
 ///////

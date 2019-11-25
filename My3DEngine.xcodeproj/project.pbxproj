@@ -43,6 +43,7 @@
 		F309EE1D2383F2FD007344F8 /* CNEAssReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */; };
 		F329F7762366DC2B000CA7F7 /* NEMath.m in Sources */ = {isa = PBXBuildFile; fileRef = F329F7752366DC2A000CA7F7 /* NEMath.m */; };
 		F3542CD3238445890090DD92 /* Cinema4D.fbx in Resources */ = {isa = PBXBuildFile; fileRef = F3542CD2238445890090DD92 /* Cinema4D.fbx */; };
+		F3D9F040238A894400EE98C2 /* NEScreenRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3D9F03E238A894400EE98C2 /* NEScreenRenderer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +196,9 @@
 		F309EE1C2383F2FD007344F8 /* CNEAssReader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CNEAssReader.hpp; sourceTree = "<group>"; };
 		F329F7752366DC2A000CA7F7 /* NEMath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEMath.m; sourceTree = "<group>"; };
 		F3542CD2238445890090DD92 /* Cinema4D.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cinema4D.fbx; sourceTree = "<group>"; };
+		F3D9F03E238A894400EE98C2 /* NEScreenRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NEScreenRenderer.cpp; sourceTree = "<group>"; };
+		F3D9F03F238A894400EE98C2 /* NEScreenRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NEScreenRenderer.hpp; sourceTree = "<group>"; };
+		F3D9F041238A8A4C00EE98C2 /* NEMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMesh.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -303,6 +307,9 @@
 				D4085BF82361CB6600ACDC70 /* NEScene.m */,
 				D44026D5238107FF00435316 /* NEDepthBuffer.cpp */,
 				D44026D6238107FF00435316 /* NEDepthBuffer.hpp */,
+				F3D9F03E238A894400EE98C2 /* NEScreenRenderer.cpp */,
+				F3D9F03F238A894400EE98C2 /* NEScreenRenderer.hpp */,
+				F3D9F041238A8A4C00EE98C2 /* NEMesh.h */,
 			);
 			path = graphic;
 			sourceTree = "<group>";
@@ -664,6 +671,7 @@
 				D4085B732361A14C00ACDC70 /* main.m in Sources */,
 				D4085BF92361CB6600ACDC70 /* NEScene.m in Sources */,
 				D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */,
+				F3D9F040238A894400EE98C2 /* NEScreenRenderer.cpp in Sources */,
 				D4085B652361A14A00ACDC70 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

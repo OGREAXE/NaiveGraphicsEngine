@@ -9,6 +9,8 @@
 #ifndef NECommon_h
 #define NECommon_h
 
+#define NE_INLINE    static __inline__
+
 #import "NEMath.h"
 #import "NEObject.h"
 #import "NECamera.h"

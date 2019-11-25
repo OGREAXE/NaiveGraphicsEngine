@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#include "NEMesh.h"
+#include <vector>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)lookDown;
 - (void)turnLeft;
 - (void)turnRight;
+
+- (void)loadMeshes:(std::vector<NEMesh> &)meshes;
 
 @end
 

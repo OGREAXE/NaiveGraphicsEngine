@@ -368,6 +368,13 @@ NEVector3 getNormalizedVector(NEVector3  original){
     return n;
 }
 
+NEVector3 getPlaneNormal(NEVector3 p0, NEVector3 p1, NEVector3 p2){
+    NEVector3 v0 = NEVector3Subtract(p1, p0);
+    NEVector3 v1 = NEVector3Subtract(p2, p0);
+    
+    return vectorCrossProduct(v0, v1);
+}
+
 NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint){
     NEVector3 pointTrans = NEVector3Make(otherPoint.x - line.pointInLine.x, otherPoint.y - line.pointInLine.y, otherPoint.z - line.pointInLine.z);
     

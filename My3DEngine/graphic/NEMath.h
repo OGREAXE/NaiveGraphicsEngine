@@ -39,6 +39,7 @@ typedef GLKMatrix4 NEMatrix4;
 #define NEMatrix4MultiplyVector4(m, v)  GLKMatrix4MultiplyVector4(m, v)
 
 #define NEVector2Subtract(a, b) GLKVector2Subtract(a, b)
+#define NEVector3Subtract(a, b) GLKVector3Subtract(a, b)
 
 #define NEMatrix4Make(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) GLKMatrix4Make(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
 
@@ -102,6 +103,8 @@ bool shouldTrimPoint(NEVector3 point, NEFrustum frustum);
 /// @param start <#start description#>
 /// @param end <#end description#>
 int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end);
+
+NEVector3 getPlaneNormal(NEVector3 p0, NEVector3 p1, NEVector3 p2);
 
 NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointInPlane);
 

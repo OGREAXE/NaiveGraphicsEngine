@@ -9,6 +9,8 @@
 #ifndef NEMesh_h
 #define NEMesh_h
 
+#include <vector>
+
 typedef struct tagNEVertice{
     float x;
     float y;
@@ -19,6 +21,8 @@ typedef struct tagNEFace{
     int aIndex;
     int bIndex;
     int cIndex;
+    
+    long color;
 } NEFace;
 
 typedef struct tagNEMesh{
@@ -27,5 +31,12 @@ typedef struct tagNEMesh{
     
     float range;
 } NEMesh;
+
+typedef struct tagNEBoundingBox{
+    int startX;
+    int startY;
+    int endX;
+    int endY;
+} NEBoundingBox;
 
 #endif /* NEMesh_h */

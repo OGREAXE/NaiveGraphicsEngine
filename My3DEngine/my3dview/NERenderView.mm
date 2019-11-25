@@ -60,7 +60,7 @@
 - (void)doInit{
     [self initCamera];
     
-    [self initLineFrame];
+//    [self initLineFrame];
     
     _depthBuffer.resetSize(self.frame.size.width * COORD_AMPLIFY_FACTOR, self.frame.size.height * COORD_AMPLIFY_FACTOR);
 }
@@ -164,6 +164,20 @@
     return [self positionInView:originalPoint projectResultNDC:nil];
 }
 
+- (NEVector3)convertToEyeSpace:(NEVector3)originalPoint{
+    NEVector3 pointTran;
+    
+    NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
+    
+    if (shouldTrimPoint(point, _camera.frustum)) {
+        pointTran.x = 2;
+        pointTran.y = 2;
+        return pointTran;
+    }
+    
+    return pointTran;
+}
+
 - (CGPoint)positionInView:(NEVector3)originalPoint projectResultNDC:(NEVector3 *)pointTran{
     CGFloat width = self.frame.size.width * COORD_AMPLIFY_FACTOR;
     CGFloat height = self.frame.size.height * COORD_AMPLIFY_FACTOR;
@@ -201,6 +215,21 @@
     return CGPointMake(screen_x, screen_y);
 }
 
+//convert screen position (i.e 375 for iphone) to eye space [-1, 1]
+- (CGFloat)revertScreenHorizontalPosition:(int)screenx{
+    CGFloat width = self.frame.size.width * COORD_AMPLIFY_FACTOR;
+    
+    CGFloat ret = (screenx / (width/2) - 1);
+    return ret;
+}
+
+- (CGFloat)revertScreenVerticalPosition:(int)screeny{
+    CGFloat height = self.frame.size.height * COORD_AMPLIFY_FACTOR;
+    
+    CGFloat ret = (1 - screeny / (height/2));
+    return ret;
+}
+
 - (void)drawOrigin{
     CGPoint p0 = [self positionInView:NEVector3Make(0, 0, 0)];
     
@@ -216,25 +245,6 @@
 
 - (void)drawLine:(NEPolygonLine *)line color:(long)color {
     [self drawPointsForLine:line color:color];
-    return;
-    
-//    CGPoint p0 = [self positionInView:line.startPosition];
-//    CGPoint p1 = [self positionInView:line.endPosition];
-//
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
-//
-//    // Draw them with a 2.0 stroke width so they are a bit more visible.
-//    CGContextSetLineWidth(context, 2.0f);
-//
-//    CGContextSetStrokeColorWithColor(context, color.CGColor);
-//
-//    CGContextMoveToPoint(context, p0.x, p0.y); //start at this point
-//
-//    CGContextAddLineToPoint(context, p1.x, p1.y); //draw to this point
-//
-//    // and now draw the Path!
-//    CGContextStrokePath(context);
 }
 
 
@@ -416,16 +426,27 @@
     [self redraw];
 }
 
+//util methods
 NEVector3 vectorFromVertice(NEVertice & vert){
     NEVector3 v = {vert.x, vert.y, vert.z};
     return v;
 }
 
+bool isPointInsideTriangle(CGPoint p0, CGPoint p1, CGPoint p2, NEBoundingBox & boundingBox){
+    return true;
+}
+
 #pragma mark ass loader
 
-- (void)loader:(NEAssLoader *)loader didLoadMeshes:(std::vector<NEMesh> &)meshes{
+- (void)loadMeshes:(std::vector<NEMesh> &)meshes{
     NEMesh & mesh = meshes[0];
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
+    
     for (NEFace & aface : mesh.faces) {
+        
         NEVertice & _v0 = mesh.vertices[aface.aIndex];
         NEVertice & _v1 = mesh.vertices[aface.bIndex];
         NEVertice & _v2 = mesh.vertices[aface.cIndex];
@@ -433,6 +454,47 @@ NEVector3 vectorFromVertice(NEVertice & vert){
         NEVector3 v0 = vectorFromVertice(_v0);
         NEVector3 v1 = vectorFromVertice(_v1);
         NEVector3 v2 = vectorFromVertice(_v2);
+        
+        NEVector3 v0t = [self convertToEyeSpace:v0];
+        NEVector3 v1t = [self convertToEyeSpace:v1];
+        NEVector3 v2t = [self convertToEyeSpace:v2];
+        
+        CGPoint pointInVew0 = [self pointInVewForVector3:v0t];
+        CGPoint pointInVew1 = [self pointInVewForVector3:v1t];
+        CGPoint pointInVew2 = [self pointInVewForVector3:v2t];
+        
+        float minx = MIN(MIN(pointInVew0.x, pointInVew1.x), pointInVew2.x);
+        float miny = MIN(MIN(pointInVew0.y, pointInVew1.y), pointInVew2.y);
+        
+        float maxx = MAX(MAX(pointInVew0.x, pointInVew1.x), pointInVew2.x);
+        float maxy = MAX(MAX(pointInVew0.y, pointInVew1.y), pointInVew2.y);
+        
+        NEBoundingBox boundingBox;
+        boundingBox.startX = (int)minx;
+        boundingBox.startY = (int)miny;
+        
+        boundingBox.endX = (int)maxx;
+        boundingBox.endY = (int)maxy;
+        
+        NEVector3 normal = getPlaneNormal(v0, v1, v2);
+        
+        for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
+            for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
+                CGFloat revertX = [self revertScreenHorizontalPosition:x];
+                CGFloat revertY = [self revertScreenHorizontalPosition:y];
+                
+                NEVector3 point = getPointInPlane(revertX, revertY, normal, v0);
+                
+                DepthInfo info = _depthBuffer.getInfo(x, y);
+                float oldZ = info.z;
+                if (point.z < oldZ) {
+                    CGContextFillRect(context, CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
+                    info.z = point.z;
+                    info.color = aface.color;
+                    _depthBuffer.setInfo(info, x, y);
+                }
+            }
+        }
     }
 }
 

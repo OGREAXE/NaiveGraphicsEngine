@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "NEMath.h"
+#include "NEMesh.h"
 #include "CNEAssReader.hpp"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,6 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<NEAssLoaderDelegate> delegate;
 
 - (NSArray<NEPolygonLine*>*)lineFrameFromMeshAt:(int)meshIndex range:(float)range;
+
+- (NSArray<NEPolygonLine*>*)lineFrameFromMesh:(NEMesh &)mesh range:(float)range;
+
+- (void)loadFbx:(NSString *)modelName;
+
+- (void)loadDefaultFile;
 
 @end
 
