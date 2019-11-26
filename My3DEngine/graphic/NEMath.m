@@ -155,6 +155,19 @@ int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end){
     return v0.x * v1.y - v1.x * v0.y;
 }
 
+bool pointInsizeTriangle(NEVector2 point, NEVector2 p0, NEVector2 p1, NEVector2 p2){
+    int t0 = testPointToLine2d(point, p0, p1);
+    int t1 = testPointToLine2d(point, p1, p2);
+    int t2 = testPointToLine2d(point, p2, p0);
+    
+    if ((t0 >= 0 && t1 >= 0 && t2 >= 0) ||
+    (t0 <= 0 && t1 <= 0 && t2 <= 0)){
+        return true;
+    }
+    
+    return false;
+}
+
 NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointInPlane){
     if (normal.z == 0) {
         return NEVector3Make(x, y, aPointInPlane.z);

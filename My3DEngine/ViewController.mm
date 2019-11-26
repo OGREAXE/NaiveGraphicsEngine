@@ -26,22 +26,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _lineFrameMode = YES;
+//    _lineFrameMode = YES;
     // Do any additional setup after loading the view.
     
 //    _renderView = [[NERenderView alloc] initWithFrame:self.view.bounds];
     _renderView = [[NERenderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width)];
+    _renderView.lineFrameMode = self.lineFrameMode;
     [self.view addSubview:_renderView];
     
     NEAssLoader * loader = [[NEAssLoader alloc] init];
     loader.delegate = self;
     
-    if (_lineFrameMode) {
-        [loader loadFbx:@"duck"];
-    } else {
-        [loader loadDefaultFile];
-    }
-    
+//    [loader loadFbx:@"duck"];
+    [loader loadDefaultFile];
     
 //    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
 }

@@ -33,6 +33,8 @@
 
 //@property (nonatomic) NEPolygonLine* line0;
 
+@property (nonatomic) std::vector<NEMesh> meshes;
+
 @property (nonatomic) NSArray<NEPolygonLine*> *geometries;
 
 @property (nonatomic) NEDepthBuffer depthBuffer;
@@ -59,6 +61,8 @@
 
 - (void)doInit{
     [self initCamera];
+    
+    [self initAxis];
     
 //    [self initLineFrame];
     
@@ -101,8 +105,6 @@
 }
 
 - (void)initLineFrame{
-    [self initAxis];
-    
     self.geometries = self.frameLines;
     
     /*
@@ -174,6 +176,8 @@
         pointTran.y = 2;
         return pointTran;
     }
+    
+    pointTran = perspetiveProjectPoint(point, self.camera.frustum);
     
     return pointTran;
 }
@@ -310,17 +314,29 @@
 }
 
 - (void)drawRect:(CGRect)rect{
-//    [self drawOrigin];
-    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, self.bounds);
     
+    if (_lineFrameMode) {
+        [self drawRect_lineFrame:rect];
+    } else {
+        const std::vector<NEMesh> & meshes = self.meshes;
+        [self drawMeshes:meshes];
+    }
+    
+    [self drawAxis];
+}
+
+- (void)drawRect_lineFrame:(CGRect)rect{
+//    [self drawOrigin];
     _depthBuffer.resetSize();
     
     for (NEPolygonLine * line in _geometries) {
         [self drawLine:line color:0xffff00]; //yellow
     }
-    
+}
+
+- (void)drawAxis{
     [self drawLine:self.xAxis color:0xff0000];
     [self drawLine:self.yAxis color:0x00ff00];
     [self drawLine:self.zAxis color:0x0000ff];
@@ -427,29 +443,40 @@
 }
 
 //util methods
-NEVector3 vectorFromVertice(NEVertice & vert){
+NEVector3 vectorFromVertice(const NEVertice & vert){
     NEVector3 v = {vert.x, vert.y, vert.z};
     return v;
 }
 
-bool isPointInsideTriangle(CGPoint p0, CGPoint p1, CGPoint p2, NEBoundingBox & boundingBox){
-    return true;
+bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
+    NEVector2 p = NEVector2Make(point.x, point.y);
+    NEVector2 v0 = NEVector2Make(p0.x, p0.y);
+    NEVector2 v1 = NEVector2Make(p1.x, p1.y);
+    NEVector2 v2 = NEVector2Make(p2.x, p2.y);
+    return pointInsizeTriangle(p, v0, v1, v2);
 }
 
 #pragma mark ass loader
 
 - (void)loadMeshes:(std::vector<NEMesh> &)meshes{
-    NEMesh & mesh = meshes[0];
+    _meshes = meshes;
+}
+
+- (void)drawMeshes:(const std::vector<NEMesh> &)meshes{
+    const NEMesh & mesh = meshes[0];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
-    for (NEFace & aface : mesh.faces) {
+    for (const NEFace & aface : mesh.faces) {
         
-        NEVertice & _v0 = mesh.vertices[aface.aIndex];
-        NEVertice & _v1 = mesh.vertices[aface.bIndex];
-        NEVertice & _v2 = mesh.vertices[aface.cIndex];
+//        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
+        CGContextSetFillColorWithColor(context, UIColor.yellowColor.CGColor);
+        
+        const NEVertice & _v0 = mesh.vertices[aface.aIndex];
+        const NEVertice & _v1 = mesh.vertices[aface.bIndex];
+        const NEVertice & _v2 = mesh.vertices[aface.cIndex];
         
         NEVector3 v0 = vectorFromVertice(_v0);
         NEVector3 v1 = vectorFromVertice(_v1);
@@ -476,12 +503,16 @@ bool isPointInsideTriangle(CGPoint p0, CGPoint p1, CGPoint p2, NEBoundingBox & b
         boundingBox.endX = (int)maxx;
         boundingBox.endY = (int)maxy;
         
-        NEVector3 normal = getPlaneNormal(v0, v1, v2);
+        NEVector3 normal = getPlaneNormal(v0t, v1t, v2t);
         
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
                 CGFloat revertX = [self revertScreenHorizontalPosition:x];
-                CGFloat revertY = [self revertScreenHorizontalPosition:y];
+                CGFloat revertY = [self revertScreenVerticalPosition:y];
+                
+                if (!isPointInsideTriangle(CGPointMake(x, y), pointInVew0, pointInVew1, pointInVew2)) {
+                    continue;
+                }
                 
                 NEVector3 point = getPointInPlane(revertX, revertY, normal, v0);
                 
@@ -492,6 +523,8 @@ bool isPointInsideTriangle(CGPoint p0, CGPoint p1, CGPoint p2, NEBoundingBox & b
                     info.z = point.z;
                     info.color = aface.color;
                     _depthBuffer.setInfo(info, x, y);
+                } else {
+                    int i = 0;
                 }
             }
         }

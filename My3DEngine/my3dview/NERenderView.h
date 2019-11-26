@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) float rotationRate;
 
+@property (nonatomic) BOOL lineFrameMode;
+
 @property (nonatomic) NSArray<NEPolygonLine*> *frameLines;
 
 - (void)moveForward;

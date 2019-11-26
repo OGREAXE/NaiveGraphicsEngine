@@ -49,6 +49,8 @@
     mesh.vertices.push_back(vy);
     mesh.vertices.push_back(vz);
     
+    mesh.range = 20;
+    
     NEFace face;
     face.aIndex = 0;
     face.bIndex = 1;

@@ -29,7 +29,7 @@ typedef struct tagNEMesh{
     std::vector<NEVertice> vertices;
     std::vector<NEFace> faces;
     
-    float range;
+    float range; //the max distance between 2 vertices
 } NEMesh;
 
 typedef struct tagNEBoundingBox{
