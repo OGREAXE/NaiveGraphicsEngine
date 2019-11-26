@@ -39,6 +39,59 @@
 }
 
 - (void)loadDefaultFile{
+    NSArray * vertices = @[
+    @[@(1), @(1) ,@(1)], @[@(1), @(3) ,@(1)], @[@(3), @(3) ,@(1)],@[@(3), @(1) ,@(1)],
+    
+    @[@(1), @(1) ,@(3)], @[@(1), @(3) ,@(3)], @[@(3), @(3) ,@(3)], @[@(3), @(1) ,@(3)],
+    ];
+    
+    NEMesh mesh;
+    mesh.range = 20;
+    
+    for (NSArray<NSNumber *> * arrVertice : vertices) {
+        NEVertice v = { arrVertice[0].floatValue, arrVertice[1].floatValue, arrVertice[2].floatValue };
+        
+        mesh.vertices.push_back(v);
+    }
+    
+    NSArray * indices = @[
+    @[@(0), @(1) ,@(2)], @[@(2), @(3) ,@(0)], //bottom
+    @[@(4), @(5) ,@(6)], @[@(6), @(7) ,@(4)], //top
+    @[@(7), @(6) ,@(2)], @[@(2), @(3) ,@(7)], //front
+    @[@(6), @(5) ,@(1)], @[@(1), @(2) ,@(6)], //right
+    @[@(4), @(0) ,@(1)], @[@(1), @(5) ,@(4)], //back
+    @[@(7), @(3) ,@(0)], @[@(0), @(4) ,@(7)], //left
+    ];
+    
+    NSArray<NSNumber *> * colors = @[
+    @(0xff0000), @(0xff0000), //bottom
+    @(0x00ff00), @(0x00ff00), //top
+    @(0x0000ff), @(0x0000ff), //front
+    @(0xffff00), @(0xffff00), //right
+    @(0x00ffff), @(0x00ffff), //back
+    @(0xff00ff), @(0xff00ff), //left
+    ];
+    
+    for (int i = 0; i < indices.count; i++) {
+        NSArray<NSNumber *> * aFaceIndices = indices[i];
+        
+        NEFace face;
+        face.aIndex = aFaceIndices[0].intValue;
+        face.bIndex = aFaceIndices[1].intValue;
+        face.cIndex = aFaceIndices[2].intValue;
+        
+        face.color = colors[i].longValue;
+        
+        mesh.faces.push_back(face);
+    }
+    
+    std::vector<NEMesh> v;
+    v.push_back(mesh);
+    
+    [self.delegate loader:self didLoadMeshes:v];
+}
+
+- (void)loadDefaultFile_{
     NEMesh mesh;
     
     NEVertice vx = { 1, 0, 0 };

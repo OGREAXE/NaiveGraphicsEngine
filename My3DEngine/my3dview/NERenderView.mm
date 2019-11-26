@@ -520,7 +520,11 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
                 DepthInfo info = _depthBuffer.getInfo(x, y);
                 float oldZ = info.z;
                 if (point.z < oldZ) {
-                    CGContextFillRect(context, CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth));
+                    
+                    CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
+                    
+                    CGContextClearRect(context, fillRect);
+                    CGContextFillRect(context, fillRect);
                     info.z = point.z;
                     info.color = aface.color;
                     _depthBuffer.setInfo(info, x, y);
