@@ -56,7 +56,7 @@
     face.bIndex = 1;
     face.cIndex = 2;
     
-    face.color = 0x110000;
+    face.color = 0xffff00;
     
     mesh.faces.push_back(face);
     

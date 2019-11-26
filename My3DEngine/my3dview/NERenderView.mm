@@ -472,9 +472,8 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
     for (const NEFace & aface : mesh.faces) {
-        
-//        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
-        CGContextSetFillColorWithColor(context, UIColor.yellowColor.CGColor);
+        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
+//        CGContextSetFillColorWithColor(context, UIColor.redColor.CGColor);
         
         const NEVertice & _v0 = mesh.vertices[aface.aIndex];
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
@@ -526,7 +525,7 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
                     info.color = aface.color;
                     _depthBuffer.setInfo(info, x, y);
                 } else {
-                    int i = 0;
+//                    int i = 0;
                 }
             }
         }
