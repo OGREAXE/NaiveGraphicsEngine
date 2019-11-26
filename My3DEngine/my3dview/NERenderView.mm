@@ -317,6 +317,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, self.bounds);
     
+    _depthBuffer.resetSize();
+    
     if (_lineFrameMode) {
         [self drawRect_lineFrame:rect];
     } else {
@@ -329,7 +331,7 @@
 
 - (void)drawRect_lineFrame:(CGRect)rect{
 //    [self drawOrigin];
-    _depthBuffer.resetSize();
+//    _depthBuffer.resetSize();
     
     for (NEPolygonLine * line in _geometries) {
         [self drawLine:line color:0xffff00]; //yellow
@@ -514,7 +516,7 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
                     continue;
                 }
                 
-                NEVector3 point = getPointInPlane(revertX, revertY, normal, v0);
+                NEVector3 point = getPointInPlane(revertX, revertY, normal, v0t);
                 
                 DepthInfo info = _depthBuffer.getInfo(x, y);
                 float oldZ = info.z;
