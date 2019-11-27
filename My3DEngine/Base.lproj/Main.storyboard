@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,28 +24,28 @@
                                 </constraints>
                                 <state key="normal" title="move left"/>
                                 <connections>
-                                    <action selector="didTapMoveLeft" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jx9-0p-RRl"/>
+                                    <action selector="didTapMoveLeft" destination="BYZ-38-t0r" eventType="touchDown" id="DN4-t1-WOd"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7kB-2a-Fba">
                                 <rect key="frame" x="166" y="404" width="82" height="54"/>
                                 <state key="normal" title="forward"/>
                                 <connections>
-                                    <action selector="didTapMoveFoward" destination="BYZ-38-t0r" eventType="touchUpInside" id="5U8-9e-rln"/>
+                                    <action selector="didTapMoveFoward" destination="BYZ-38-t0r" eventType="touchDown" id="fac-Mh-yPW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVF-3c-S6N">
                                 <rect key="frame" x="166" y="466" width="82" height="54"/>
                                 <state key="normal" title="back"/>
                                 <connections>
-                                    <action selector="didTapMoveBack" destination="BYZ-38-t0r" eventType="touchUpInside" id="r7E-ow-pvW"/>
+                                    <action selector="didTapMoveBack" destination="BYZ-38-t0r" eventType="touchDown" id="rsz-oa-cXe"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Do-9y-vo0">
                                 <rect key="frame" x="292" y="431" width="82" height="54"/>
                                 <state key="normal" title="move right"/>
                                 <connections>
-                                    <action selector="didTapMoveRight" destination="BYZ-38-t0r" eventType="touchUpInside" id="dte-Aj-UZf"/>
+                                    <action selector="didTapMoveRight" destination="BYZ-38-t0r" eventType="touchDown" id="KDd-KE-NqE"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iv4-No-34o">
@@ -54,7 +54,7 @@
                                     <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapTurnLeft" destination="BYZ-38-t0r" eventType="touchUpInside" id="0S4-wg-vSE"/>
+                                    <action selector="didTapTurnLeft" destination="BYZ-38-t0r" eventType="touchDown" id="VKV-Fw-kjA"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8h-8Z-okV">
@@ -63,7 +63,7 @@
                                     <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapLookUp" destination="BYZ-38-t0r" eventType="touchUpInside" id="MLN-Kq-n8F"/>
+                                    <action selector="didTapLookUp" destination="BYZ-38-t0r" eventType="touchDown" id="L1E-vo-Jfz"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Adq-UI-cW5">
@@ -72,7 +72,7 @@
                                     <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapLookDown" destination="BYZ-38-t0r" eventType="touchUpInside" id="bmM-hU-XJE"/>
+                                    <action selector="didTapLookDown" destination="BYZ-38-t0r" eventType="touchDown" id="Okw-3s-HEU"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrA-u1-Nfw">
@@ -81,7 +81,7 @@
                                     <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapTurnRight" destination="BYZ-38-t0r" eventType="touchUpInside" id="0y4-lE-UVA"/>
+                                    <action selector="didTapTurnRight" destination="BYZ-38-t0r" eventType="touchDown" id="2rm-hz-96I"/>
                                 </connections>
                             </button>
                         </subviews>

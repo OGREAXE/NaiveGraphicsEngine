@@ -452,6 +452,9 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
     
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
+    CGFloat screenWidth = self.frame.size.width * COORD_AMPLIFY_FACTOR;
+    CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
+    
     for (const NEFace & aface : mesh.faces) {
         CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
 //        CGContextSetFillColorWithColor(context, UIColor.redColor.CGColor);
@@ -475,8 +478,14 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
         float minx = MIN(MIN(pointInVew0.x, pointInVew1.x), pointInVew2.x);
         float miny = MIN(MIN(pointInVew0.y, pointInVew1.y), pointInVew2.y);
         
+        if (minx < 0) {minx = 0;}
+        if (miny < 0) {miny = 0;}
+        
         float maxx = MAX(MAX(pointInVew0.x, pointInVew1.x), pointInVew2.x);
         float maxy = MAX(MAX(pointInVew0.y, pointInVew1.y), pointInVew2.y);
+        
+        if (maxx > screenWidth) {maxx = screenWidth;}
+        if (maxy > screenHeight) {maxy = screenHeight;}
         
         NEBoundingBox boundingBox;
         boundingBox.startX = (int)minx;
@@ -487,8 +496,6 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
         
         NEVector3 normal = getPlaneNormal(v0t, v1t, v2t);
         
-        CGFloat screenWidth = self.frame.size.width * COORD_AMPLIFY_FACTOR;
-        CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
         
@@ -517,7 +524,7 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
                     
                     CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
                     
-//                    CGContextClearRect(context, fillRect);
+                    CGContextClearRect(context, fillRect);
                     CGContextFillRect(context, fillRect);
                     info.z = point.z;
                     info.color = aface.color;
