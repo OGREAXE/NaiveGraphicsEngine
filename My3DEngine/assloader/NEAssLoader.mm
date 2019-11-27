@@ -15,9 +15,15 @@
 
 @property (nonatomic) CNEAssReader *reader;
 
+//better not use std containers as attributes
+//'cause getter(self.) returns a copy not reference
+//@property (nonatomic) std::vector<NEMesh> meshes;
+
 @end
 
-@implementation NEAssLoader
+@implementation NEAssLoader{
+    std::vector<NEMesh> _meshes;
+}
 
 - (id)init{
     self = [super init];
@@ -39,6 +45,58 @@
 }
 
 - (void)loadDefaultFile{
+    _meshes.clear();
+    
+    [self loadPlanes];
+    
+    [self loadTestMesh];
+    
+    [self.delegate loader:self didLoadMeshes:_meshes];
+}
+
+- (void)loadPlanes{
+    float planeRange = 10;
+    NSArray * vertices = @[
+    @[@(0), @(0) ,@(0)], @[@(0), @(1) ,@(0)], @[@(1), @(1) ,@(0)], @[@(1), @(0) ,@(0)], @[@(1), @(0) ,@(1)], @[@(0), @(0) ,@(1)], @[@(0), @(1) ,@(1)],];
+    
+    NEMesh mesh;
+    mesh.range = planeRange;
+    
+    for (NSArray<NSNumber *> * arrVertice : vertices) {
+        NEVertice v = { arrVertice[0].floatValue * planeRange, arrVertice[1].floatValue * planeRange, arrVertice[2].floatValue * planeRange };
+        
+        mesh.vertices.push_back(v);
+    }
+    
+    NSArray * indices = @[
+    @[@(0), @(1) ,@(2)], @[@(2), @(3) ,@(0)], //xy
+    @[@(0), @(3) ,@(4)], @[@(4), @(5) ,@(0)], //xz
+    @[@(0), @(5) ,@(6)], @[@(6), @(1) ,@(0)], //yz
+    ];
+    
+    NSArray<NSNumber *> * colors = @[
+    @(0xeeeeee), @(0xeeeeee), //xy
+    @(0xaaaaaa), @(0xaaaaaa), //xz
+    @(0x888888), @(0x888888), //yz
+    ];
+    
+    for (int i = 0; i < indices.count; i++) {
+        NSArray<NSNumber *> * aFaceIndices = indices[i];
+        
+        NEFace face;
+        face.aIndex = aFaceIndices[0].intValue;
+        face.bIndex = aFaceIndices[1].intValue;
+        face.cIndex = aFaceIndices[2].intValue;
+        
+        face.color = colors[i].longValue;
+        
+        mesh.faces.push_back(face);
+    }
+    
+    _meshes.push_back(mesh);
+}
+
+- (void)loadTestMesh{
     NSArray * vertices = @[
     @[@(1), @(1) ,@(1)], @[@(1), @(3) ,@(1)], @[@(3), @(3) ,@(1)],@[@(3), @(1) ,@(1)],
     
@@ -85,10 +143,7 @@
         mesh.faces.push_back(face);
     }
     
-    std::vector<NEMesh> v;
-    v.push_back(mesh);
-    
-    [self.delegate loader:self didLoadMeshes:v];
+    _meshes.push_back(mesh);
 }
 
 - (void)loadDefaultFile_{

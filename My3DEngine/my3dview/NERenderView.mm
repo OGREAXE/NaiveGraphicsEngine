@@ -49,6 +49,10 @@
 
 @implementation NERenderView{
     NEVector3 _lineBuffer[MAX_LINE_BUF];
+    
+    std::vector<NEMesh> _meshes;
+    
+    NEDepthBuffer _depthBuffer;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -106,42 +110,6 @@
 
 - (void)initLineFrame{
     self.geometries = self.frameLines;
-    
-    /*
-    NSMutableArray * geometries = [NSMutableArray array];
-        
-    //_line0 = [NEPolygonLine lineWithStart:NEVector3Make(1, -2, 1) end:NEVector3Make(1, 2, 1)];
-    NSArray * points3 = @[
-    @[@(1), @(1) ,@(1)], @[@(1), @(3) ,@(1)],
-    @[@(1), @(3) ,@(1)], @[@(3), @(3) ,@(1)],
-    @[@(3), @(3) ,@(1)],@[@(3), @(1) ,@(1)],
-    @[@(3), @(1) ,@(1)],@[@(1), @(1) ,@(1)],
-    
-    @[@(1), @(1) ,@(3)], @[@(1), @(3) ,@(3)],
-    @[@(1), @(3) ,@(3)], @[@(3), @(3) ,@(3)],
-    @[@(3), @(3) ,@(3)],@[@(3), @(1) ,@(3)],
-    @[@(3), @(1) ,@(3)],@[@(1), @(1) ,@(3)],
-    
-    @[@(1), @(1) ,@(1)], @[@(1), @(1) ,@(3)],
-    @[@(1), @(3) ,@(1)], @[@(1), @(3) ,@(3)],
-    @[@(3), @(3) ,@(1)],@[@(3), @(3) ,@(3)],
-    @[@(3), @(1) ,@(1)],@[@(3), @(1) ,@(3)],
-    
-    ];
-    
-    for (int i = 0; i < points3.count/2; i++) {
-        NSArray<NSNumber*> * endPoint = points3[2 * i];
-        NSArray<NSNumber*> * startPoint = points3[2 * i + 1];
-        
-        NEPolygonLine * line = [NEPolygonLine lineWithStart:NEVector3Make(startPoint[0].floatValue, startPoint[1].floatValue - 2, startPoint[2].floatValue -2 ) end:NEVector3Make(endPoint[0].floatValue, endPoint[1].floatValue - 2, endPoint[2].floatValue - 2)];
-        [geometries addObject:line];
-    }
-    
-    self.geometries = geometries;
-    
-//    NEPolygonLine * line = [NEPolygonLine lineWithStart:NEVector3Make(3, 1, 1) end:NEVector3Make(1, 3, 1)];
-//    [geometries addObject:line];
-    */
 }
 
 - (void)initAxis{
@@ -232,6 +200,14 @@
     
     CGFloat ret = (1 - screeny / (height/2));
     return ret;
+}
+
+static inline CGFloat revertScreenHorizatalPos(int screenX, CGFloat reverseFactor){
+    return (screenX * reverseFactor - 1);
+}
+
+static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor){
+    return (1 - screenY * reverseFactor);
 }
 
 - (void)drawOrigin{
@@ -465,8 +441,13 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
 }
 
 - (void)drawMeshes:(const std::vector<NEMesh> &)meshes{
-    const NEMesh & mesh = meshes[0];
-    
+    for (int i = 0; i < meshes.size(); i++) {
+        const NEMesh & mesh = meshes[i];
+        [self drawMesh:mesh];
+    }
+}
+
+- (void)drawMesh:(const NEMesh &)mesh{
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
@@ -506,16 +487,29 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
         
         NEVector3 normal = getPlaneNormal(v0t, v1t, v2t);
         
+        CGFloat screenWidth = self.frame.size.width * COORD_AMPLIFY_FACTOR;
+        CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
+        CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
+        CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
+        
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
-                CGFloat revertX = [self revertScreenHorizontalPosition:x];
-                CGFloat revertY = [self revertScreenVerticalPosition:y];
                 
                 if (!isPointInsideTriangle(CGPointMake(x, y), pointInVew0, pointInVew1, pointInVew2)) {
                     continue;
                 }
                 
+//                CGFloat revertX = [self revertScreenHorizontalPosition:x];
+//                CGFloat revertY = [self revertScreenVerticalPosition:y];
+                
+                CGFloat revertX = revertScreenHorizatalPos(x, reverseHorizontalFactor);
+                CGFloat revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
+                
                 NEVector3 point = getPointInPlane(revertX, revertY, normal, v0t);
+                
+                if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
+                    continue;
+                }
                 
                 DepthInfo info = _depthBuffer.getInfo(x, y);
                 float oldZ = info.z;
@@ -523,7 +517,7 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
                     
                     CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
                     
-                    CGContextClearRect(context, fillRect);
+//                    CGContextClearRect(context, fillRect);
                     CGContextFillRect(context, fillRect);
                     info.z = point.z;
                     info.color = aface.color;
