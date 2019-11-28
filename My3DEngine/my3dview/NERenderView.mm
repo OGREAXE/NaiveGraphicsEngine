@@ -21,7 +21,7 @@
 #define HEXRGBACOLOR(h,a)     RGBACOLOR(((h>>16)&0xFF), ((h>>8)&0xFF), (h&0xFF), a)
 #define HEXRGBCOLOR(h)        HEXRGBACOLOR(h,1)
 
-@interface NERenderView()<NEAssLoaderDelegate>
+@interface NERenderView()
 
 @property (nonatomic) NSArray<NSValue*>* vectices;
 
@@ -33,11 +33,11 @@
 
 //@property (nonatomic) NEPolygonLine* line0;
 
-@property (nonatomic) std::vector<NEMesh> meshes;
+//@property (nonatomic) std::vector<NEMesh> meshes;
 
 @property (nonatomic) NSArray<NEPolygonLine*> *geometries;
 
-@property (nonatomic) NEDepthBuffer depthBuffer;
+//@property (nonatomic) NEDepthBuffer depthBuffer;
 
 //@property (nonatomic) NEVector2 lineBuffer[];
 
@@ -47,12 +47,16 @@
 
 #define COORD_AMPLIFY_FACTOR 1
 
+typedef long long RenderBufferType;
+
 @implementation NERenderView{
     NEVector3 _lineBuffer[MAX_LINE_BUF];
     
     std::vector<NEMesh> _meshes;
     
     NEDepthBuffer _depthBuffer;
+    
+    RenderBufferType *_renderBuffer;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -71,6 +75,14 @@
 //    [self initLineFrame];
     
     _depthBuffer.resetSize(self.frame.size.width * COORD_AMPLIFY_FACTOR, self.frame.size.height * COORD_AMPLIFY_FACTOR);
+    
+    _renderBuffer = (RenderBufferType *)malloc(sizeof(RenderBufferType) * self.frame.size.width * self.frame.size.height);
+}
+
+- (void)dealloc{
+    if (_renderBuffer) {
+        free(_renderBuffer);
+    }
 }
 
 - (void)setFrameLines:(NSArray<NEPolygonLine *> *)frameLines{
@@ -290,6 +302,16 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 }
 
 - (void)drawRect:(CGRect)rect{
+    NSDate *timeBefore = [NSDate date];
+    
+    [self doDrawRect:rect];
+    
+    NSDate *timeAfter = [NSDate date];
+    NSTimeInterval executionTime = [timeAfter timeIntervalSinceDate:timeBefore];
+    NSLog(@"executionTime = %f", executionTime);
+}
+
+- (void)doDrawRect:(CGRect)rect{
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, self.bounds);
     
@@ -298,11 +320,10 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
     if (_lineFrameMode) {
         [self drawRect_lineFrame:rect];
     } else {
-        const std::vector<NEMesh> & meshes = self.meshes;
-        [self drawMeshes:meshes];
+        [self drawMeshes:_meshes];
     }
     
-    [self drawAxis];
+//    [self drawAxis];
 }
 
 - (void)drawRect_lineFrame:(CGRect)rect{
@@ -321,19 +342,23 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 }
 
 - (void)redraw{
-    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
-    
-    NSLog(@" y axis %.5f, %.5f, %.5f", _camera.yAxis.x, _camera.yAxis.y, _camera.yAxis.z);
-    
-    NSLog(@" x axis %.5f, %.5f, %.5f", _camera.xAxis.x, _camera.xAxis.y, _camera.xAxis.z);
-    
-    NSLog(@" position %.5f, %.5f, %.5f", _camera.position.x, _camera.position.y, _camera.position.z);
-    
-    NSLog(@"--------------------------");
-    
-//    NSLog(@"x * y = %.5f, x * z = %.5f, y * z = %.5f", vectorMultiply(_camera.xAxis, _camera.yAxis),vectorMultiply(_camera.xAxis, _camera.lookAtDirection), vectorMultiply(_camera.yAxis, _camera.lookAtDirection));
+//    [self logPosition];
     
     [self setNeedsDisplay];
+}
+
+- (void)logPosition{
+    NSLog(@"lookAtDirection %.5f, %.5f, %.5f", _camera.lookAtDirection.x, _camera.lookAtDirection.y, _camera.lookAtDirection.z);
+        
+        NSLog(@" y axis %.5f, %.5f, %.5f", _camera.yAxis.x, _camera.yAxis.y, _camera.yAxis.z);
+        
+        NSLog(@" x axis %.5f, %.5f, %.5f", _camera.xAxis.x, _camera.xAxis.y, _camera.xAxis.z);
+        
+        NSLog(@" position %.5f, %.5f, %.5f", _camera.position.x, _camera.position.y, _camera.position.z);
+        
+        NSLog(@"--------------------------");
+        
+    //    NSLog(@"x * y = %.5f, x * z = %.5f, y * z = %.5f", vectorMultiply(_camera.xAxis, _camera.yAxis),vectorMultiply(_camera.xAxis, _camera.lookAtDirection), vectorMultiply(_camera.yAxis, _camera.lookAtDirection));
 }
 
 #pragma mark cam action
@@ -426,7 +451,7 @@ NEVector3 vectorFromVertice(const NEVertice & vert){
     return v;
 }
 
-bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
+bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2){
     NEVector2 p = NEVector2Make(point.x, point.y);
     NEVector2 v0 = NEVector2Make(p0.x, p0.y);
     NEVector2 v1 = NEVector2Make(p1.x, p1.y);
@@ -456,8 +481,8 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
     CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
     for (const NEFace & aface : mesh.faces) {
-        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
-//        CGContextSetFillColorWithColor(context, UIColor.redColor.CGColor);
+        long long color = aface.color;
+//        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
         
         const NEVertice & _v0 = mesh.vertices[aface.aIndex];
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
@@ -499,16 +524,16 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
         
+        int renderSize = 0;
+        
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
-                
-                if (!isPointInsideTriangle(CGPointMake(x, y), pointInVew0, pointInVew1, pointInVew2)) {
+                CGPoint p = CGPointMake(x, y);
+                //performance bottleneck
+                if (!isPointInsideTriangle(p, pointInVew0, pointInVew1, pointInVew2)) {
                     continue;
                 }
-                
-//                CGFloat revertX = [self revertScreenHorizontalPosition:x];
-//                CGFloat revertY = [self revertScreenVerticalPosition:y];
-                
+                    
                 CGFloat revertX = revertScreenHorizatalPos(x, reverseHorizontalFactor);
                 CGFloat revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
                 
@@ -521,11 +546,14 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
                 DepthInfo info = _depthBuffer.getInfo(x, y);
                 float oldZ = info.z;
                 if (point.z < oldZ) {
+                    _renderBuffer[renderSize ++] =
+                    ((x | y << 16) | color << 32);
+
+//                    CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
+//
+//                    CGContextClearRect(context, fillRect);
+//                    CGContextFillRect(context, fillRect);
                     
-                    CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
-                    
-                    CGContextClearRect(context, fillRect);
-                    CGContextFillRect(context, fillRect);
                     info.z = point.z;
                     info.color = aface.color;
                     _depthBuffer.setInfo(info, x, y);
@@ -533,6 +561,25 @@ bool isPointInsideTriangle(CGPoint point, CGPoint p0, CGPoint p1, CGPoint p2){
 //                    int i = 0;
                 }
             }
+        }
+        
+        long lastColor = 0;
+        for (int i = 0; i < renderSize; i++) {
+            RenderBufferType renderValue = _renderBuffer[i];
+            
+            int x = renderValue & 0xffff;
+            int y = (renderValue >> 16) & 0xffff;
+            long renderColor = (renderValue >> 32);
+            
+            CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
+            
+            if (renderColor != lastColor) {
+                lastColor = renderColor;
+                CGContextSetFillColorWithColor(context, HEXRGBCOLOR(renderColor).CGColor);
+            }
+            
+            CGContextFillRect(context, fillRect);
+            
         }
     }
 }
