@@ -455,10 +455,27 @@ NEVector3 vectorFromVertice(const NEVertice & vert){
     return v;
 }
 
-bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
+inline bool isPointInsideTriangle_(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
     NEVector2 p = NEVector2Make(point.x, point.y);
     
     return pointInsizeTriangle(p, p0, p1, p2);
+}
+
+inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
+    NEVector2 p = NEVector2Make(point.x, point.y);
+    
+#define testPoint(point, start, end) ((point.x - start.x) * (end.y - start.y) - (end.x - start.x) * (point.y - start.y));
+    
+    int t0 = testPoint(p, p0, p1);
+    int t1 = testPoint(p, p1, p2);
+    int t2 = testPoint(p, p2, p0);
+    
+    if ((t0 >= 0 && t1 >= 0 && t2 >= 0) ||
+    (t0 <= 0 && t1 <= 0 && t2 <= 0)){
+        return true;
+    }
+    
+    return false;
 }
 
 #pragma mark ass loader
@@ -583,6 +600,8 @@ bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVecto
 }
 
 - (void)doRenderScreen{
+//    return;
+    
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
