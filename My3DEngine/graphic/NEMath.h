@@ -65,6 +65,10 @@ NEVector3 vectorCrossProduct(NEVector3 vec0, NEVector3 vec1);
 ///||a||
 float vectorMagnitude(NEVector3 vec);
 
+
+/// return [0 ; π]
+/// @param vec0 <#vec0 description#>
+/// @param vec1 <#vec1 description#>
 float getAngleBetweenVectors(NEVector3 vec0,NEVector3 vec1);
 
 NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle);

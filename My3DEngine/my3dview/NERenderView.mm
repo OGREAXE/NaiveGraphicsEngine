@@ -59,6 +59,8 @@ typedef long long RenderBufferType;
     RenderBufferType *_renderBuffer;
     
     int _renderBufferSize;
+    
+    NEVector3 _lightPos;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -79,6 +81,8 @@ typedef long long RenderBufferType;
     _depthBuffer.resetSize(self.frame.size.width * COORD_AMPLIFY_FACTOR, self.frame.size.height * COORD_AMPLIFY_FACTOR);
     
     _renderBuffer = (RenderBufferType *)malloc(sizeof(RenderBufferType) * self.frame.size.width * self.frame.size.height);
+    
+    _lightPos = GLKVector3MultiplyScalar (_camera.position, 3);
 }
 
 - (void)dealloc{
@@ -489,6 +493,9 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
     _meshes = meshes;
 }
 
+float maxIntensity = 0;
+float minIntensity = 1;
+
 - (void)drawMeshes:(const std::vector<NEMesh> &)meshes{
     for (int i = 0; i < meshes.size(); i++) {
         const NEMesh & mesh = meshes[i];
@@ -496,6 +503,32 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
     }
     
     [self doRenderScreen];
+    
+    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
+}
+
+inline long colorWithIntensity(long color, float intensity){
+    if (intensity > maxIntensity) {
+        maxIntensity = intensity;
+    }
+    
+    if (intensity < minIntensity) {
+        minIntensity = intensity;
+    }
+    
+    long r = (color >>16) & 0xff;
+    long g = (color >>8) & 0xff;
+    long b = color & 0xff;
+    
+    r *= intensity;
+    g *= intensity;
+    b *= intensity;
+    
+    return r <<16 | g <<8 | b;
+}
+
+inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2){
+    return NEVector3Make((x0 + x1 + x2)/3, (y0 + y1 + y2)/3, (z0 + z1 + z2)/3);
 }
 
 - (void)drawMesh:(const NEMesh &)mesh{
@@ -517,9 +550,17 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
         NEVector3 v1 = vectorFromVertice(_v1, mesh.range, 10);
         NEVector3 v2 = vectorFromVertice(_v2, mesh.range, 10);
         
+        NEVector3 _normal =
+        mixNormal(
+                  _v0.normal_x, _v0.normal_y, _v0.normal_z,
+                  _v1.normal_x, _v1.normal_y, _v1.normal_z,
+                  _v2.normal_x, _v2.normal_y, _v2.normal_z);
+        
         NEVector3 v0t = [self convertToEyeSpace:v0];
         NEVector3 v1t = [self convertToEyeSpace:v1];
         NEVector3 v2t = [self convertToEyeSpace:v2];
+        
+        NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
         
         CGPoint pointInVew0 = [self pointInVewForVector3:v0t];
         CGPoint pointInVew1 = [self pointInVewForVector3:v1t];
@@ -548,7 +589,9 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
         boundingBox.endX = (int)maxx;
         boundingBox.endY = (int)maxy;
         
-        NEVector3 normal = getPlaneNormal(v0t, v1t, v2t);
+//        NEVector3 normal = getPlaneNormal(v0t, v1t, v2t);
+        
+        NEVector3 normal = [self convertToEyeSpace:_normal];
         
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
@@ -564,7 +607,16 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
                 CGFloat revertX = revertScreenHorizatalPos(x, reverseHorizontalFactor);
                 CGFloat revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
                 
+                //the point in eye space inside the triangle
                 NEVector3 point = getPointInPlane(revertX, revertY, normal, v0t);
+                
+                /////handle light
+                NEVector3 lightOnPointVec = NEVector3Make(point.x - lightPosT.x, point.y - lightPosT.y, point.z - lightPosT.z);
+                float lightAngle = getAngleBetweenVectors(lightOnPointVec, normal);
+//                long tColor = color * (0.5 + lightAngle/ (2 *M_PI));
+                
+                long tColor = colorWithIntensity(color, ( cosf(lightAngle)));
+                /////finish handle color
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                     continue;
@@ -577,10 +629,10 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
                 if (point.z < oldZ) {
                     long oldIndex = info.additionalInfo;
                     if (oldIndex > 0) {
-                        _renderBuffer[-- oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, color)
+                        _renderBuffer[-- oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, tColor)
                         ;
                     } else {
-                        _renderBuffer[_renderBufferSize ++] = COMPOSE_RENDER_BUF_VAL(x, y, color);
+                        _renderBuffer[_renderBufferSize ++] = COMPOSE_RENDER_BUF_VAL(x, y, tColor);
                         
                         info.additionalInfo = _renderBufferSize;
                     }
@@ -591,7 +643,7 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
 //                    CGContextFillRect(context, fillRect);
                     
                     info.z = point.z;
-                    info.color = color;
+                    info.color = tColor;
                     
                     _depthBuffer.setInfo(info, x, y);
                 } else {
@@ -623,9 +675,9 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
         
         if (renderColor != lastColor) {
             lastColor = renderColor;
-            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(renderColor).CGColor);
+//            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(renderColor).CGColor);
         }
-        
+        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(renderColor).CGColor);
         CGContextFillRect(context, fillRect);
     }
 }

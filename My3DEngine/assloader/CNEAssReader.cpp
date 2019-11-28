@@ -68,7 +68,7 @@ void CNEAssReader::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 //
 //        Vertices.push_back(v);
         
-        NEVertice vertice = {pPos->x, pPos->y, pPos->z};
+        NEVertice vertice = {pPos->x, pPos->y, pPos->z, pNormal->x, pNormal->y, pNormal->z};
         aMesh.vertices.push_back(vertice);
         
         if (maxx < pPos->x) {
@@ -106,7 +106,7 @@ void CNEAssReader::InitMesh(unsigned int Index, const aiMesh* paiMesh)
         aFace.aIndex = face.mIndices[0];
         aFace.bIndex = face.mIndices[1];
         aFace.cIndex = face.mIndices[2];
-        aFace.color = 0xff0000;
+        aFace.color = 0xffffff;
         aMesh.faces.push_back(aFace);
     }
     
