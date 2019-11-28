@@ -455,6 +455,11 @@ NEVector3 vectorFromVertice(const NEVertice & vert){
     return v;
 }
 
+NEVector3 vectorFromVertice(const NEVertice & vert, float max, float range){
+    NEVector3 v = {vert.x * range / max, vert.y * range / max, vert.z * range / max};
+    return v;
+}
+
 inline bool isPointInsideTriangle_(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
     NEVector2 p = NEVector2Make(point.x, point.y);
     
@@ -508,9 +513,9 @@ inline bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, 
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
         const NEVertice & _v2 = mesh.vertices[aface.cIndex];
         
-        NEVector3 v0 = vectorFromVertice(_v0);
-        NEVector3 v1 = vectorFromVertice(_v1);
-        NEVector3 v2 = vectorFromVertice(_v2);
+        NEVector3 v0 = vectorFromVertice(_v0, mesh.range, 10);
+        NEVector3 v1 = vectorFromVertice(_v1, mesh.range, 10);
+        NEVector3 v2 = vectorFromVertice(_v2, mesh.range, 10);
         
         NEVector3 v0t = [self convertToEyeSpace:v0];
         NEVector3 v1t = [self convertToEyeSpace:v1];

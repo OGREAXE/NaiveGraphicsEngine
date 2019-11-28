@@ -37,8 +37,8 @@
     NEAssLoader * loader = [[NEAssLoader alloc] init];
     loader.delegate = self;
     
-//    [loader loadFbx:@"duck"];
-    [loader loadDefaultFile];
+    [loader loadFbx:@"duck"];
+//    [loader loadDefaultFile];
     
 //    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
 }
