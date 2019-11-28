@@ -23,7 +23,7 @@
 
 @interface NERenderView()
 
-@property (nonatomic) NSArray<NSValue*>* vectices;
+//@property (nonatomic) NSArray<NSValue*>* vectices;
 
 @property (nonatomic) NECamera* camera;
 
@@ -57,6 +57,8 @@ typedef long long RenderBufferType;
     NEDepthBuffer _depthBuffer;
     
     RenderBufferType *_renderBuffer;
+    
+    int _renderBufferSize;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -317,6 +319,8 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
     
     _depthBuffer.resetSize();
     
+    _renderBufferSize = 0;
+    
     if (_lineFrameMode) {
         [self drawRect_lineFrame:rect];
     } else {
@@ -470,6 +474,8 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
         const NEMesh & mesh = meshes[i];
         [self drawMesh:mesh];
     }
+    
+    [self doRenderScreen];
 }
 
 - (void)drawMesh:(const NEMesh &)mesh{
@@ -524,8 +530,6 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
         
-        int renderSize = 0;
-        
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
                 CGPoint p = CGPointMake(x, y);
@@ -545,17 +549,27 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
                 
                 DepthInfo info = _depthBuffer.getInfo(x, y);
                 float oldZ = info.z;
+                
+#define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
                 if (point.z < oldZ) {
-                    _renderBuffer[renderSize ++] =
-                    ((x | y << 16) | color << 32);
-
+                    long oldIndex = info.additionalInfo;
+                    if (oldIndex > 0) {
+                        _renderBuffer[-- oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, color)
+                        ;
+                    } else {
+                        _renderBuffer[_renderBufferSize ++] = COMPOSE_RENDER_BUF_VAL(x, y, color);
+                        
+                        info.additionalInfo = _renderBufferSize;
+                    }
+                    
 //                    CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
 //
 //                    CGContextClearRect(context, fillRect);
 //                    CGContextFillRect(context, fillRect);
                     
                     info.z = point.z;
-                    info.color = aface.color;
+                    info.color = color;
+                    
                     _depthBuffer.setInfo(info, x, y);
                 } else {
 //                    int i = 0;
@@ -563,24 +577,31 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
             }
         }
         
-        long lastColor = 0;
-        for (int i = 0; i < renderSize; i++) {
-            RenderBufferType renderValue = _renderBuffer[i];
-            
-            int x = renderValue & 0xffff;
-            int y = (renderValue >> 16) & 0xffff;
-            long renderColor = (renderValue >> 32);
-            
-            CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
-            
-            if (renderColor != lastColor) {
-                lastColor = renderColor;
-                CGContextSetFillColorWithColor(context, HEXRGBCOLOR(renderColor).CGColor);
-            }
-            
-            CGContextFillRect(context, fillRect);
-            
+        
+    }
+}
+
+- (void)doRenderScreen{
+    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    long lastColor = 0;
+    for (int i = 0; i < _renderBufferSize; i++) {
+        RenderBufferType renderValue = _renderBuffer[i];
+        
+        int x = renderValue & 0xffff;
+        int y = (renderValue >> 16) & 0xffff;
+        long renderColor = (renderValue >> 32);
+        
+        CGRect fillRect = CGRectMake(x / COORD_AMPLIFY_FACTOR - fillWidth/2, y / COORD_AMPLIFY_FACTOR - fillWidth/2, fillWidth, fillWidth);
+        
+        if (renderColor != lastColor) {
+            lastColor = renderColor;
+            CGContextSetFillColorWithColor(context, HEXRGBCOLOR(renderColor).CGColor);
         }
+        
+        CGContextFillRect(context, fillRect);
     }
 }
 

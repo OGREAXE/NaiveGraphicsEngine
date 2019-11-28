@@ -18,6 +18,8 @@ extern int NE_DEPTHBUFFER_PARAM_ERROR;
 typedef struct tagDepthInfo{
     float z;
     long color;
+    
+    long additionalInfo;
 } DepthInfo;
 
 class NEDepthBuffer {
