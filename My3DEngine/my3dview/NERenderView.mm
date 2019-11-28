@@ -455,12 +455,10 @@ NEVector3 vectorFromVertice(const NEVertice & vert){
     return v;
 }
 
-bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2){
+bool isPointInsideTriangle(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
     NEVector2 p = NEVector2Make(point.x, point.y);
-    NEVector2 v0 = NEVector2Make(p0.x, p0.y);
-    NEVector2 v1 = NEVector2Make(p1.x, p1.y);
-    NEVector2 v2 = NEVector2Make(p2.x, p2.y);
-    return pointInsizeTriangle(p, v0, v1, v2);
+    
+    return pointInsizeTriangle(p, p0, p1, p2);
 }
 
 #pragma mark ass loader
@@ -479,9 +477,8 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
 }
 
 - (void)drawMesh:(const NEMesh &)mesh{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
     CGFloat screenWidth = self.frame.size.width * COORD_AMPLIFY_FACTOR;
     CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
@@ -505,6 +502,10 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
         CGPoint pointInVew0 = [self pointInVewForVector3:v0t];
         CGPoint pointInVew1 = [self pointInVewForVector3:v1t];
         CGPoint pointInVew2 = [self pointInVewForVector3:v2t];
+        
+        NEVector2 v0InView = NEVector2Make(pointInVew0.x, pointInVew0.y);
+        NEVector2 v1InView = NEVector2Make(pointInVew1.x, pointInVew1.y);
+        NEVector2 v2InView = NEVector2Make(pointInVew2.x, pointInVew2.y);
         
         float minx = MIN(MIN(pointInVew0.x, pointInVew1.x), pointInVew2.x);
         float miny = MIN(MIN(pointInVew0.y, pointInVew1.y), pointInVew2.y);
@@ -534,7 +535,7 @@ bool isPointInsideTriangle(CGPoint &point, CGPoint &p0, CGPoint &p1, CGPoint &p2
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
                 CGPoint p = CGPointMake(x, y);
                 //performance bottleneck
-                if (!isPointInsideTriangle(p, pointInVew0, pointInVew1, pointInVew2)) {
+                if (!isPointInsideTriangle(p, v0InView, v1InView, v2InView)) {
                     continue;
                 }
                     

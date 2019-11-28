@@ -102,9 +102,9 @@ bool shouldTrimPoint(NEVector3 point, NEFrustum frustum);
 /// @param point <#point description#>
 /// @param start <#start description#>
 /// @param end <#end description#>
-int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end);
+inline int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end);
 
-bool pointInsizeTriangle(NEVector2 point, NEVector2 p0, NEVector2 p1, NEVector2 p2);
+inline bool pointInsizeTriangle(NEVector2 point, NEVector2 p0, NEVector2 p1, NEVector2 p2);
 
 NEVector3 getPlaneNormal(NEVector3 p0, NEVector3 p1, NEVector3 p2);
 

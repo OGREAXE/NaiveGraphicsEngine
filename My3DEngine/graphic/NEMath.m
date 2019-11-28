@@ -149,10 +149,18 @@ bool shouldTrimPoint(NEVector3 point, NEFrustum frustum){
 }
 
 int testPointToLine2d(NEVector2 point, NEVector2 start, NEVector2 end){
-    NEVector2 v0 = NEVector2Subtract(point, start);
-    NEVector2 v1 = NEVector2Subtract(end, start);
+//    NEVector2 v0 = NEVector2Subtract(point, start);
+//    NEVector2 v1 = NEVector2Subtract(end, start);
     
-    return v0.x * v1.y - v1.x * v0.y;
+//    return v0.x * v1.y - v1.x * v0.y;
+    
+    float v0dx = point.x - start.x;
+    float v0dy = point.y - start.y;
+    
+    float v1dx = end.x - start.x;
+    float v1dy = end.y - start.y;
+    
+    return v0dx * v1dy - v1dx * v0dy;
 }
 
 bool pointInsizeTriangle(NEVector2 point, NEVector2 p0, NEVector2 p1, NEVector2 p2){
