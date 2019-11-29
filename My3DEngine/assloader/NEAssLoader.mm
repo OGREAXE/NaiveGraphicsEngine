@@ -49,7 +49,7 @@
     
     [self loadPlanes];
     
-    [self loadTestMesh];
+//    [self loadTestMesh];
     
     [self.delegate loader:self didLoadMeshes:_meshes];
 }
@@ -65,13 +65,22 @@
     for (NSArray<NSNumber *> * arrVertice : vertices) {
         NEVertice v = { arrVertice[0].floatValue * planeRange, arrVertice[1].floatValue * planeRange, arrVertice[2].floatValue * planeRange };
         
+        v.normal_z = 1;
+        v.normal_y = 0;
+        v.normal_x = 0;
         mesh.vertices.push_back(v);
     }
     
+//    NSArray * indices = @[
+//    @[@(0), @(1) ,@(2)], @[@(2), @(3) ,@(0)], //xy
+//    @[@(0), @(3) ,@(4)], @[@(4), @(5) ,@(0)], //xz
+//    @[@(0), @(5) ,@(6)], @[@(6), @(1) ,@(0)], //yz
+//    ];
+    
     NSArray * indices = @[
     @[@(0), @(1) ,@(2)], @[@(2), @(3) ,@(0)], //xy
-    @[@(0), @(3) ,@(4)], @[@(4), @(5) ,@(0)], //xz
-    @[@(0), @(5) ,@(6)], @[@(6), @(1) ,@(0)], //yz
+//    @[@(0), @(3) ,@(4)], @[@(4), @(5) ,@(0)], //xz
+//    @[@(0), @(5) ,@(6)], @[@(6), @(1) ,@(0)], //yz
     ];
     
     NSArray<NSNumber *> * colors = @[

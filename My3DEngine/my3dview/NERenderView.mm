@@ -82,7 +82,10 @@ typedef long long RenderBufferType;
     
     _renderBuffer = (RenderBufferType *)malloc(sizeof(RenderBufferType) * self.frame.size.width * self.frame.size.height);
     
-    _lightPos = GLKVector3MultiplyScalar (_camera.position, 3);
+//    _lightPos = GLKVector3MultiplyScalar (_camera.position, 3);
+    
+//    _lightPos = NEVector3Make(2, 2, 2);
+    _lightPos = NEVector3Make(0, 0, 2);
 }
 
 - (void)dealloc{
@@ -520,9 +523,9 @@ inline long colorWithIntensity(long color, float intensity){
     long g = (color >>8) & 0xff;
     long b = color & 0xff;
     
-    r *= intensity;
-    g *= intensity;
-    b *= intensity;
+    r *= intensity * intensity;
+    g *= intensity * intensity;
+    b *= intensity * intensity;
     
     return r <<16 | g <<8 | b;
 }
@@ -537,6 +540,8 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     
     CGFloat screenWidth = self.frame.size.width * COORD_AMPLIFY_FACTOR;
     CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
+    
+    NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
     
     for (const NEFace & aface : mesh.faces) {
         long long color = aface.color;
@@ -559,8 +564,6 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         NEVector3 v0t = [self convertToEyeSpace:v0];
         NEVector3 v1t = [self convertToEyeSpace:v1];
         NEVector3 v2t = [self convertToEyeSpace:v2];
-        
-        NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
         
         CGPoint pointInVew0 = [self pointInVewForVector3:v0t];
         CGPoint pointInVew1 = [self pointInVewForVector3:v1t];
@@ -589,9 +592,9 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         boundingBox.endX = (int)maxx;
         boundingBox.endY = (int)maxy;
         
-//        NEVector3 normal = getPlaneNormal(v0t, v1t, v2t);
+        NEVector3 normalReal = getPlaneNormal(v0t, v1t, v2t);
         
-        NEVector3 normal = [self convertToEyeSpace:_normal];
+        NEVector3 preDefinedNormal = [self convertToEyeSpace:_normal];
         
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
@@ -608,14 +611,10 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
                 CGFloat revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
                 
                 //the point in eye space inside the triangle
-                NEVector3 point = getPointInPlane(revertX, revertY, normal, v0t);
+                NEVector3 point = getPointInPlane(revertX, revertY, normalReal, v0t);
                 
                 /////handle light
-                NEVector3 lightOnPointVec = NEVector3Make(point.x - lightPosT.x, point.y - lightPosT.y, point.z - lightPosT.z);
-                float lightAngle = getAngleBetweenVectors(lightOnPointVec, normal);
-//                long tColor = color * (0.5 + lightAngle/ (2 *M_PI));
-                
-                long tColor = colorWithIntensity(color, ( cosf(lightAngle)));
+                long tColor = lightBlendResultWithColor(color, point, lightPosT, preDefinedNormal);
                 /////finish handle color
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
@@ -654,6 +653,14 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         
         
     }
+}
+
+long lightBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
+    NEVector3 lightOnPointVec = NEVector3Make(point.x - lightPosT.x, point.y - lightPosT.y, point.z - lightPosT.z);
+    float lightAngle = getAngleBetweenVectors(lightOnPointVec, preDefinedNormal);
+      
+    long tColor = colorWithIntensity(color,  (1. + cosf(lightAngle))/2.);
+    return tColor;
 }
 
 - (void)doRenderScreen{
