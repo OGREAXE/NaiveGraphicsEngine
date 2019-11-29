@@ -171,6 +171,11 @@ typedef long long RenderBufferType;
     return pointTran;
 }
 
+- (NEVector3)convertVectorToEyeSpace:(NEVector3&)aVector originInEyeSpace:(NEVector3&)originPosT{
+    NEVector3 vectorT = [self convertToEyeSpace:aVector];
+    return NEVector3Subtract(vectorT, originPosT);
+}
+
 - (CGPoint)positionInView:(NEVector3)originalPoint projectResultNDC:(NEVector3 *)pointTran{
     CGFloat width = self.frame.size.width * COORD_AMPLIFY_FACTOR;
     CGFloat height = self.frame.size.height * COORD_AMPLIFY_FACTOR;
@@ -317,7 +322,7 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
     
     NSDate *timeAfter = [NSDate date];
     NSTimeInterval executionTime = [timeAfter timeIntervalSinceDate:timeBefore];
-    NSLog(@"executionTime = %f", executionTime);
+//    NSLog(@"executionTime = %f", executionTime);
 }
 
 - (void)doDrawRect:(CGRect)rect{
@@ -507,7 +512,7 @@ float minIntensity = 1;
     
     [self doRenderScreen];
     
-    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
+//    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
 }
 
 inline long colorWithIntensity(long color, float intensity){
@@ -523,18 +528,19 @@ inline long colorWithIntensity(long color, float intensity){
     long g = (color >>8) & 0xff;
     long b = color & 0xff;
     
-    r *= intensity * intensity;
-    g *= intensity * intensity;
-    b *= intensity * intensity;
+    r *= intensity;
+    g *= intensity;
+    b *= intensity;
     
     return r <<16 | g <<8 | b;
 }
 
 inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2){
-    return NEVector3Make((x0 + x1 + x2)/3, (y0 + y1 + y2)/3, (z0 + z1 + z2)/3);
+    return NEVector3Make((x0 + x1 + x2)/3., (y0 + y1 + y2)/3., (z0 + z1 + z2)/3.);
 }
 
 - (void)drawMesh:(const NEMesh &)mesh{
+    NSLog(@"mesh draw begin >>>>>>>>>>>>>>");
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     
@@ -542,6 +548,8 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
     NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
+    
+    NEVector3 originPosT = [self convertToEyeSpace:NEVector3Make(0, 0, 0)];
     
     for (const NEFace & aface : mesh.faces) {
         long long color = aface.color;
@@ -592,12 +600,20 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         boundingBox.endX = (int)maxx;
         boundingBox.endY = (int)maxy;
         
-        NEVector3 normalReal = getPlaneNormal(v0t, v1t, v2t);
+        //normalReal is the normal calculated from 3 vertices
+        NEVector3 normalRealt = getPlaneNormal(v0t, v1t, v2t);
         
-        NEVector3 preDefinedNormal = [self convertToEyeSpace:_normal];
+        //preDefined Normal affects light blend effect
+        NEVector3 preDefinedNormalt = [self convertVectorToEyeSpace:_normal originInEyeSpace:originPosT];
         
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
+        
+        float angleT0 = getLightToPointAngle(v0t, lightPosT, preDefinedNormalt);
+        float angleT1 = getLightToPointAngle(v1t, lightPosT, preDefinedNormalt);
+        float angleT2 = getLightToPointAngle(v2t, lightPosT, preDefinedNormalt);
+        
+        NSLog(@"angle0 is %f, angle1 is %f, angle2 is %f", angleT0,  angleT1,  angleT2);
         
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
@@ -611,10 +627,10 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
                 CGFloat revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
                 
                 //the point in eye space inside the triangle
-                NEVector3 point = getPointInPlane(revertX, revertY, normalReal, v0t);
+                NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
                 /////handle light
-                long tColor = lightBlendResultWithColor(color, point, lightPosT, preDefinedNormal);
+                long tColor = lightBlendResultWithColor(color, point, lightPosT, preDefinedNormalt);
                 /////finish handle color
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
@@ -655,11 +671,30 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     }
 }
 
-long lightBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
+inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
     NEVector3 lightOnPointVec = NEVector3Make(point.x - lightPosT.x, point.y - lightPosT.y, point.z - lightPosT.z);
     float lightAngle = getAngleBetweenVectors(lightOnPointVec, preDefinedNormal);
+    
+//    bool isNan = isnan(lightAngle);
+//    if (isNan) {
+//        float vdp = vectorDotProduct(lightOnPointVec, preDefinedNormal);
+//        float vm0 = vectorMagnitude(lightOnPointVec);
+//        float vm1 = vectorMagnitude(preDefinedNormal);
+//
+//        float result = vdp / (vm0 * vm1);
+//
+//        float angle = acosf(result);
+//
+//        NSLog(@"???");
+//    }
+    return lightAngle;
+}
+
+inline long lightBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
+    float lightAngle = M_PI - getLightToPointAngle(point, lightPosT, preDefinedNormal);
       
     long tColor = colorWithIntensity(color,  (1. + cosf(lightAngle))/2.);
+    
     return tColor;
 }
 

@@ -43,8 +43,13 @@ float vectorMagnitude(NEVector3 vec){
 
 float getAngleBetweenVectors(NEVector3 vec0,NEVector3 vec1){
     float result = vectorDotProduct(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
-    result = acosf(result);
-    return  result;
+    if (result < -1) {
+        result = -1;
+    } else if (result > 1) {
+        result = 1;
+    }
+    float angle = acosf(result);
+    return  angle;
 }
 
 NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix){
