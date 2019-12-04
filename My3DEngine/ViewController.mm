@@ -39,7 +39,7 @@
     
 //    [loader loadFbx:@"duck"];
     [loader loadDefaultFile];
-    
+//
 //    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
 }
 

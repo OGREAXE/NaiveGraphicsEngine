@@ -161,9 +161,9 @@ typedef long long RenderBufferType;
     NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
     
     if (shouldTrimPoint(point, _camera.frustum)) {
-        pointTran.x = 2;
-        pointTran.y = 2;
-        return pointTran;
+//        pointTran.x = 2;
+//        pointTran.y = 2;
+//        return pointTran;
     }
     
     pointTran = perspetiveProjectPoint(point, self.camera.frustum);
@@ -512,7 +512,7 @@ float minIntensity = 1;
     
     [self doRenderScreen];
     
-//    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
+    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
 }
 
 inline long colorWithIntensity(long color, float intensity){
@@ -531,6 +531,10 @@ inline long colorWithIntensity(long color, float intensity){
     r *= intensity;
     g *= intensity;
     b *= intensity;
+    
+    if (intensity < 0.01){
+        int k = 0;
+    }
     
     return r <<16 | g <<8 | b;
 }
@@ -609,11 +613,11 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
         
-        float angleT0 = getLightToPointAngle(v0t, lightPosT, preDefinedNormalt);
-        float angleT1 = getLightToPointAngle(v1t, lightPosT, preDefinedNormalt);
-        float angleT2 = getLightToPointAngle(v2t, lightPosT, preDefinedNormalt);
+//        float angleT0 = getLightToPointAngle(v0t, lightPosT, preDefinedNormalt);
+//        float angleT1 = getLightToPointAngle(v1t, lightPosT, preDefinedNormalt);
+//        float angleT2 = getLightToPointAngle(v2t, lightPosT, preDefinedNormalt);
         
-        NSLog(@"angle0 is %f, angle1 is %f, angle2 is %f", angleT0,  angleT1,  angleT2);
+//        NSLog(@"angle0 is %f, angle1 is %f, angle2 is %f", angleT0,  angleT1,  angleT2);
         
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
@@ -674,26 +678,32 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
 inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
     NEVector3 lightOnPointVec = NEVector3Make(point.x - lightPosT.x, point.y - lightPosT.y, point.z - lightPosT.z);
     float lightAngle = getAngleBetweenVectors(lightOnPointVec, preDefinedNormal);
-    
-//    bool isNan = isnan(lightAngle);
-//    if (isNan) {
-//        float vdp = vectorDotProduct(lightOnPointVec, preDefinedNormal);
-//        float vm0 = vectorMagnitude(lightOnPointVec);
-//        float vm1 = vectorMagnitude(preDefinedNormal);
-//
-//        float result = vdp / (vm0 * vm1);
-//
-//        float angle = acosf(result);
-//
-//        NSLog(@"???");
-//    }
+
+        
+    //    bool isNan = isnan(lightAngle);
+    //    if (isNan) {
+    //        float vdp = vectorDotProduct(lightOnPointVec, preDefinedNormal);
+    //        float vm0 = vectorMagnitude(lightOnPointVec);
+    //        float vm1 = vectorMagnitude(preDefinedNormal);
+    //
+    //        float result = vdp / (vm0 * vm1);
+    //
+    //        float angle = acosf(result);
+    //
+    //        NSLog(@"???");
+    //    }
     return lightAngle;
 }
 
 inline long lightBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
-    float lightAngle = M_PI - getLightToPointAngle(point, lightPosT, preDefinedNormal);
-      
-    long tColor = colorWithIntensity(color,  (1. + cosf(lightAngle))/2.);
+    float lightAngle = getLightToPointAngle(point, lightPosT, preDefinedNormal);
+    
+    if(lightAngle < M_PI_2){
+        // smaller than pi/2, light is from behind
+        lightAngle = M_PI_2;
+    }
+    
+    long tColor = colorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
     
     return tColor;
 }

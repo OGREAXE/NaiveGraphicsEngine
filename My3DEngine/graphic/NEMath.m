@@ -220,10 +220,26 @@ NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum
     NEVector4 point4 = NEVector4MakeWithVector3(pointInCameraSpace, 1);
     
     NEVector4 res = NEMatrix4MultiplyVector4(rotm, point4);
-    
+
     NEVector3 res3 = NEVector3Make(res.x / res.w, res.y / res.w, res.z / res.w);
     
     return res3;
+}
+
+NEVector3 invertPerspetiveProject(NEVector3 pointInEyeSpace, NEFrustum frustum){
+    float m00 = frustum.near/frustum.r;
+    
+    float m11 = frustum.near/frustum.t;
+    
+    float m22 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
+    
+    float m23 = - 2 * frustum.far * frustum.near / (frustum.far - frustum.near);
+    
+    float ze = -m23 /(pointInEyeSpace.z + m22);
+    float xe = pointInEyeSpace.x * (-ze) / m00;
+    float ye = pointInEyeSpace.y * (-ze) / m11;
+    
+    return NEVector3Make(xe, ye, ze);
 }
 
 NEVector3 getVerticalVec(NEVector3 vec, float *px, float *py, float *pz){

@@ -89,6 +89,8 @@ NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3
 
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum);
 
+NEVector3 invertPerspetiveProject(NEVector3 pointInEyeSpace, NEFrustum frustum);
+
 NEVector3 getVerticalVec(NEVector3 vec, float *x, float *y, float *z);
 
 NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize);
