@@ -7,13 +7,10 @@
 //
 
 #import "ViewController.h"
-#import "NEScene.h"
 #import "NERenderView.h"
 #import "NEAssLoader.h"
 
 @interface ViewController () <NEAssLoaderDelegate>
-
-@property (nonatomic) NEScene *scene;
 
 @property (nonatomic) NERenderView *renderView;
 
@@ -57,10 +54,6 @@
         NEVector3 positionInCam = getPositionInCameraCoordinateSystem(NEVector3Make(3, 3, 2), NEVector3Make(2, 2, 0), NEVector3Make(1, 1, 1), NEVector3Make(-1, -1, 2));
         
         NSLog(@"result is %f, %f, %f",positionInCam.x, positionInCam.y, positionInCam.z);
-}
-
-- (void)createScene{
-    _scene = [[NEScene alloc] init];
 }
 
 - (void)loader:(NEAssLoader *)loader didLoadMeshes:(std::vector<NEMesh> &)meshes{

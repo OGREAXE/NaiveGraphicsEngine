@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NEFrustum frustum;
 
-- (void)lookAt:(NEVector3)direction;
+- (void)lookAtPoint:(NEVector3)direction;
 
 - (void)normalize;
 

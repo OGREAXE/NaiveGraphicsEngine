@@ -28,21 +28,6 @@ typedef GLKVector4 NEVector4;
 typedef GLKMatrix3 NEMatrix3;
 typedef GLKMatrix4 NEMatrix4;
 
-#define NEVector4Make(x, y, z, a) GLKVector4Make(x, y, z, a)
-#define NEVector3Make(x, y, z) GLKVector3Make(x, y, z)
-#define NEVector2Make(x, y) GLKVector2Make(x, y)
-
-#define NEVector4MakeWithVector3(v, a) GLKVector4MakeWithVector3(v, a)
-
-#define NEMatrix3MultiplyVector3(m, v) GLKMatrix3MultiplyVector3(rotationMatrix, aPoint);
-
-#define NEMatrix4MultiplyVector4(m, v)  GLKMatrix4MultiplyVector4(m, v)
-
-#define NEVector2Subtract(a, b) GLKVector2Subtract(a, b)
-#define NEVector3Subtract(a, b) GLKVector3Subtract(a, b)
-
-#define NEMatrix4Make(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) GLKMatrix4Make(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
-
 typedef struct tagNEFrustum{
     float near;
     float far;
@@ -54,6 +39,27 @@ typedef struct tagNELine{
     NEVector3 vector;
     NEVector3 pointInLine;
 } NELine;
+
+NEVector2 NEVector2Make(float x, float y);
+
+NEVector3 NEVector3Make(float x, float y, float z);
+
+NEVector4 NEVector4Make(float x, float y, float z, float w);
+
+NEVector4 NEVector4MakeWithVector3(NEVector3 vector, float w);
+
+NEVector3 NEMatrix3MultiplyVector3(NEMatrix3 matrixLeft, NEVector3 vectorRight);
+
+NEVector4 NEMatrix4MultiplyVector4(NEMatrix4 matrixLeft, NEVector4 vectorRight);
+
+NEVector2 NEVector2Subtract(NEVector2 vectorLeft, NEVector2 vectorRight);
+
+NEVector3 NEVector3Subtract(NEVector3 vectorLeft, NEVector3 vectorRight);
+
+NEMatrix4 NEMatrix4Make(float m00, float m01, float m02, float m03,
+                                            float m10, float m11, float m12, float m13,
+                                            float m20, float m21, float m22, float m23,
+                        float m30, float m31, float m32, float m33);
 
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 

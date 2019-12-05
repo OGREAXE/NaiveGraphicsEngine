@@ -111,7 +111,7 @@ typedef long long RenderBufferType;
 //    camera.position = NEVector3Make(0, 10, 0);
 //    NEVector3 pointToLookAt = NEVector3Make(0, 12, 0);
     
-    [camera lookAt:NEVector3Make(pointToLookAt.x - camera.position.x, pointToLookAt.y - camera.position.y, pointToLookAt.z - camera.position.z)];
+    [camera lookAtPoint:pointToLookAt];
     //find y axis which together with z form a plane vertical to xy plane
     NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
     NEVector3 cam_yAxis = vectorCrossProduct(camera.lookAtDirection, lookAtRotated_90);

@@ -25,7 +25,9 @@
     return self;
 }
 
-- (void)lookAt:(NEVector3)direction{
+- (void)lookAtPoint:(NEVector3)pointToLookAt{
+    NEVector3 direction = NEVector3Make(pointToLookAt.x - self.position.x, pointToLookAt.y - self.position.y, pointToLookAt.z - self.position.z);
+    
     self.lookAtDirection = direction;
 }
 

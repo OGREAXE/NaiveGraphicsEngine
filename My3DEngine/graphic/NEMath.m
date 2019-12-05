@@ -10,6 +10,81 @@
 #import <math.h>
 #include "NEMath.h"
 
+NEVector4 NEVector4Make(float x, float y, float z, float w){
+    NEVector4 v = { x, y, z, w };
+    return v;
+}
+
+//#define NEVector3Make(x, y, z) GLKVector3Make(x, y, z)
+
+NEVector3 NEVector3Make(float x, float y, float z){
+    NEVector3 v = { x, y, z};
+    return v;
+}
+
+//#define NEVector2Make(x, y) GLKVector2Make(x, y)
+NEVector2 NEVector2Make(float x, float y){
+    NEVector2 v = { x, y};
+    return v;
+}
+
+//#define NEVector4MakeWithVector3(v, a) GLKVector4MakeWithVector3(v, a)
+
+NEVector4 NEVector4MakeWithVector3(NEVector3 vector, float w){
+    NEVector4 v = { vector.v[0], vector.v[1], vector.v[2], w };
+    return v;
+}
+
+//#define NEMatrix3MultiplyVector3(m, v) GLKMatrix3MultiplyVector3(rotationMatrix, aPoint);
+NEVector3 NEMatrix3MultiplyVector3(NEMatrix3 matrixLeft, NEVector3 vectorRight)
+{
+    NEVector3 v = { matrixLeft.m[0] * vectorRight.v[0] + matrixLeft.m[3] * vectorRight.v[1] + matrixLeft.m[6] * vectorRight.v[2],
+                     matrixLeft.m[1] * vectorRight.v[0] + matrixLeft.m[4] * vectorRight.v[1] + matrixLeft.m[7] * vectorRight.v[2],
+                     matrixLeft.m[2] * vectorRight.v[0] + matrixLeft.m[5] * vectorRight.v[1] + matrixLeft.m[8] * vectorRight.v[2] };
+    return v;
+}
+
+//#define NEMatrix4MultiplyVector4(m, v)  GLKMatrix4MultiplyVector4(m, v)
+NEVector4 NEMatrix4MultiplyVector4(NEMatrix4 matrixLeft, NEVector4 vectorRight)
+{
+
+    NEVector4 v = { matrixLeft.m[0] * vectorRight.v[0] + matrixLeft.m[4] * vectorRight.v[1] + matrixLeft.m[8] * vectorRight.v[2] + matrixLeft.m[12] * vectorRight.v[3],
+                     matrixLeft.m[1] * vectorRight.v[0] + matrixLeft.m[5] * vectorRight.v[1] + matrixLeft.m[9] * vectorRight.v[2] + matrixLeft.m[13] * vectorRight.v[3],
+                     matrixLeft.m[2] * vectorRight.v[0] + matrixLeft.m[6] * vectorRight.v[1] + matrixLeft.m[10] * vectorRight.v[2] + matrixLeft.m[14] * vectorRight.v[3],
+                     matrixLeft.m[3] * vectorRight.v[0] + matrixLeft.m[7] * vectorRight.v[1] + matrixLeft.m[11] * vectorRight.v[2] + matrixLeft.m[15] * vectorRight.v[3] };
+    return v;
+}
+
+//#define NEVector2Subtract(a, b) GLKVector2Subtract(a, b)
+NEVector2 NEVector2Subtract(NEVector2 vectorLeft, NEVector2 vectorRight)
+{
+    NEVector2 v = { vectorLeft.v[0] - vectorRight.v[0],
+                     vectorLeft.v[1] - vectorRight.v[1] };
+    return v;
+}
+
+//#define NEVector3Subtract(a, b) GLKVector3Subtract(a, b)
+NEVector3 NEVector3Subtract(NEVector3 vectorLeft, NEVector3 vectorRight)
+{
+    NEVector3 v = { vectorLeft.v[0] - vectorRight.v[0],
+                     vectorLeft.v[1] - vectorRight.v[1],
+                     vectorLeft.v[2] - vectorRight.v[2] };
+    return v;
+}
+
+//#define NEMatrix4Make(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) GLKMatrix4Make(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33)
+NEMatrix4 NEMatrix4Make(float m00, float m01, float m02, float m03,
+                                            float m10, float m11, float m12, float m13,
+                                            float m20, float m21, float m22, float m23,
+                                            float m30, float m31, float m32, float m33)
+{
+    NEMatrix4 m = { m00, m01, m02, m03,
+                     m10, m11, m12, m13,
+                     m20, m21, m22, m23,
+                     m30, m31, m32, m33 };
+    return m;
+}
+
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float radians){
    NEVector3 v = getNormalizedVector(rotationAxis);
    float cos = cosf(radians);
