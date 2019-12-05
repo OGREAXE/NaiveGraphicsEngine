@@ -82,7 +82,7 @@ typedef long long RenderBufferType;
     
     _renderBuffer = (RenderBufferType *)malloc(sizeof(RenderBufferType) * self.frame.size.width * self.frame.size.height);
     
-    _lightPos = GLKVector3MultiplyScalar (_camera.position, 3);
+    _lightPos = NEVector3MultiplyScalar (_camera.position, 3);
     
 //    _lightPos = NEVector3Make(2, 2, 2);
 //    _lightPos = NEVector3Make(0, 0, 2);

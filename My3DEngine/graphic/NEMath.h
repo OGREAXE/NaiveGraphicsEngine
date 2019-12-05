@@ -9,7 +9,7 @@
 #ifndef NEMath_h
 #define NEMath_h
 
-#import <GLKit/GLKit.h>
+//#import <GLKit/GLKit.h>
 
 #ifdef __cplusplus
 extern "C"{
@@ -20,13 +20,62 @@ extern "C"{
 #define NE_RESULT_OK 0
 
 ///vector definitions
-typedef GLKVector2 NEVector2;
-typedef GLKVector3 NEVector3;
-typedef GLKVector4 NEVector4;
+//typedef GLKVector2 NEVector2;
+union _NEVector2
+{
+    struct { float x, y; };
+    struct { float s, t; };
+    float v[2];
+} __attribute__((aligned(8)));
+typedef union _NEVector2 NEVector2;
+
+//typedef GLKVector3 NEVector3;
+union _NEVector3
+{
+    struct { float x, y, z; };
+    struct { float r, g, b; };
+    struct { float s, t, p; };
+    float v[3];
+};
+typedef union _NEVector3 NEVector3;
+
+//typedef GLKVector4 NEVector4;
+union _NEVector4
+{
+    struct { float x, y, z, w; };
+    struct { float r, g, b, a; };
+    struct { float s, t, p, q; };
+    float v[4];
+} __attribute__((aligned(16)));
+typedef union _NEVector4 NEVector4;
 
 ///matrix definitions
-typedef GLKMatrix3 NEMatrix3;
-typedef GLKMatrix4 NEMatrix4;
+//typedef GLKMatrix3 NEMatrix3;
+union _NEMatrix3
+{
+    struct
+    {
+        float m00, m01, m02;
+        float m10, m11, m12;
+        float m20, m21, m22;
+    };
+    float m[9];
+};
+typedef union _NEMatrix3 NEMatrix3;
+
+//typedef GLKMatrix4 NEMatrix4;
+union _NEMatrix4
+{
+    struct
+    {
+        float m00, m01, m02, m03;
+        float m10, m11, m12, m13;
+        float m20, m21, m22, m23;
+        float m30, m31, m32, m33;
+    };
+    float m[16];
+} __attribute__((aligned(16)));
+typedef union _NEMatrix4 NEMatrix4;
 
 typedef struct tagNEFrustum{
     float near;
@@ -39,6 +88,14 @@ typedef struct tagNELine{
     NEVector3 vector;
     NEVector3 pointInLine;
 } NELine;
+
+#if !defined(MIN)
+    #define MIN(A,B)    ((A) < (B) ? (A) : (B))
+#endif
+
+#if !defined(MAX)
+    #define MAX(A,B)    ((A) > (B) ? (A) : (B))
+#endif
 
 NEVector2 NEVector2Make(float x, float y);
 
@@ -55,6 +112,8 @@ NEVector4 NEMatrix4MultiplyVector4(NEMatrix4 matrixLeft, NEVector4 vectorRight);
 NEVector2 NEVector2Subtract(NEVector2 vectorLeft, NEVector2 vectorRight);
 
 NEVector3 NEVector3Subtract(NEVector3 vectorLeft, NEVector3 vectorRight);
+
+NEVector3 NEVector3MultiplyScalar(NEVector3 vector, float value);
 
 NEMatrix4 NEMatrix4Make(float m00, float m01, float m02, float m03,
                                             float m10, float m11, float m12, float m13,

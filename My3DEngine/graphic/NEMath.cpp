@@ -364,7 +364,7 @@ void safeIncreaseSize(NEVector3 * pointsBuf, int maxBufSize, int * bufSize, floa
 NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize){
     *bufSize = 0;
     
-    CGFloat step = 0.001;
+    float step = 0.001;
     
     if (start.x == end.x && start.y != end.y) {
         float k_yz = (end.z - start.z)/( end.y - start.y);
@@ -522,4 +522,11 @@ NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint){
                                      d * normVec.z + line.pointInLine.z);
     
     return point;
+}
+
+NEVector3 NEVector3MultiplyScalar(NEVector3 vector, float value){
+    NEVector3 v = { vector.v[0] * value,
+                     vector.v[1] * value,
+                     vector.v[2] * value };
+    return v;
 }
