@@ -477,15 +477,12 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 }
 
 //util methods
-NEVector3 vectorFromVertice(const NEVertice & vert){
-    NEVector3 v = {vert.x, vert.y, vert.z};
-    return v;
-}
 
-NEVector3 vectorFromVertice(const NEVertice & vert, float max, float range){
-    NEVector3 v = {vert.x * range / max, vert.y * range / max, vert.z * range / max};
-    return v;
-}
+extern NEVector3 vectorFromVertice(const NEVertice & vert, float max, float range);
+//{
+//    NEVector3 v = {vert.x * range / max, vert.y * range / max, vert.z * range / max};
+//    return v;
+//}
 
 inline bool isPointInsideTriangle_(CGPoint &point, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
     NEVector2 p = NEVector2Make(point.x, point.y);

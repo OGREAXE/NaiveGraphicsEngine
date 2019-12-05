@@ -12,7 +12,9 @@
 #define NE_INLINE    static __inline__
 
 #import "NEMath.h"
-#import "NEObject.h"
+//#import "NEObject.h"
 //#import "NECamera.h"
+
+#define NELog(fmt, ...) printf(fmt, ##__VA_ARGS__)
 
 #endif /* MECommon_h */
