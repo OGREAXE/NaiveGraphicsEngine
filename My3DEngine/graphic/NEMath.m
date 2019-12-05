@@ -195,26 +195,36 @@ NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointIn
 }
 
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
+    float m00 = frustum.near / frustum.r;
+    
+    float m11 = frustum.near / frustum.t;
+    
+    float m22 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
+    
+    float m23 = - 2 * frustum.far * frustum.near / (frustum.far - frustum.near);
+    
+    float zn = (m22 * pointInCameraSpace.z + m23)/(-pointInCameraSpace.z);
+    
     NEMatrix4 rotm =
-    NEMatrix4Make(/*row0*/
+    NEMatrix4Make(/*col0*/
                    frustum.near/frustum.r,
                    0,
                    0,
                    0,
-                   /*row1*/
+                   /*col01*/
                    0,
                    frustum.near/frustum.t,
                    0,
                    0,
-                   /*row2*/
+                   /*col02*/
                    0,
                    0,
                   - (frustum.far + frustum.near) / (frustum.far - frustum.near),
-                  - 2 * frustum.far * frustum.near / (frustum.far - frustum.near),
-                   /*row3*/
+                  - 1,
+                   /*col03*/
                    0,
                    0,
-                   - 1,
+                   - 2 * frustum.far * frustum.near / (frustum.far - frustum.near),
                    0);
     
     NEVector4 point4 = NEVector4MakeWithVector3(pointInCameraSpace, 1);
@@ -227,15 +237,15 @@ NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum
 }
 
 NEVector3 invertPerspetiveProject(NEVector3 pointInEyeSpace, NEFrustum frustum){
-    float m00 = frustum.near/frustum.r;
+    float m00 = frustum.near / frustum.r;
     
-    float m11 = frustum.near/frustum.t;
+    float m11 = frustum.near / frustum.t;
     
     float m22 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
     
     float m23 = - 2 * frustum.far * frustum.near / (frustum.far - frustum.near);
     
-    float ze = -m23 /(pointInEyeSpace.z + m22);
+    float ze = -m23 / (pointInEyeSpace.z + m22);
     float xe = pointInEyeSpace.x * (-ze) / m00;
     float ye = pointInEyeSpace.y * (-ze) / m11;
     

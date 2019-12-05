@@ -82,10 +82,10 @@ typedef long long RenderBufferType;
     
     _renderBuffer = (RenderBufferType *)malloc(sizeof(RenderBufferType) * self.frame.size.width * self.frame.size.height);
     
-//    _lightPos = GLKVector3MultiplyScalar (_camera.position, 3);
+    _lightPos = GLKVector3MultiplyScalar (_camera.position, 3);
     
 //    _lightPos = NEVector3Make(2, 2, 2);
-    _lightPos = NEVector3Make(0, 0, 2);
+//    _lightPos = NEVector3Make(0, 0, 2);
 }
 
 - (void)dealloc{
@@ -102,7 +102,7 @@ typedef long long RenderBufferType;
 - (void)initCamera{
     NECamera * camera = [[NECamera alloc] init];
         
-    camera.position = NEVector3Make(7, 7, 2);
+    camera.position = NEVector3Make(28, 28, 8);
     NEVector3 pointToLookAt = NEVector3Make(0, 0, 2);
     
 //    camera.position = NEVector3Make(-0, 12, 0);
@@ -155,10 +155,16 @@ typedef long long RenderBufferType;
     return [self positionInView:originalPoint projectResultNDC:nil];
 }
 
+- (NEVector3)convertToCameraSpace:(NEVector3)originalPoint{
+    return getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
+}
+
 - (NEVector3)convertToEyeSpace:(NEVector3)originalPoint{
-    NEVector3 pointTran;
+//    NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
     
-    NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
+    NEVector3 point = [self convertToCameraSpace:originalPoint];
+    
+    NEVector3 pointTran;
     
     if (shouldTrimPoint(point, _camera.frustum)) {
 //        pointTran.x = 2;
@@ -171,8 +177,18 @@ typedef long long RenderBufferType;
     return pointTran;
 }
 
+- (NEVector3)convertVectorToCameraSpace:(NEVector3&)aVector originInEyeSpace:(NEVector3&)originPosT{
+    NEVector3 vectorT = [self convertToEyeSpace:aVector];
+    return NEVector3Subtract(vectorT, originPosT);
+}
+
 - (NEVector3)convertVectorToEyeSpace:(NEVector3&)aVector originInEyeSpace:(NEVector3&)originPosT{
     NEVector3 vectorT = [self convertToEyeSpace:aVector];
+    return NEVector3Subtract(vectorT, originPosT);
+}
+
+- (NEVector3)convertVectorToCameraSpace:(NEVector3&)aVector originInCameraSpace:(NEVector3&)originPosT{
+    NEVector3 vectorT = [self convertToCameraSpace:aVector];
     return NEVector3Subtract(vectorT, originPosT);
 }
 
@@ -512,7 +528,7 @@ float minIntensity = 1;
     
     [self doRenderScreen];
     
-    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
+//    NSLog(@"max intensity %f, min intensity %f", maxIntensity, minIntensity);
 }
 
 inline long colorWithIntensity(long color, float intensity){
@@ -543,6 +559,19 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     return NEVector3Make((x0 + x1 + x2)/3., (y0 + y1 + y2)/3., (z0 + z1 + z2)/3.);
 }
 
+- (void)testInvertProject:(const NEMesh &)mesh{
+    const NEVertice & _v0 = mesh.vertices[0];
+    NEVector3 v0 = vectorFromVertice(_v0, mesh.range, 10);
+    
+    NEVector3 v0t = [self convertToEyeSpace:v0];
+    
+    NEVector3 v0c = [self convertToCameraSpace:v0];
+    NEVector3 v0c_r = invertPerspetiveProject(v0t, self.camera.frustum);
+    
+    NEVector3 subtractRes = NEVector3Subtract(v0c, v0c_r);
+    NSLog(@"testInvertProject: %f, %f, %f", subtractRes.x, subtractRes.y, subtractRes.z);
+}
+
 - (void)drawMesh:(const NEMesh &)mesh{
     NSLog(@"mesh draw begin >>>>>>>>>>>>>>");
 //    CGContextRef context = UIGraphicsGetCurrentContext();
@@ -552,8 +581,15 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
     NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
-    
     NEVector3 originPosT = [self convertToEyeSpace:NEVector3Make(0, 0, 0)];
+    
+    NEVector3 lightPosC = [self convertToCameraSpace:_lightPos];
+    NEVector3 originPosC = [self convertToCameraSpace:NEVector3Make(0, 0, 0)];
+    
+    //do invert projection test here
+//    [self testInvertProject:mesh];
+//    return;
+    //end test
     
     for (const NEFace & aface : mesh.faces) {
         long long color = aface.color;
@@ -608,16 +644,30 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         NEVector3 normalRealt = getPlaneNormal(v0t, v1t, v2t);
         
         //preDefined Normal affects light blend effect
-        NEVector3 preDefinedNormalt = [self convertVectorToEyeSpace:_normal originInEyeSpace:originPosT];
+//        NEVector3 preDefinedNormalt = [self convertVectorToEyeSpace:_normal originInEyeSpace:originPosT];
+        
+        NEVector3 preDefinedNormalC = [self convertVectorToCameraSpace:_normal originInCameraSpace:originPosC];
         
         CGFloat reverseHorizontalFactor = (1 / (screenWidth/2));
         CGFloat reverseVerticalFactor = (1 / (screenHeight/2));
         
-//        float angleT0 = getLightToPointAngle(v0t, lightPosT, preDefinedNormalt);
-//        float angleT1 = getLightToPointAngle(v1t, lightPosT, preDefinedNormalt);
-//        float angleT2 = getLightToPointAngle(v2t, lightPosT, preDefinedNormalt);
+        //////test angle
         
+//        NEVector3 v0c = [self convertToCameraSpace:v0];
+//        NEVector3 v1c = [self convertToCameraSpace:v1];
+//        NEVector3 v2c = [self convertToCameraSpace:v2];
+//
+//        float angleT0 = getLightToPointAngle(v0c, lightPosC, preDefinedNormalC);
+//        float angleT1 = getLightToPointAngle(v1c, lightPosC, preDefinedNormalC);
+//        float angleT2 = getLightToPointAngle(v2c, lightPosC, preDefinedNormalC);
+//
+//        NEVector3 v0c_r = invertPerspetiveProject(v0t, self.camera.frustum);
+//        NEVector3 v1c_r = invertPerspetiveProject(v1t, self.camera.frustum);
+//        NEVector3 v2c_r = invertPerspetiveProject(v2t, self.camera.frustum);
+//
 //        NSLog(@"angle0 is %f, angle1 is %f, angle2 is %f", angleT0,  angleT1,  angleT2);
+        
+        /////end test angle
         
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
@@ -633,8 +683,12 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
                 //the point in eye space inside the triangle
                 NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
+                NEVector3 pointc = invertPerspetiveProject(point, self.camera.frustum);
+                
                 /////handle light
-                long tColor = lightBlendResultWithColor(color, point, lightPosT, preDefinedNormalt);
+//                long tColor = lightBlendResultWithColor(color, point, lightPosT, preDefinedNormalt);
+                
+                long tColor = lightBlendResultWithColor(color, pointc, lightPosC, preDefinedNormalC);
                 /////finish handle color
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
@@ -679,19 +733,6 @@ inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVe
     NEVector3 lightOnPointVec = NEVector3Make(point.x - lightPosT.x, point.y - lightPosT.y, point.z - lightPosT.z);
     float lightAngle = getAngleBetweenVectors(lightOnPointVec, preDefinedNormal);
 
-        
-    //    bool isNan = isnan(lightAngle);
-    //    if (isNan) {
-    //        float vdp = vectorDotProduct(lightOnPointVec, preDefinedNormal);
-    //        float vm0 = vectorMagnitude(lightOnPointVec);
-    //        float vm1 = vectorMagnitude(preDefinedNormal);
-    //
-    //        float result = vdp / (vm0 * vm1);
-    //
-    //        float angle = acosf(result);
-    //
-    //        NSLog(@"???");
-    //    }
     return lightAngle;
 }
 
