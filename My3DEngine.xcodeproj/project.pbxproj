@@ -18,7 +18,6 @@
 		D4085B882361A14C00ACDC70 /* My3DEngineUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085B872361A14C00ACDC70 /* My3DEngineUITests.m */; };
 		D4085B9A2361A38200ACDC70 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4085B982361A38200ACDC70 /* OpenGLES.framework */; };
 		D4085B9B2361A38200ACDC70 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4085B992361A38200ACDC70 /* GLKit.framework */; };
-		D4085BF12361A70F00ACDC70 /* NECamera.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF02361A70F00ACDC70 /* NECamera.m */; };
 		D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BF42361A82200ACDC70 /* NEPolygonLine.m */; };
 		D4085BFC2361CBA600ACDC70 /* NEPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFB2361CBA600ACDC70 /* NEPolygon.m */; };
 		D4085BFF2361CC2300ACDC70 /* NEObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D4085BFE2361CC2300ACDC70 /* NEObject.m */; };
@@ -41,8 +40,9 @@
 		F309EE1A2383F107007344F8 /* libzlibstatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F309EE182383F106007344F8 /* libzlibstatic.a */; };
 		F309EE1D2383F2FD007344F8 /* CNEAssReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */; };
 		F329F7762366DC2B000CA7F7 /* NEMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F329F7752366DC2A000CA7F7 /* NEMath.cpp */; };
+		F33730FB2398ECEE00AA54D6 /* NEStandardRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F33730F92398ECEE00AA54D6 /* NEStandardRenderer.cpp */; };
+		F33730FE2398F02200AA54D6 /* NECamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F33730FC2398F02200AA54D6 /* NECamera.cpp */; };
 		F3542CD3238445890090DD92 /* Cinema4D.fbx in Resources */ = {isa = PBXBuildFile; fileRef = F3542CD2238445890090DD92 /* Cinema4D.fbx */; };
-		F3D9F040238A894400EE98C2 /* NEScreenRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3D9F03E238A894400EE98C2 /* NEScreenRenderer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,8 +84,6 @@
 		D4085B962361A2FE00ACDC70 /* NEMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMath.h; sourceTree = "<group>"; };
 		D4085B982361A38200ACDC70 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D4085B992361A38200ACDC70 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		D4085BEF2361A70F00ACDC70 /* NECamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NECamera.h; sourceTree = "<group>"; };
-		D4085BF02361A70F00ACDC70 /* NECamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NECamera.m; sourceTree = "<group>"; };
 		D4085BF32361A82200ACDC70 /* NEPolygonLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEPolygonLine.h; sourceTree = "<group>"; };
 		D4085BF42361A82200ACDC70 /* NEPolygonLine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEPolygonLine.m; sourceTree = "<group>"; };
 		D4085BF62361A84100ACDC70 /* NECommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NECommon.h; sourceTree = "<group>"; };
@@ -192,9 +190,11 @@
 		F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CNEAssReader.cpp; sourceTree = "<group>"; };
 		F309EE1C2383F2FD007344F8 /* CNEAssReader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CNEAssReader.hpp; sourceTree = "<group>"; };
 		F329F7752366DC2A000CA7F7 /* NEMath.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NEMath.cpp; sourceTree = "<group>"; };
+		F33730F92398ECEE00AA54D6 /* NEStandardRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NEStandardRenderer.cpp; sourceTree = "<group>"; };
+		F33730FA2398ECEE00AA54D6 /* NEStandardRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NEStandardRenderer.hpp; sourceTree = "<group>"; };
+		F33730FC2398F02200AA54D6 /* NECamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NECamera.cpp; sourceTree = "<group>"; };
+		F33730FD2398F02200AA54D6 /* NECamera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NECamera.hpp; sourceTree = "<group>"; };
 		F3542CD2238445890090DD92 /* Cinema4D.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cinema4D.fbx; sourceTree = "<group>"; };
-		F3D9F03E238A894400EE98C2 /* NEScreenRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NEScreenRenderer.cpp; sourceTree = "<group>"; };
-		F3D9F03F238A894400EE98C2 /* NEScreenRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NEScreenRenderer.hpp; sourceTree = "<group>"; };
 		F3D9F041238A8A4C00EE98C2 /* NEMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMesh.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -297,14 +297,14 @@
 				D4085BF22361A80F00ACDC70 /* polygon */,
 				D4085B962361A2FE00ACDC70 /* NEMath.h */,
 				F329F7752366DC2A000CA7F7 /* NEMath.cpp */,
-				D4085BEF2361A70F00ACDC70 /* NECamera.h */,
-				D4085BF02361A70F00ACDC70 /* NECamera.m */,
 				D4085BF62361A84100ACDC70 /* NECommon.h */,
 				D44026D5238107FF00435316 /* NEDepthBuffer.cpp */,
 				D44026D6238107FF00435316 /* NEDepthBuffer.hpp */,
-				F3D9F03E238A894400EE98C2 /* NEScreenRenderer.cpp */,
-				F3D9F03F238A894400EE98C2 /* NEScreenRenderer.hpp */,
 				F3D9F041238A8A4C00EE98C2 /* NEMesh.h */,
+				F33730F92398ECEE00AA54D6 /* NEStandardRenderer.cpp */,
+				F33730FA2398ECEE00AA54D6 /* NEStandardRenderer.hpp */,
+				F33730FC2398F02200AA54D6 /* NECamera.cpp */,
+				F33730FD2398F02200AA54D6 /* NECamera.hpp */,
 			);
 			path = graphic;
 			sourceTree = "<group>";
@@ -655,7 +655,8 @@
 			files = (
 				D4085BFF2361CC2300ACDC70 /* NEObject.m in Sources */,
 				D4085BFC2361CBA600ACDC70 /* NEPolygon.m in Sources */,
-				D4085BF12361A70F00ACDC70 /* NECamera.m in Sources */,
+				F33730FB2398ECEE00AA54D6 /* NEStandardRenderer.cpp in Sources */,
+				F33730FE2398F02200AA54D6 /* NECamera.cpp in Sources */,
 				D4085C072361D00600ACDC70 /* NERenderView.mm in Sources */,
 				D4085B682361A14A00ACDC70 /* ViewController.mm in Sources */,
 				F309ECAA2383D68B007344F8 /* NEAssLoader.mm in Sources */,
@@ -665,7 +666,6 @@
 				F309EE1D2383F2FD007344F8 /* CNEAssReader.cpp in Sources */,
 				D4085B732361A14C00ACDC70 /* main.m in Sources */,
 				D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */,
-				F3D9F040238A894400EE98C2 /* NEScreenRenderer.cpp in Sources */,
 				D4085B652361A14A00ACDC70 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

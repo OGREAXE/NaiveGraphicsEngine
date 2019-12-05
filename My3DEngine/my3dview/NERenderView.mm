@@ -8,6 +8,7 @@
 
 #import "NERenderView.h"
 #import "NECommon.h"
+#include "NECamera.hpp"
 #import "NEPolygonLine.h"
 #import "NEDepthBuffer.hpp"
 #include <math.h>
@@ -25,7 +26,7 @@
 
 //@property (nonatomic) NSArray<NSValue*>* vectices;
 
-@property (nonatomic) NECamera* camera;
+//@property (nonatomic) NECamera* camera;
 
 @property (nonatomic) NEPolygonLine* xAxis;
 @property (nonatomic) NEPolygonLine* yAxis;
@@ -61,6 +62,8 @@ typedef long long RenderBufferType;
     int _renderBufferSize;
     
     NEVector3 _lightPos;
+    
+    NECamera _camera;
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -100,9 +103,7 @@ typedef long long RenderBufferType;
 }
 
 - (void)initCamera{
-    NECamera * camera = [[NECamera alloc] init];
-        
-    camera.position = NEVector3Make(28, 28, 8);
+    _camera.position = NEVector3Make(28, 28, 8);
     NEVector3 pointToLookAt = NEVector3Make(0, 0, 2);
     
 //    camera.position = NEVector3Make(-0, 12, 0);
@@ -111,16 +112,14 @@ typedef long long RenderBufferType;
 //    camera.position = NEVector3Make(0, 10, 0);
 //    NEVector3 pointToLookAt = NEVector3Make(0, 12, 0);
     
-    [camera lookAtPoint:pointToLookAt];
+    _camera.lookAtPoint(pointToLookAt);
     //find y axis which together with z form a plane vertical to xy plane
-    NEVector3 lookAtRotated_90= { - camera.lookAtDirection.y , camera.lookAtDirection.x, 0};
-    NEVector3 cam_yAxis = vectorCrossProduct(camera.lookAtDirection, lookAtRotated_90);
-    camera.yAxis = cam_yAxis;
-    camera.xAxis = lookAtRotated_90;
+    NEVector3 lookAtRotated_90= { - _camera.lookAtDirection.y , _camera.lookAtDirection.x, 0};
+    NEVector3 cam_yAxis = vectorCrossProduct(_camera.lookAtDirection, lookAtRotated_90);
+    _camera.yAxis = cam_yAxis;
+    _camera.xAxis = lookAtRotated_90;
     
-    [camera normalize];
-    
-    self.camera = camera;
+    _camera.normalize();
     
     self.moveSpeed = 2;
     
@@ -156,7 +155,7 @@ typedef long long RenderBufferType;
 }
 
 - (NEVector3)convertToCameraSpace:(NEVector3)originalPoint{
-    return getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
+    return getPositionInCameraCoordinateSystem(originalPoint, _camera.position, _camera.lookAtDirection, _camera.yAxis);
 }
 
 - (NEVector3)convertToEyeSpace:(NEVector3)originalPoint{
@@ -172,7 +171,7 @@ typedef long long RenderBufferType;
 //        return pointTran;
     }
     
-    pointTran = perspetiveProjectPoint(point, self.camera.frustum);
+    pointTran = perspetiveProjectPoint(point, _camera.frustum);
     
     return pointTran;
 }
@@ -196,7 +195,7 @@ typedef long long RenderBufferType;
     CGFloat width = self.frame.size.width * COORD_AMPLIFY_FACTOR;
     CGFloat height = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
-    NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, self.camera.position, self.camera.lookAtDirection, self.camera.yAxis);
+    NEVector3 point = getPositionInCameraCoordinateSystem(originalPoint, _camera.position, _camera.lookAtDirection, _camera.yAxis);
     
     if (shouldTrimPoint(point, _camera.frustum)) {
         if (pointTran) {
@@ -207,7 +206,7 @@ typedef long long RenderBufferType;
         return CGPointZero;
     }
     
-    NEVector3 point_tran = perspetiveProjectPoint(point, self.camera.frustum);
+    NEVector3 point_tran = perspetiveProjectPoint(point, _camera.frustum);
     
     if (pointTran) {
         *pointTran = point_tran;
@@ -445,7 +444,7 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 //    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
 //    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
     
-    [_camera rotateByNearVerticallyByDegree:angleDiff];
+    _camera.rotateByNearVerticallyByDegree(angleDiff);
     
     [self redraw];
 }
@@ -454,7 +453,7 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 //    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
 //    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
     
-    [_camera rotateByNearVerticallyByDegree:angleDiff];
+    _camera.rotateByNearVerticallyByDegree(angleDiff);
     
     [self redraw];
 }
@@ -463,7 +462,7 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 //    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
 //    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
-    [_camera rotateByNearHorizontallyByDegree:angleDiff];
+    _camera.rotateByNearHorizontallyByDegree(angleDiff);
     
     [self redraw];
 }
@@ -472,7 +471,7 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 //    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
 //    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
-    [_camera rotateByNearHorizontallyByDegree:angleDiff];
+    _camera. rotateByNearHorizontallyByDegree(angleDiff);
     
     [self redraw];
 }
@@ -566,7 +565,7 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     NEVector3 v0t = [self convertToEyeSpace:v0];
     
     NEVector3 v0c = [self convertToCameraSpace:v0];
-    NEVector3 v0c_r = invertPerspetiveProject(v0t, self.camera.frustum);
+    NEVector3 v0c_r = invertPerspetiveProject(v0t, _camera.frustum);
     
     NEVector3 subtractRes = NEVector3Subtract(v0c, v0c_r);
     NSLog(@"testInvertProject: %f, %f, %f", subtractRes.x, subtractRes.y, subtractRes.z);
@@ -683,7 +682,7 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
                 //the point in eye space inside the triangle
                 NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
-                NEVector3 pointc = invertPerspetiveProject(point, self.camera.frustum);
+                NEVector3 pointc = invertPerspetiveProject(point, _camera.frustum);
                 
                 /////handle light
 //                long tColor = lightBlendResultWithColor(color, point, lightPosT, preDefinedNormalt);

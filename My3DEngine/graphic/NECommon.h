@@ -13,6 +13,6 @@
 
 #import "NEMath.h"
 #import "NEObject.h"
-#import "NECamera.h"
+//#import "NECamera.h"
 
 #endif /* MECommon_h */
