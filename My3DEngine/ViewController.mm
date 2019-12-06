@@ -38,7 +38,7 @@
     [loader loadDefaultFile];
     
     NELoadAssParam loadParam;
-    loadParam.position = NEVector3Make(1, -1, 0);
+    loadParam.position = NEVector3Make(5, 5, 1);
     loadParam.rotation = NEVector3Make(M_PI_2, 0, 0);
     loadParam.width = 10;
     

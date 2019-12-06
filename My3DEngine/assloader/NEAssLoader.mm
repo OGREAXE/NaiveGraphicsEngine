@@ -53,7 +53,13 @@
     
 //    [self loadPlanes];
     
-    [self loadPlanes2WithOffsetX:-0.5 offsetY:-0.5 z:0 rotation:NEVector3Make(0, 0, 0)];
+    [self loadPlanes2WithPosition:NEVector3Make(0, 0, 0) rotation:NEVector3Make(0, 0, 0) width:10 normal:NEVector3Make(0, 0, 1)];
+    
+    [self loadPlanes2WithPosition:NEVector3Make(0, 0, 0) rotation:NEVector3Make(0, -M_PI_2, 0) width:10 normal:NEVector3Make(0, 0, -1)];
+    
+    [self loadPlanes2WithPosition:NEVector3Make(0, 0, 0) rotation:NEVector3Make(M_PI_2, 0, 0) width:10 normal:NEVector3Make(0, 0, -1)];
+    
+//    [self loadPlanes2WithPosition:NEVector3Make(0, 0, 0) rotation:NEVector3Make(0, 0, 0) width:15];
     
 //    [self loadPlanes2WithOffsetX:2 offsetY:1.5 z:1];
     
@@ -114,25 +120,26 @@
     _meshes.push_back(mesh);
 }
 
-- (void)loadPlanes2WithOffsetX:(float)offsetx offsetY:(float)offsety z:(float)z rotation:(NEVector3)rotation{
-    float planeRange = 1;
+- (void)loadPlanes2WithPosition:(NEVector3)position rotation:(NEVector3)rotation width:(float)width normal:(NEVector3)normal{
     NSArray * vertices = @[
-    @[@(0), @(0) ,@(z)], @[@(0), @(1) ,@(z)], @[@(1), @(1) ,@(z)], @[@(1), @(0) ,@(z)]];
+    @[@(0), @(0) ,@(0)], @[@(0), @(1) ,@(0)], @[@(1), @(1) ,@(0)], @[@(1), @(0) ,@(0)]];
     
     NEMesh mesh;
     mesh.range = 1;
-    mesh.width = 15;
+    mesh.width = width;
+    mesh.position = position;
     mesh.roatation = rotation;
     
 //    float offsetx = 2;
 //    float offsety = 2;
     
     for (NSArray<NSNumber *> * arrVertice : vertices) {
-        NEVertice v = { (arrVertice[0].floatValue + offsetx) * planeRange, (arrVertice[1].floatValue  + offsety) * planeRange, arrVertice[2].floatValue * planeRange };
+        NEVertice v = { (arrVertice[0].floatValue) , (arrVertice[1].floatValue) , arrVertice[2].floatValue };
         
-        v.normal.z = 1;
-        v.normal.y = 0;
-        v.normal.x = 0;
+//        v.normal.z = 1;
+//        v.normal.y = 0;
+//        v.normal.x = 0;
+        v.normal = normal;
         mesh.vertices.push_back(v);
     }
     
