@@ -53,7 +53,7 @@
     
 //    [self loadPlanes];
     
-    [self loadPlanes2WithOffsetX:2 offsetY:2 z:3.5 rotation:NEVector3Make(0, 0, 0)];
+    [self loadPlanes2WithOffsetX:-0.5 offsetY:-0.5 z:0 rotation:NEVector3Make(0, 0, 0)];
     
 //    [self loadPlanes2WithOffsetX:2 offsetY:1.5 z:1];
     
@@ -121,7 +121,7 @@
     
     NEMesh mesh;
     mesh.range = 1;
-    mesh.width = 2;
+    mesh.width = 15;
     mesh.roatation = rotation;
     
 //    float offsetx = 2;

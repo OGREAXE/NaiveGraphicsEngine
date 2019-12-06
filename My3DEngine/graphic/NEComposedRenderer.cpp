@@ -47,7 +47,9 @@ inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector
     
     if(lightAngle < M_PI_2){
         // smaller than pi/2, light is from behind
-        lightAngle = M_PI_2;
+//        lightAngle = M_PI_2;
+        
+        fade = 0.9;
     }
     
     long tColor = getColorWithIntensity(color, fade * (1. - cosf(lightAngle))/2.);

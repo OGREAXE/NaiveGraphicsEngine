@@ -35,10 +35,10 @@
     NEAssLoader * loader = [[NEAssLoader alloc] init];
     loader.delegate = self;
     
-//    [loader loadDefaultFile];
+    [loader loadDefaultFile];
     
     NELoadAssParam loadParam;
-    loadParam.position = NEVector3Make(2, -2, 0);
+    loadParam.position = NEVector3Make(1, -1, 0);
     loadParam.rotation = NEVector3Make(M_PI_2, 0, 0);
     loadParam.width = 10;
     
