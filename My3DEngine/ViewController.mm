@@ -36,6 +36,7 @@
     
     [loader loadFbx:@"duck"];
 //    [loader loadDefaultFile];
+//    [loader loadFbx:@"Lamborghini_Aventador"];
 //
 //    _renderView.frameLines = [loader lineFrameFromMeshAt:0 range:20];
 }

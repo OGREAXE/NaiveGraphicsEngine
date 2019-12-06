@@ -9,8 +9,6 @@
 #include "NEStandardRenderer.hpp"
 #include "NECommon.h"
 
-#define COORD_AMPLIFY_FACTOR 1
-
 NEVector3 vectorFromVertice(const NEVertice & vert){
     NEVector3 v = {vert.x, vert.y, vert.z};
     return v;
@@ -106,10 +104,14 @@ NEVector2 NEStandardRenderer::pointInVewForVector3(NEVector3 vector){
 
 
 void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
+    prepareDrawMeshes(meshes);
+    
     for (int i = 0; i < meshes.size(); i++) {
         const NEMesh & mesh = meshes[i];
         drawMesh(mesh);
     }
+    
+    finishDrawMeshes(meshes);
 }
 
 void NEStandardRenderer::drawMesh(const NEMesh &mesh){
@@ -187,7 +189,6 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         float reverseHorizontalFactor = (1 / (screenWidth/2));
         float reverseVerticalFactor = (1 / (screenHeight/2));
         
-        
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
                 NEVector2 p = NEVector2Make(x, y);
@@ -202,7 +203,9 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 //the point in eye space inside the triangle
                 NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
-                long tColor = color;
+                NEVector3 pointc = invertPerspetiveProject(point, _camera.frustum);
+                
+                long tColor = colorBlendResult(color, pointc, preDefinedNormalC, nullptr);
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                     continue;
@@ -214,14 +217,19 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
 #define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
                 if (point.z < oldZ) {
                     long oldIndex = info.additionalInfo;
-                    if (oldIndex > 0) {
-                        _renderBuffer[-- oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, tColor)
-                        ;
-                    } else {
-                        _renderBuffer[_renderBufferSize ++] = COMPOSE_RENDER_BUF_VAL(x, y, tColor);
-                        
-                        info.additionalInfo = _renderBufferSize;
+                    if (_renderBuffer) {
+                        if (oldIndex > 0) {
+                            oldIndex --;
+                            _renderBuffer[oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, tColor)
+                            ;
+                        } else {
+                            _renderBuffer[_renderBufferSize] = COMPOSE_RENDER_BUF_VAL(x, y, tColor);
+                            _renderBufferSize ++;
+                            
+                            info.additionalInfo = _renderBufferSize;
+                        }
                     }
+                    
                     info.z = point.z;
                     info.color = tColor;
                     

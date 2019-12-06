@@ -48,8 +48,6 @@
 
 #define COORD_AMPLIFY_FACTOR 1
 
-typedef long long RenderBufferType;
-
 @implementation NERenderView{
     NEVector3 _lineBuffer[MAX_LINE_BUF];
     
@@ -576,9 +574,9 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     CGFloat screenWidth = self.frame.size.width * COORD_AMPLIFY_FACTOR;
     CGFloat screenHeight = self.frame.size.height * COORD_AMPLIFY_FACTOR;
     
-    NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
-    NEVector3 originPosT = [self convertToEyeSpace:NEVector3Make(0, 0, 0)];
-    
+//    NEVector3 lightPosT = [self convertToEyeSpace:_lightPos];
+//    NEVector3 originPosT = [self convertToEyeSpace:NEVector3Make(0, 0, 0)];
+//
     NEVector3 lightPosC = [self convertToCameraSpace:_lightPos];
     NEVector3 originPosC = [self convertToCameraSpace:NEVector3Make(0, 0, 0)];
     
