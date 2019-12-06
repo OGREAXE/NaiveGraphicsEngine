@@ -20,6 +20,40 @@ NEVector3 vectorFromVertice(const NEVertice & vert, float range, float width){
     return v;
 }
 
+NEVector3 convertNormal(const NEVector3 & normal, const NEMesh &mesh){
+    NEVector3 n = normal;
+    
+    if (mesh.roatation.x != 0) {
+        n = rotationByAngle(n, NEVector3Make(1, 0, 0), mesh.roatation.x);
+    }
+    if (mesh.roatation.y != 0) {
+        n = rotationByAngle(n, NEVector3Make(0, 1, 0), mesh.roatation.y);
+    }
+    if (mesh.roatation.z != 0) {
+        n = rotationByAngle(n, NEVector3Make(0, 0, 1), mesh.roatation.z);
+    }
+    
+    return n;
+}
+
+NEVector3 vectorFromVertice(const NEVertice & vert, const NEMesh &mesh){
+    NEVector3 v = vectorFromVertice(vert, mesh.range, mesh.width);
+    
+    if (mesh.roatation.x != 0) {
+        v = rotationByAngle(v, NEVector3Make(1, 0, 0), mesh.roatation.x);
+    }
+    if (mesh.roatation.y != 0) {
+        v = rotationByAngle(v, NEVector3Make(0, 1, 0), mesh.roatation.y);
+    }
+    if (mesh.roatation.z != 0) {
+        v = rotationByAngle(v, NEVector3Make(0, 0, 1), mesh.roatation.z);
+    }
+    
+    v = translationByVector(v, mesh.position);
+    
+    return v;
+}
+
 NEVector3 NEStandardRenderer::convertToCameraSpace(NEVector3 originalPoint){
     return getPositionInCameraCoordinateSystem(originalPoint, camera.position, camera.lookAtDirection, camera.yAxis);
 }
@@ -144,11 +178,12 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
         const NEVertice & _v2 = mesh.vertices[aface.cIndex];
         
-        NEVector3 v0 = vectorFromVertice(_v0, mesh.range, mesh.width);
-        NEVector3 v1 = vectorFromVertice(_v1, mesh.range, mesh.width);
-        NEVector3 v2 = vectorFromVertice(_v2, mesh.range, mesh.width);
-        
         NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
+        _normal = convertNormal(_normal, mesh);
+        
+        NEVector3 v0 = vectorFromVertice(_v0, mesh);
+        NEVector3 v1 = vectorFromVertice(_v1, mesh);
+        NEVector3 v2 = vectorFromVertice(_v2, mesh);
         
         NEVector3 v0t = convertToEyeSpace(v0);
         NEVector3 v1t = convertToEyeSpace(v1);

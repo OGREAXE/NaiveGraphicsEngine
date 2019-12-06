@@ -53,7 +53,7 @@
     
 //    [self loadPlanes];
     
-    [self loadPlanes2WithOffsetX:2 offsetY:2 z:3.5];
+    [self loadPlanes2WithOffsetX:2 offsetY:2 z:3.5 rotation:NEVector3Make(0, 0, 0)];
     
 //    [self loadPlanes2WithOffsetX:2 offsetY:1.5 z:1];
     
@@ -114,7 +114,7 @@
     _meshes.push_back(mesh);
 }
 
-- (void)loadPlanes2WithOffsetX:(float)offsetx offsetY:(float)offsety z:(float)z{
+- (void)loadPlanes2WithOffsetX:(float)offsetx offsetY:(float)offsety z:(float)z rotation:(NEVector3)rotation{
     float planeRange = 1;
     NSArray * vertices = @[
     @[@(0), @(0) ,@(z)], @[@(0), @(1) ,@(z)], @[@(1), @(1) ,@(z)], @[@(1), @(0) ,@(z)]];
@@ -122,6 +122,7 @@
     NEMesh mesh;
     mesh.range = 1;
     mesh.width = 2;
+    mesh.roatation = rotation;
     
 //    float offsetx = 2;
 //    float offsety = 2;

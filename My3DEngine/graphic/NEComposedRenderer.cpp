@@ -90,7 +90,7 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEV
 //        float lightAngle = M_PI_2;
 //        long tColor = getColorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
 //        return tColor;
-        fade = 0.7;
+        fade = 0.8;
     }
 #endif
     

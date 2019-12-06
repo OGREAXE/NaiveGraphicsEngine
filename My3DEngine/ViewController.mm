@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "NERenderView.h"
 #import "NEAssLoader.h"
+#import <math.h>
 
 @interface ViewController () <NEAssLoaderDelegate>
 
@@ -34,11 +35,11 @@
     NEAssLoader * loader = [[NEAssLoader alloc] init];
     loader.delegate = self;
     
-    [loader loadDefaultFile];
+//    [loader loadDefaultFile];
     
     NELoadAssParam loadParam;
     loadParam.position = NEVector3Make(2, -2, 0);
-    loadParam.rotation = NEVector3Make(0, 0, 0);
+    loadParam.rotation = NEVector3Make(M_PI_2, 0, 0);
     loadParam.width = 10;
     
     [loader loadFbx:@"duck" param:loadParam];
