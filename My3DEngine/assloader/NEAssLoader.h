@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)loadDefaultFile;
 
+- (void)upload;
+
+- (void)reset;
+
 @end
 
 NS_ASSUME_NONNULL_END

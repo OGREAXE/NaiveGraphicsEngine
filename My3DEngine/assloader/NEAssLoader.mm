@@ -44,14 +44,22 @@
 //    [self loadFbx:@"Cinema4D"];
 }
 
-- (void)loadDefaultFile{
+- (void)reset{
     _meshes.clear();
+}
+
+- (void)loadDefaultFile{
+//    _meshes.clear();
     
-    [self loadPlanes];
+//    [self loadPlanes];
+    
+    [self loadPlanes2WithOffsetX:2 offsetY:2 z:3.5];
+    
+//    [self loadPlanes2WithOffsetX:2 offsetY:1.5 z:1];
     
 //    [self loadTestMesh];
     
-    [self.delegate loader:self didLoadMeshes:_meshes];
+//    [self.delegate loader:self didLoadMeshes:_meshes];
 }
 
 - (void)loadPlanes{
@@ -64,6 +72,61 @@
     
     for (NSArray<NSNumber *> * arrVertice : vertices) {
         NEVertice v = { arrVertice[0].floatValue * planeRange, arrVertice[1].floatValue * planeRange, arrVertice[2].floatValue * planeRange };
+        
+        v.normal_z = 1;
+        v.normal_y = 0;
+        v.normal_x = 0;
+        mesh.vertices.push_back(v);
+    }
+    
+//    NSArray * indices = @[
+//    @[@(0), @(1) ,@(2)], @[@(2), @(3) ,@(0)], //xy
+//    @[@(0), @(3) ,@(4)], @[@(4), @(5) ,@(0)], //xz
+//    @[@(0), @(5) ,@(6)], @[@(6), @(1) ,@(0)], //yz
+//    ];
+    
+    NSArray * indices = @[
+    @[@(0), @(1) ,@(2)],
+  @[@(2), @(3) ,@(0)], //xy
+//    @[@(0), @(3) ,@(4)], @[@(4), @(5) ,@(0)], //xz
+//    @[@(0), @(5) ,@(6)], @[@(6), @(1) ,@(0)], //yz
+    ];
+    
+    NSArray<NSNumber *> * colors = @[
+    @(0xeeeeee), @(0xeeeeee), //xy
+    @(0xaaaaaa), @(0xaaaaaa), //xz
+    @(0x888888), @(0x888888), //yz
+    ];
+    
+    for (int i = 0; i < indices.count; i++) {
+        NSArray<NSNumber *> * aFaceIndices = indices[i];
+        
+        NEFace face;
+        face.aIndex = aFaceIndices[0].intValue;
+        face.bIndex = aFaceIndices[1].intValue;
+        face.cIndex = aFaceIndices[2].intValue;
+        
+        face.color = colors[i].longValue;
+        
+        mesh.faces.push_back(face);
+    }
+    
+    _meshes.push_back(mesh);
+}
+
+- (void)loadPlanes2WithOffsetX:(float)offsetx offsetY:(float)offsety z:(float)z{
+    float planeRange = 2;
+    NSArray * vertices = @[
+    @[@(0), @(0) ,@(z)], @[@(0), @(1) ,@(z)], @[@(1), @(1) ,@(z)], @[@(1), @(0) ,@(z)]];
+    
+    NEMesh mesh;
+    mesh.range = 10;
+    
+//    float offsetx = 2;
+//    float offsety = 2;
+    
+    for (NSArray<NSNumber *> * arrVertice : vertices) {
+        NEVertice v = { (arrVertice[0].floatValue + offsetx) * planeRange, (arrVertice[1].floatValue  + offsety) * planeRange, arrVertice[2].floatValue * planeRange };
         
         v.normal_z = 1;
         v.normal_y = 0;
@@ -156,40 +219,16 @@
     _meshes.push_back(mesh);
 }
 
-- (void)loadDefaultFile_{
-    NEMesh mesh;
-    
-    NEVertice vx = { 1, 0, 0 };
-    NEVertice vy = { 0, 2, 0 };
-    NEVertice vz = { 0, 0, 3};
-    
-    mesh.vertices.push_back(vx);
-    mesh.vertices.push_back(vy);
-    mesh.vertices.push_back(vz);
-    
-    mesh.range = 20;
-    
-    NEFace face;
-    face.aIndex = 0;
-    face.bIndex = 1;
-    face.cIndex = 2;
-    
-    face.color = 0xffff00;
-    
-    mesh.faces.push_back(face);
-    
-    std::vector<NEMesh> v;
-    v.push_back(mesh);
-    
-    [self.delegate loader:self didLoadMeshes:v];
-}
-
 - (void)loadFbx:(NSString *)modelName{
     NSString *fileName = [[NSBundle mainBundle] pathForResource:modelName ofType:@"fbx"];
     
     if (_reader->LoadMesh(fileName.UTF8String)){
-        [self.delegate loader:self didLoadMeshes:_reader->mMeshes];
+        _meshes.insert(_meshes.end(), _reader->mMeshes.begin(), _reader->mMeshes.end());
     }
+}
+
+- (void)upload{
+    [self.delegate loader:self didLoadMeshes:_meshes];
 }
 
 - (NSArray<NEPolygonLine*>*)lineFrameFromMeshAt:(int)meshIndex range:(float)range{

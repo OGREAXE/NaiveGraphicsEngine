@@ -21,7 +21,7 @@ class NEDotLight {
     bool _needRedrawMap;
 public:
     NEDotLight(){
-        _renderer = new NEDotLightRenderer(500, 500);
+        _renderer = new NEDotLightRenderer(1500, 1500);
         _needRedrawMap = true;
     }
     ~NEDotLight(){

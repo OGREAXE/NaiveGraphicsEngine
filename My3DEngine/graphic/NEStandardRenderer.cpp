@@ -8,6 +8,7 @@
 
 #include "NEStandardRenderer.hpp"
 #include "NECommon.h"
+#include <math.h>
 
 NEVector3 vectorFromVertice(const NEVertice & vert){
     NEVector3 v = {vert.x, vert.y, vert.z};
