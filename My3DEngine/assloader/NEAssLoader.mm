@@ -73,9 +73,9 @@
     for (NSArray<NSNumber *> * arrVertice : vertices) {
         NEVertice v = { arrVertice[0].floatValue * planeRange, arrVertice[1].floatValue * planeRange, arrVertice[2].floatValue * planeRange };
         
-        v.normal_z = 1;
-        v.normal_y = 0;
-        v.normal_x = 0;
+        v.normal.z = 1;
+        v.normal.y = 0;
+        v.normal.x = 0;
         mesh.vertices.push_back(v);
     }
     
@@ -115,12 +115,13 @@
 }
 
 - (void)loadPlanes2WithOffsetX:(float)offsetx offsetY:(float)offsety z:(float)z{
-    float planeRange = 2;
+    float planeRange = 1;
     NSArray * vertices = @[
     @[@(0), @(0) ,@(z)], @[@(0), @(1) ,@(z)], @[@(1), @(1) ,@(z)], @[@(1), @(0) ,@(z)]];
     
     NEMesh mesh;
-    mesh.range = 10;
+    mesh.range = 1;
+    mesh.width = 2;
     
 //    float offsetx = 2;
 //    float offsety = 2;
@@ -128,9 +129,9 @@
     for (NSArray<NSNumber *> * arrVertice : vertices) {
         NEVertice v = { (arrVertice[0].floatValue + offsetx) * planeRange, (arrVertice[1].floatValue  + offsety) * planeRange, arrVertice[2].floatValue * planeRange };
         
-        v.normal_z = 1;
-        v.normal_y = 0;
-        v.normal_x = 0;
+        v.normal.z = 1;
+        v.normal.y = 0;
+        v.normal.x = 0;
         mesh.vertices.push_back(v);
     }
     

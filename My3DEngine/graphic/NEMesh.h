@@ -17,9 +17,10 @@ typedef struct tagNEVertice{
     float y;
     float z;
     
-    float normal_x;
-    float normal_y;
-    float normal_z;
+//    float normal_x;
+//    float normal_y;
+//    float normal_z;
+    NEVector3 normal;
 } NEVertice;
 
 typedef struct tagNEFace{

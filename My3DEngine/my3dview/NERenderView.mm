@@ -619,9 +619,9 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
         
         NEVector3 _normal =
         mixNormal(
-                  _v0.normal_x, _v0.normal_y, _v0.normal_z,
-                  _v1.normal_x, _v1.normal_y, _v1.normal_z,
-                  _v2.normal_x, _v2.normal_y, _v2.normal_z);
+                  _v0.normal.x, _v0.normal.y, _v0.normal.z,
+                  _v1.normal.x, _v1.normal.y, _v1.normal.z,
+                  _v2.normal.x, _v2.normal.y, _v2.normal.z);
         
         NEVector3 v0t = [self convertToEyeSpace:v0];
         NEVector3 v1t = [self convertToEyeSpace:v1];

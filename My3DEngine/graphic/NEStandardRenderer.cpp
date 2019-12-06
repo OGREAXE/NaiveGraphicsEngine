@@ -56,6 +56,10 @@ inline NEVector3 mixNormal(float x0, float y0, float z0, float x1, float y1, flo
     return NEVector3Make((x0 + x1 + x2)/3., (y0 + y1 + y2)/3., (z0 + z1 + z2)/3.);
 }
 
+inline NEVector3 mixNormal(NEVector3 normal0, NEVector3 normal1, NEVector3 normal2){
+    return NEVector3Make((normal0.x + normal1.x + normal2.x)/3., (normal0.y + normal1.y + normal2.y)/3., (normal0.z + normal1.z + normal2.z)/3.);
+}
+
 inline bool isPointInsideTriangle(NEVector2 &p, NEVector2 &p0, NEVector2 &p1, NEVector2 &p2){
     
 #define testPoint(point, start, end) ((point.x - start.x) * (end.y - start.y) - (end.x - start.x) * (point.y - start.y));
@@ -144,11 +148,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v1 = vectorFromVertice(_v1, mesh.range, mesh.width);
         NEVector3 v2 = vectorFromVertice(_v2, mesh.range, mesh.width);
         
-        NEVector3 _normal =
-        mixNormal(
-                  _v0.normal_x, _v0.normal_y, _v0.normal_z,
-                  _v1.normal_x, _v1.normal_y, _v1.normal_z,
-                  _v2.normal_x, _v2.normal_y, _v2.normal_z);
+        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
         
         NEVector3 v0t = convertToEyeSpace(v0);
         NEVector3 v1t = convertToEyeSpace(v1);
