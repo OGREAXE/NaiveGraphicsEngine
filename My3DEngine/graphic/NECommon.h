@@ -11,7 +11,7 @@
 
 #define NE_INLINE    static __inline__
 
-#import "NEMath.h"
+#include "NEMath.h"
 //#import "NEObject.h"
 //#import "NECamera.h"
 

@@ -12,6 +12,11 @@
 
 #import <UIKit/UIKit.h>
 
+void NECoreGraphicsDevice::clearDevice(NERect clearRect){
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextClearRect(context, CGRectMake(clearRect.x, clearRect.y, clearRect.z, clearRect.w));
+}
+
 void NECoreGraphicsDevice::presentRenderBuffer(RenderBufferType *renderBuffer, int renderBufferSize, int mode, void *extra){
     CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
         

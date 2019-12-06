@@ -16,22 +16,35 @@
 #include "NECommon.h"
 #include "NEDisplayDevice.hpp"
 
-class NEComposedRenderer:NEStandardRenderer{
+class NEComposedRenderer:public NEStandardRenderer{
     NEDotLight *_dotLight0;
     NEVector3 _dotLightPositionInCameraSpace;
     NEDisplayDevice *_device;
     
 protected:
     NEComposedRenderer();
+    
+    virtual void prepareDrawMeshes(const std::vector<NEMesh> &meshes);
+    
+    virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes);
+    
+    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo);
+public:
+    NEComposedRenderer(int width, int height):NEStandardRenderer(width, height){
+//        NEStandardRenderer(width, height);
+        createDefaultRenderBuffer();
+    }
+    
     ~NEComposedRenderer(){
         NESafeDelete(_dotLight0);
     }
     
-    virtual void prepareDrawMeshes(const std::vector<NEMesh> &meshes);
+    void setDevice(NEDisplayDevice *device){_device = device;}
     
-    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo);
-public:
-    
+    void createDotLightAt(NEVector3 position){
+        this->_dotLight0 = new NEDotLight();
+        _dotLight0->setPosition(position);
+    }
 };
 
 #endif /* NEComposedRenderer_hpp */

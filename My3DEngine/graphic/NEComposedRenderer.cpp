@@ -54,12 +54,20 @@ inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector
 }
 
 NEComposedRenderer::NEComposedRenderer(){
-    this->_dotLight0 = new NEDotLight();
+    
 }
 
 void NEComposedRenderer::prepareDrawMeshes(const std::vector<NEMesh> &meshes){
     NEVector3 &lightPos = _dotLight0->position();
     _dotLightPositionInCameraSpace  = convertToCameraSpace(lightPos);
+    
+    _device->clearDevice(NEVector4Make(0, 0, _screenWidth, _screenHeight));
+    
+    _renderBufferSize = 0;
+}
+
+void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
+    _device->presentRenderBuffer(_renderBuffer, _renderBufferSize, 0, nullptr);
 }
 
 float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo){

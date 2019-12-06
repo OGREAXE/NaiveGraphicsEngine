@@ -25,6 +25,13 @@ void NECamera::lookAtPoint(NEVector3 pointToLookAt){
     NEVector3 direction = NEVector3Make(pointToLookAt.x - this->position.x, pointToLookAt.y - this->position.y, pointToLookAt.z - this->position.z);
     
     this->lookAtDirection = direction;
+    
+    NEVector3 lookAtRotated_90= { - lookAtDirection.y , lookAtDirection.x, 0};
+    NEVector3 cam_yAxis = vectorCrossProduct(lookAtDirection, lookAtRotated_90);
+    this->yAxis = cam_yAxis;
+    this->xAxis = lookAtRotated_90;
+    
+    this->normalize();
 }
 
 void NECamera::normalize(){

@@ -13,18 +13,21 @@
 #include "NEDepthBuffer.hpp"
 #include "NECamera.hpp"
 #include "NEMesh.h"
+#include "NECommon.h"
 
 typedef long long RenderBufferType;
 
 class NEStandardRenderer {
+private:
+    
 protected:
+    NEStandardRenderer(){}
+    
     NEDepthBuffer _depthBuffer;
     
     RenderBufferType *_renderBuffer;
     
     int _renderBufferSize;
-    
-    NECamera _camera;
     
     int _screenWidth;
     
@@ -58,21 +61,27 @@ protected:
     
     virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes){};
 public:
+    //public members
+    NECamera camera;
+public:
+    NEStandardRenderer(int width, int height):_screenWidth(width), _screenHeight(height){
+        _depthBuffer.resetSize(width * COORD_AMPLIFY_FACTOR, height * COORD_AMPLIFY_FACTOR);
+    }
+    
     virtual ~NEStandardRenderer(){
         free(_renderBuffer);
     }
     
-    void setScreenSize(int width, int height){
-        _screenWidth = width;
-        _screenHeight = height;
-    }
+//    void setScreenSize(int width, int height){
+//        _screenWidth = width;
+//        _screenHeight = height;
+//    }
     
     //called after setScreenSize
     void createDefaultRenderBuffer(){
         createRenderBuffer(_screenHeight * _screenWidth);
+        _renderBufferSize = 0;
     }
-    
-    NECamera &camera(){return _camera;}
     
     NEDepthBuffer &depthBuffer(){return _depthBuffer;}
     

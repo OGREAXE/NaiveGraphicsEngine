@@ -13,10 +13,12 @@
 #include "NECommon.h"
 #include "NEDisplayDevice.hpp"
 
-class NECoreGraphicsDevice : NEDisplayDevice {
+class NECoreGraphicsDevice : public NEDisplayDevice {
     
 public:
     virtual void presentRenderBuffer(RenderBufferType *renderBuffer, int renderSize, int mode, void *extra);
+    
+    virtual void clearDevice(NERect clearRect);
 };
 
 #endif /* NECoreGraphicsDevice_hpp */

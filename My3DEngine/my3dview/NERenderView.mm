@@ -16,11 +16,14 @@
 #include "CNEAssReader.hpp"
 #import "NEAssLoader.h"
 
+#include "NEComposedRenderer.hpp"
+#include "NECoreGraphicsDevice.hpp"
+
 // 创建颜色
-#define RGBACOLOR(r,g,b,a)    ([UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)])
-#define RGBCOLOR(r,g,b)       RGBACOLOR(r,g,b,1)
-#define HEXRGBACOLOR(h,a)     RGBACOLOR(((h>>16)&0xFF), ((h>>8)&0xFF), (h&0xFF), a)
-#define HEXRGBCOLOR(h)        HEXRGBACOLOR(h,1)
+//#define RGBACOLOR(r,g,b,a)    ([UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)])
+//#define RGBCOLOR(r,g,b)       RGBACOLOR(r,g,b,1)
+//#define HEXRGBACOLOR(h,a)     RGBACOLOR(((h>>16)&0xFF), ((h>>8)&0xFF), (h&0xFF), a)
+//#define HEXRGBCOLOR(h)        HEXRGBACOLOR(h,1)
 
 @interface NERenderView()
 
@@ -62,14 +65,31 @@
     NEVector3 _lightPos;
     
     NECamera _camera;
+    
+    NEComposedRenderer * _renderer;
+    
+    NECoreGraphicsDevice * _cgDevice;
 }
 
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self doInit];
+        [self doInitPlus];
+//        [self doInit];
     }
     return self;
+}
+
+- (void)doInitPlus{
+    _renderer = new NEComposedRenderer(self.frame.size.width, self.frame.size.height);
+    
+    _renderer->camera.position = NEVector3Make(28, 28, 8);
+    _renderer->camera.lookAtPoint(NEVector3Make(0, 0, 2));
+    
+    _renderer->createDotLightAt(NEVector3MultiplyScalar (_renderer->camera.position, 3));
+    
+    _cgDevice = new NECoreGraphicsDevice();
+    _renderer->setDevice(_cgDevice);
 }
 
 - (void)doInit{
@@ -102,27 +122,9 @@
 
 - (void)initCamera{
     _camera.position = NEVector3Make(28, 28, 8);
-    NEVector3 pointToLookAt = NEVector3Make(0, 0, 2);
-    
-//    camera.position = NEVector3Make(-0, 12, 0);
-//    NEVector3 pointToLookAt = NEVector3Make(0, 1, 0);
-    
-//    camera.position = NEVector3Make(0, 10, 0);
-//    NEVector3 pointToLookAt = NEVector3Make(0, 12, 0);
-    
-    _camera.lookAtPoint(pointToLookAt);
-    //find y axis which together with z form a plane vertical to xy plane
-    NEVector3 lookAtRotated_90= { - _camera.lookAtDirection.y , _camera.lookAtDirection.x, 0};
-    NEVector3 cam_yAxis = vectorCrossProduct(_camera.lookAtDirection, lookAtRotated_90);
-    _camera.yAxis = cam_yAxis;
-    _camera.xAxis = lookAtRotated_90;
-    
-    _camera.normalize();
+    _camera.lookAtPoint(NEVector3Make(0, 0, 2));
     
     self.moveSpeed = 2;
-    
-//    self.rotationRate = M_PI_2/100;
-    
     self.rotationRate = M_PI_2 /32;
 }
 
@@ -331,11 +333,16 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 - (void)drawRect:(CGRect)rect{
     NSDate *timeBefore = [NSDate date];
     
-    [self doDrawRect:rect];
+//    [self doDrawRect:rect];
+    [self doDrawRectPlus:rect];
     
     NSDate *timeAfter = [NSDate date];
     NSTimeInterval executionTime = [timeAfter timeIntervalSinceDate:timeBefore];
 //    NSLog(@"executionTime = %f", executionTime);
+}
+
+- (void)doDrawRectPlus:(CGRect)rect{
+    _renderer->drawMeshes(_meshes);
 }
 
 - (void)doDrawRect:(CGRect)rect{

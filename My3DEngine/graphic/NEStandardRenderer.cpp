@@ -20,7 +20,7 @@ NEVector3 vectorFromVertice(const NEVertice & vert, float max, float range){
 }
 
 NEVector3 NEStandardRenderer::convertToCameraSpace(NEVector3 originalPoint){
-    return getPositionInCameraCoordinateSystem(originalPoint, _camera.position, _camera.lookAtDirection, _camera.yAxis);
+    return getPositionInCameraCoordinateSystem(originalPoint, camera.position, camera.lookAtDirection, camera.yAxis);
 }
 
 NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 originalPoint){
@@ -29,11 +29,11 @@ NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 originalPoint){
     
     NEVector3 pointTran;
     
-    if (shouldTrimPoint(point, _camera.frustum)) {
+    if (shouldTrimPoint(point, camera.frustum)) {
         
     }
     
-    pointTran = perspetiveProjectPoint(point, _camera.frustum);
+    pointTran = perspetiveProjectPoint(point, camera.frustum);
     
     return pointTran;
 }
@@ -104,6 +104,8 @@ NEVector2 NEStandardRenderer::pointInVewForVector3(NEVector3 vector){
 
 
 void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
+    _depthBuffer.resetSize();
+    
     prepareDrawMeshes(meshes);
     
     for (int i = 0; i < meshes.size(); i++) {
@@ -203,7 +205,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 //the point in eye space inside the triangle
                 NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
-                NEVector3 pointc = invertPerspetiveProject(point, _camera.frustum);
+                NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
                 
                 long tColor = colorBlendResult(color, pointc, preDefinedNormalC, nullptr);
                 

@@ -16,11 +16,13 @@
 #define RenderValueGetY(renderValue) ((renderValue >> 16) & 0xffff)
 #define RenderValueGetColor(renderValue) (renderValue >> 32);
 
+typedef NEVector4 NERect;
+
 class NEDisplayDevice {
-    
-    
 public:
     virtual void presentRenderBuffer(RenderBufferType *renderBuffer, int renderSize, int mode, void *extra) = 0;
+    
+    virtual void clearDevice(NERect clearRect) = 0;
 };
 
 #endif /* NEDisplayDevice_hpp */
