@@ -35,7 +35,14 @@
     loader.delegate = self;
     
     [loader loadDefaultFile];
-    [loader loadFbx:@"duck"];
+    
+    NELoadAssParam loadParam;
+    loadParam.position = NEVector3Make(2, -2, 0);
+    loadParam.rotation = NEVector3Make(0, 0, 0);
+    loadParam.width = 10;
+    
+    [loader loadFbx:@"duck" param:loadParam];
+    
     [loader upload];
     
 //    [loader loadFbx:@"Lamborghini_Aventador"];

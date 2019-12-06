@@ -10,6 +10,7 @@
 #define NEMesh_h
 
 #include <vector>
+#include "NEMath.h"
 
 typedef struct tagNEVertice{
     float x;
@@ -33,7 +34,11 @@ typedef struct tagNEMesh{
     std::vector<NEVertice> vertices;
     std::vector<NEFace> faces;
     
-    float range; //the max distance between 2 vertices
+    float range; //the max distance of vertices
+    float width; //the width in world
+    
+    NEVector3 position;
+    NEVector3 roatation;
 } NEMesh;
 
 typedef struct tagNEBoundingBox{

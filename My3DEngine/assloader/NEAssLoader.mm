@@ -219,10 +219,16 @@
     _meshes.push_back(mesh);
 }
 
-- (void)loadFbx:(NSString *)modelName{
+- (void)loadFbx:(NSString *)modelName  param:(NELoadAssParam)param{
     NSString *fileName = [[NSBundle mainBundle] pathForResource:modelName ofType:@"fbx"];
     
     if (_reader->LoadMesh(fileName.UTF8String)){
+        for (NEMesh & mesh : _reader->mMeshes) {
+            mesh.position = param.position;
+            mesh.roatation = param.rotation;
+            mesh.width = param.width;
+        }
+        
         _meshes.insert(_meshes.end(), _reader->mMeshes.begin(), _reader->mMeshes.end());
     }
 }

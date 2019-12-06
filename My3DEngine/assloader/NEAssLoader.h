@@ -11,6 +11,12 @@
 #include "NEMesh.h"
 #include "CNEAssReader.hpp"
 
+typedef struct tagLoadParam {
+    NEVector3 position;
+    NEVector3 rotation;
+    float width;
+} NELoadAssParam;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class NEAssLoader;
@@ -31,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<NEPolygonLine*>*)lineFrameFromMesh:(NEMesh &)mesh range:(float)range;
 
-- (void)loadFbx:(NSString *)modelName;
+- (void)loadFbx:(NSString *)modelName param:(NELoadAssParam)param;
 
 - (void)loadDefaultFile;
 

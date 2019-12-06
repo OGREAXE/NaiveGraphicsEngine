@@ -15,8 +15,8 @@ NEVector3 vectorFromVertice(const NEVertice & vert){
     return v;
 }
 
-NEVector3 vectorFromVertice(const NEVertice & vert, float max, float range){
-    NEVector3 v = {vert.x * range / max, vert.y * range / max, vert.z * range / max};
+NEVector3 vectorFromVertice(const NEVertice & vert, float range, float width){
+    NEVector3 v = {vert.x * width / range, vert.y * width / range, vert.z * width / range};
     return v;
 }
 
@@ -140,9 +140,9 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
         const NEVertice & _v2 = mesh.vertices[aface.cIndex];
         
-        NEVector3 v0 = vectorFromVertice(_v0, mesh.range, 10);
-        NEVector3 v1 = vectorFromVertice(_v1, mesh.range, 10);
-        NEVector3 v2 = vectorFromVertice(_v2, mesh.range, 10);
+        NEVector3 v0 = vectorFromVertice(_v0, mesh.range, mesh.width);
+        NEVector3 v1 = vectorFromVertice(_v1, mesh.range, mesh.width);
+        NEVector3 v2 = vectorFromVertice(_v2, mesh.range, mesh.width);
         
         NEVector3 _normal =
         mixNormal(

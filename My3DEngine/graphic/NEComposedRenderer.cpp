@@ -42,7 +42,7 @@ inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVe
     return lightAngle;
 }
 
-inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPos, NEVector3 & normal){
+inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPos, NEVector3 & normal, float fade){
     float lightAngle = getLightToPointAngle(point, lightPos, normal);
     
     if(lightAngle < M_PI_2){
@@ -50,7 +50,7 @@ inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector
         lightAngle = M_PI_2;
     }
     
-    long tColor = getColorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
+    long tColor = getColorWithIntensity(color, fade * (1. - cosf(lightAngle))/2.);
     
     return tColor;
 }
@@ -84,12 +84,15 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEV
     
     NEVector3 worldPos = camera.getWorldPosition(position);
     
+    float fade = 1;
+    
     if (!_dotLight0->canTouchPosition(worldPos)) {
-        float lightAngle = M_PI_2;
-        long tColor = getColorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
-        return tColor;
+//        float lightAngle = M_PI_2;
+//        long tColor = getColorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
+//        return tColor;
+        fade = 0.7;
     }
 #endif
     
-    return generateBlendResultWithColor(color, position, _dotLightPositionInCameraSpace, normal);
+    return generateBlendResultWithColor(color, position, _dotLightPositionInCameraSpace, normal, fade);
 }
