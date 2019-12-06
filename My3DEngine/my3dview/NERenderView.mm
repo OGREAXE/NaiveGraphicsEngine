@@ -81,12 +81,19 @@
 }
 
 - (void)doInitPlus{
+    self.moveSpeed = 2;
+    self.rotationRate = M_PI_2 /32;
+    
     _renderer = new NEComposedRenderer(self.frame.size.width, self.frame.size.height);
     
-    _renderer->camera.position = NEVector3Make(28, 28, 8);
+    _renderer->camera.position = NEVector3Make(28, 28, 18);
     _renderer->camera.lookAtPoint(NEVector3Make(0, 0, 2));
     
-    _renderer->createDotLightAt(NEVector3MultiplyScalar (_renderer->camera.position, 3), NEVector3Make(0, 0, 0));
+//    NEVector3 lightPos = NEVector3MultiplyScalar (_renderer->camera.position, 3);
+//    _renderer->createDotLightAt(lightPos, NEVector3Make(0, 0, 0));
+    
+    NEVector3 lightPos = NEVector3Make(6, 6, 3);
+    _renderer->createDotLightAt(lightPos, NEVector3Make(0, 0, 0));
     
     _cgDevice = new NECoreGraphicsDevice();
     _renderer->setDevice(_cgDevice);
@@ -400,83 +407,89 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 #pragma mark cam action
 
 - (void)moveForward{
+    NECamera &camera = _renderer->camera;
     float moveDistance = _moveSpeed;
-    NEVector3 translation = NEVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
-    _camera.position = translationByVector(_camera.position, translation);
+    NEVector3 translation = NEVector3Make(moveDistance * camera.lookAtDirection.x, moveDistance * camera.lookAtDirection.y, moveDistance * camera.lookAtDirection.z);
+    camera.position = translationByVector(camera.position, translation);
     
     [self redraw];
 }
 
 - (void)moveBack{
+    NECamera &camera = _renderer->camera;
     float moveDistance = - _moveSpeed;
-    NEVector3 translation = NEVector3Make(moveDistance * _camera.lookAtDirection.x, moveDistance * _camera.lookAtDirection.y, moveDistance * _camera.lookAtDirection.z);
-    _camera.position = translationByVector(_camera.position, translation);
+    NEVector3 translation = NEVector3Make(moveDistance * camera.lookAtDirection.x, moveDistance * camera.lookAtDirection.y, moveDistance * camera.lookAtDirection.z);
+    camera.position = translationByVector(camera.position, translation);
     
     [self redraw];
 }
 
 - (void)moveUp{
+    NECamera &camera = _renderer->camera;
     float moveDistance = _moveSpeed;
-    NEVector3 translation = NEVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
-    _camera.position = translationByVector(_camera.position, translation);
+    NEVector3 translation = NEVector3Make(moveDistance * camera.yAxis.x, moveDistance * camera.yAxis.y, moveDistance * camera.yAxis.z);
+    camera.position = translationByVector(camera.position, translation);
     
     [self redraw];
 }
 - (void)moveDown{
+    NECamera &camera = _renderer->camera;
     float moveDistance = - _moveSpeed;
-    NEVector3 translation = NEVector3Make(moveDistance * _camera.yAxis.x, moveDistance * _camera.yAxis.y, moveDistance * _camera.yAxis.z);
-    _camera.position = translationByVector(_camera.position, translation);
+    NEVector3 translation = NEVector3Make(moveDistance * camera.yAxis.x, moveDistance * camera.yAxis.y, moveDistance * camera.yAxis.z);
+    camera.position = translationByVector(camera.position, translation);
     
     [self redraw];
 }
 - (void)moveLeft{
+    NECamera &camera = _renderer->camera;
     float moveDistance = _moveSpeed;
-    NEVector3 translation = NEVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
-    _camera.position = translationByVector(_camera.position, translation);
+    NEVector3 translation = NEVector3Make(moveDistance * camera.xAxis.x, moveDistance * camera.xAxis.y, moveDistance * camera.xAxis.z);
+    camera.position = translationByVector(camera.position, translation);
     
     [self redraw];
 }
 - (void)moveRight{
+    NECamera &camera = _renderer->camera;
     float moveDistance = - _moveSpeed;
-    NEVector3 translation = NEVector3Make(moveDistance * _camera.xAxis.x, moveDistance * _camera.xAxis.y, moveDistance * _camera.xAxis.z);
-    _camera.position = translationByVector(_camera.position, translation);
+    NEVector3 translation = NEVector3Make(moveDistance * camera.xAxis.x, moveDistance * camera.xAxis.y, moveDistance * camera.xAxis.z);
+    camera.position = translationByVector(camera.position, translation);
     
     [self redraw];
 }
 
 - (void)lookUp{
     float angleDiff = - _rotationRate;
-//    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
-//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
+
+//    _camera.rotateByNearVerticallyByDegree(angleDiff);
     
-    _camera.rotateByNearVerticallyByDegree(angleDiff);
+    _renderer->camera.rotateByNearVerticallyByDegree(angleDiff);
     
     [self redraw];
 }
 - (void)lookDown{
     float angleDiff = _rotationRate;
-//    _camera.yAxis = rotationByAngle(_camera.yAxis, _camera.xAxis, angleDiff);
-//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.xAxis, angleDiff);
-    
-    _camera.rotateByNearVerticallyByDegree(angleDiff);
+
+//    _camera.rotateByNearVerticallyByDegree(angleDiff);
+
+    _renderer->camera.rotateByNearVerticallyByDegree(angleDiff);
     
     [self redraw];
 }
 - (void)turnLeft{
     float angleDiff = _rotationRate;
-//    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
-//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
     
-    _camera.rotateByNearHorizontallyByDegree(angleDiff);
+//    _camera.rotateByNearHorizontallyByDegree(angleDiff);
+    
+    _renderer->camera.rotateByNearHorizontallyByDegree(angleDiff);
     
     [self redraw];
 }
 - (void)turnRight{
     float angleDiff = - _rotationRate;
-//    _camera.xAxis = rotationByAngle(_camera.xAxis, _camera.yAxis, angleDiff);
-//    _camera.lookAtDirection = rotationByAngle(_camera.lookAtDirection, _camera.yAxis, angleDiff);
+
+//    _camera. rotateByNearHorizontallyByDegree(angleDiff);
     
-    _camera. rotateByNearHorizontallyByDegree(angleDiff);
+    _renderer->camera.rotateByNearHorizontallyByDegree(angleDiff);
     
     [self redraw];
 }

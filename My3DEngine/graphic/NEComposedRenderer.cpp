@@ -24,9 +24,9 @@ inline long getColorWithIntensity(long color, float intensity){
     long g = (color >>8) & 0xff;
     long b = color & 0xff;
     
-    r *= intensity;
-    g *= intensity;
-    b *= intensity;
+    r *= intensity * intensity;
+    g *= intensity * intensity;
+    b *= intensity * intensity;
     
 //    if (intensity < 0.01){
 //        int k = 0;
