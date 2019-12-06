@@ -22,6 +22,11 @@ public:
     NEVector3 xAxis; //y axis vector, world coordinate
     NEFrustum frustum;
     
+    NEVector3 worldIOriginInCameraCoord;
+    NEVector3 worldXAxisInCameraCoord;
+    NEVector3 worldYAxisInCameraCoord;
+    NEVector3 worldZAxisInCameraCoord;
+    
     NECamera();
     NECamera(NEFrustum frustum):frustum(frustum){}
     
@@ -30,6 +35,30 @@ public:
     void normalize();
     void rotateByNearHorizontallyByDegree(float degree);
     void rotateByNearVerticallyByDegree(float degree);
+    
+    void updateWorldAxis(){
+        worldIOriginInCameraCoord = getPositionInCameraCoordinateSystem(NEVector3Make(0, 0, 0), position, lookAtDirection, yAxis);
+        
+        worldXAxisInCameraCoord = getPositionInCameraCoordinateSystem(NEVector3Make(1, 0, 0), position, lookAtDirection, yAxis);
+        
+        worldXAxisInCameraCoord = NEVector3Subtract(worldXAxisInCameraCoord, worldIOriginInCameraCoord);
+        
+        worldYAxisInCameraCoord = getPositionInCameraCoordinateSystem(NEVector3Make(0, 1, 0), position, lookAtDirection, yAxis);
+        
+        worldYAxisInCameraCoord = NEVector3Subtract(worldYAxisInCameraCoord, worldIOriginInCameraCoord);
+        
+        worldZAxisInCameraCoord = getPositionInCameraCoordinateSystem(NEVector3Make(0, 0, 1), position, lookAtDirection, yAxis);
+        
+        worldZAxisInCameraCoord = NEVector3Subtract(worldZAxisInCameraCoord, worldIOriginInCameraCoord);
+    }
+    
+    inline NEVector3 getWorldPosition(NEVector3 &positionInCameraSpace){
+//        convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
+        
+        return convertPositionFromOriginalCoordSystem(positionInCameraSpace, worldIOriginInCameraCoord, worldZAxisInCameraCoord, worldYAxisInCameraCoord);
+
+
+    }
 };
 
 #endif /* NECamera_hpp */

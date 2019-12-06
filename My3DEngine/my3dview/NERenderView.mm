@@ -86,7 +86,7 @@
     _renderer->camera.position = NEVector3Make(28, 28, 8);
     _renderer->camera.lookAtPoint(NEVector3Make(0, 0, 2));
     
-    _renderer->createDotLightAt(NEVector3MultiplyScalar (_renderer->camera.position, 3));
+    _renderer->createDotLightAt(NEVector3MultiplyScalar (_renderer->camera.position, 3), NEVector3Make(0, 0, 0));
     
     _cgDevice = new NECoreGraphicsDevice();
     _renderer->setDevice(_cgDevice);

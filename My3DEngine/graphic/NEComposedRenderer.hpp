@@ -41,9 +41,10 @@ public:
     
     void setDevice(NEDisplayDevice *device){_device = device;}
     
-    void createDotLightAt(NEVector3 position){
+    void createDotLightAt(NEVector3 position, NEVector3 renderDestination){
         this->_dotLight0 = new NEDotLight();
         _dotLight0->setPosition(position);
+        _dotLight0->setRenderDestination(renderDestination);
     }
 };
 

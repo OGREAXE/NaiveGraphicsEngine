@@ -7,4 +7,15 @@
 //
 
 #include "NEDotLightRenderer.hpp"
-#include "NEStandardRenderer.hpp"
+
+int NEDotLightRenderer::testPosition_world(NEVector3 & worldPos){
+    NEVector3 vt = convertToEyeSpace(worldPos);
+    NEVector2 vInView = pointInVewForVector3(vt);
+    
+    DepthInfo info = _depthBuffer.getInfo(vInView.x, vInView.y);
+    if (vt.z <= info.z) {
+        return 1;
+    }
+    
+    return 0;
+}

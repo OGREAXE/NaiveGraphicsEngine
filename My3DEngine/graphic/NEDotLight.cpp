@@ -8,3 +8,14 @@
 
 #include "NEDotLight.hpp"
 
+void NEDotLight::renderIfNeed(const std::vector<NEMesh> &meshes){
+    if (!_needRedrawMap) {
+        return;
+    }
+    
+    _renderer->clear();
+    
+    _renderer->drawMeshes(meshes);
+    
+    _needRedrawMap = false;
+}

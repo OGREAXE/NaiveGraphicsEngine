@@ -9,6 +9,8 @@
 #include "NEComposedRenderer.hpp"
 #include <math.h>
 
+//#define NE_TRUE_LIGHT
+
 inline long getColorWithIntensity(long color, float intensity){
 //    if (intensity > maxIntensity) {
 //        maxIntensity = intensity;
@@ -58,12 +60,19 @@ NEComposedRenderer::NEComposedRenderer(){
 }
 
 void NEComposedRenderer::prepareDrawMeshes(const std::vector<NEMesh> &meshes){
+    camera.updateWorldAxis();
+    
+    _dotLight0->prepareRander();
+    
     NEVector3 &lightPos = _dotLight0->position();
+    
     _dotLightPositionInCameraSpace  = convertToCameraSpace(lightPos);
     
     _device->clearDevice(NEVector4Make(0, 0, _screenWidth, _screenHeight));
     
     _renderBufferSize = 0;
+    
+    _dotLight0->renderIfNeed(meshes);
 }
 
 void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
@@ -71,6 +80,16 @@ void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
 }
 
 float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo){
+#ifdef NE_TRUE_LIGHT
+    
+    NEVector3 worldPos = camera.getWorldPosition(position);
+    
+    if (!_dotLight0->canTouchPosition(worldPos)) {
+        float lightAngle = M_PI_2;
+        long tColor = getColorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
+        return tColor;
+    }
+#endif
     
     return generateBlendResultWithColor(color, position, _dotLightPositionInCameraSpace, normal);
 }

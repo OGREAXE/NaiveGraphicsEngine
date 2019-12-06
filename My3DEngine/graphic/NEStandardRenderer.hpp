@@ -54,6 +54,7 @@ protected:
     
 protected:
     //overwrite this method to do color blending/lighting
+    //all parameters are in camera space
     virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo){return color;}
     
     //overwrite this method to prepare for drawing
@@ -65,6 +66,7 @@ public:
     NECamera camera;
 public:
     NEStandardRenderer(int width, int height):_screenWidth(width), _screenHeight(height){
+        _renderBuffer = nullptr;
         _depthBuffer.resetSize(width * COORD_AMPLIFY_FACTOR, height * COORD_AMPLIFY_FACTOR);
     }
     
