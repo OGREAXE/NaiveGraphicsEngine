@@ -185,9 +185,21 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v1 = vectorFromVertice(_v1, mesh);
         NEVector3 v2 = vectorFromVertice(_v2, mesh);
         
+        NEVector3 v0c = convertToCameraSpace(v0);
+        NEVector3 v1c = convertToCameraSpace(v1);
+        NEVector3 v2c = convertToCameraSpace(v2);
+        
         NEVector3 v0t = convertToEyeSpace(v0);
         NEVector3 v1t = convertToEyeSpace(v1);
         NEVector3 v2t = convertToEyeSpace(v2);
+        
+        NEVector3 noraml0 = _v0.normal;
+        NEVector3 noraml1 = _v1.normal;
+        NEVector3 noraml2 = _v2.normal;
+        
+        NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
+        NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);
+        NEVector3 normal2c = convertVectorToCameraSpace(noraml2, originPosC);
         
 //        float pointInVew0 = [self pointInVewForVector3:v0t];
 //        float pointInVew1 = [self pointInVewForVector3:v1t];
@@ -242,6 +254,8 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
                 NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
+                
+                //refering the 3 vertice
                 
                 long tColor = colorBlendResult(color, pointc, preDefinedNormalC, nullptr);
                 

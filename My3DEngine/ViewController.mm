@@ -24,6 +24,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    NEVector2 j = getJointPoint(NEVector2Make(2, 1), NEVector2Make(5, 2), NEVector2Make(3, 3), NEVector2Make(4, 2));
+    
+    /*
+    bool canjoint = true;
+    NEVector2 j = getJointPoint(NEVector2Make(2, 1), NEVector2Make(5, 2), NEVector2Make(3, 3), NEVector2Make(3, 2), &canjoint);
+    
+    NSLog(@"%@, result is (%f, %f)",canjoint?@"ok":@"fail", j.x, j.y);
+    return;
+     */
+    
 //    _lineFrameMode = YES;
     // Do any additional setup after loading the view.
     
@@ -38,11 +48,17 @@
     [loader loadDefaultFile];
     
     NELoadAssParam loadParam;
-    loadParam.position = NEVector3Make(5, 5, 1);
+    loadParam.position = NEVector3Make(5, 5, 3);
     loadParam.rotation = NEVector3Make(M_PI_2, 0, 0);
-    loadParam.width = 10;
+    loadParam.width = 6;
     
-    [loader loadFbx:@"duck" param:loadParam];
+//    [loader loadFbx:@"duck" param:loadParam];
+    
+    loadParam.position = NEVector3Make(5, 5, 0);
+    loadParam.rotation = NEVector3Make(0, 0, M_PI_2);
+    loadParam.width = 10;
+
+    [loader loadFbx:@"MFBX" param:loadParam];
     
     [loader upload];
     

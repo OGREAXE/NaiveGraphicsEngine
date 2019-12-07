@@ -136,6 +136,10 @@ float vectorMagnitude(NEVector3 vec);
 /// @param vec1 <#vec1 description#>
 float getAngleBetweenVectors(NEVector3 vec0,NEVector3 vec1);
 
+float NEVector3Length(NEVector3 vector);
+
+float NEVector3Distance(NEVector3 vectorStart, NEVector3 vectorEnd);
+
 NEVector3 rotationByAngle(NEVector3 aPoint, NEVector3 rotationAxis, float angle);
 
 NEVector3 rotationByAngleAroundLine(NEVector3 aPoint, NELine line, float angle);
@@ -180,6 +184,10 @@ inline bool pointInsizeTriangle(NEVector2 point, NEVector2 p0, NEVector2 p1, NEV
 NEVector3 getPlaneNormal(NEVector3 p0, NEVector3 p1, NEVector3 p2);
 
 NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointInPlane);
+
+NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line2Start, NEVector2 line2end, bool *canJoint);
+
+float getIntensityForTriangle(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2, bool *canJoint);
 
 #ifdef __cplusplus
 }

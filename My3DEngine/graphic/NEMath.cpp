@@ -127,6 +127,16 @@ float getAngleBetweenVectors(NEVector3 vec0,NEVector3 vec1){
     return  angle;
 }
 
+float NEVector3Length(NEVector3 vector)
+{
+    return sqrt(vector.v[0] * vector.v[0] + vector.v[1] * vector.v[1] + vector.v[2] * vector.v[2]);
+}
+
+float NEVector3Distance(NEVector3 vectorStart, NEVector3 vectorEnd)
+{
+    return NEVector3Length(NEVector3Subtract(vectorEnd, vectorStart));
+}
+
 NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix){
     return NEMatrix3MultiplyVector3(rotationMatrix, aPoint);
 }
@@ -529,4 +539,51 @@ NEVector3 NEVector3MultiplyScalar(NEVector3 vector, float value){
                      vector.v[1] * value,
                      vector.v[2] * value };
     return v;
+}
+
+float getIntensityForTriangle(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2){
+    return 0;
+}
+
+NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line2Start, NEVector2 line2end, bool *canJoint){
+    if (line1end.x == line1Start.x) {
+        if (line2Start.x == line2end.x) {
+            *canJoint = false;
+            return NEVector2Make(0, 0);
+        } else {
+            float m = (line2end.y - line2Start.y)/(line2end.x - line2Start.x);
+            float x = line1end.x;
+            float y = m * (x  - line2Start.x) + line2Start.y ;
+            return NEVector2Make(x, y);
+        }
+    }
+    
+    if (line2end.x == line2Start.x) {
+        if (line1Start.x == line1end.x) {
+            *canJoint = false;
+            return NEVector2Make(0, 0);
+        } else {
+            float k = (line1end.y - line1Start.y)/(line1end.x - line1Start.x);
+            float x = line2end.x;
+            float y = k * (x  - line1Start.x) + line1Start.y ;
+            return NEVector2Make(x, y);
+        }
+    }
+    
+    float k = (line1end.y - line1Start.y)/(line1end.x - line1Start.x);
+    
+    float m = (line2end.y - line2Start.y)/(line2end.x - line2Start.x);
+    
+    if (k == m) {
+        *canJoint = false;
+        return NEVector2Make(0, 0);
+    }
+    
+    float x = (k * line1Start.x + line2Start.y  - m * line2Start.x - line1Start.y)/(k - m);
+    
+    float y = k * ( x - line1Start.x) + line1Start.y ;
+    
+    *canJoint = true;
+    return NEVector2Make(x, y);
+    
 }
