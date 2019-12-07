@@ -17,6 +17,21 @@
 
 typedef long long RenderBufferType;
 
+typedef struct tagDrawParam {
+    NEVector3 vert0c;
+    NEVector3 vert1c;
+    NEVector3 vert2c;
+    
+    NEVector3 normal0c;
+    NEVector3 normal1c;
+    NEVector3 normal2c;
+    
+    float intensity0;
+    float intensity1;
+    float intensity2;
+    
+} DrawParam;
+
 class NEStandardRenderer {
 private:
     
@@ -55,12 +70,14 @@ protected:
 protected:
     //overwrite this method to do color blending/lighting
     //all parameters are in camera space
-    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo){return color;}
+    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, DrawParam &param,  void *extraInfo){return color;}
     
     //overwrite this method to prepare for drawing
     virtual void prepareDrawMeshes(const std::vector<NEMesh> &meshes){};
     
     virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes){};
+    
+    virtual void prepareDrawFace(const NEFace &face, DrawParam &param){};
 public:
     //public members
     NECamera camera;

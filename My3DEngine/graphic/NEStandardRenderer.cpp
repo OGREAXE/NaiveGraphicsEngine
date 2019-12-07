@@ -172,6 +172,8 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
 //    return;
     //end test
     
+    DrawParam drawParam;
+    
     for (const NEFace & aface : mesh.faces) {
         long long color = aface.color;
 //        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
@@ -191,6 +193,10 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v1c = convertToCameraSpace(v1);
         NEVector3 v2c = convertToCameraSpace(v2);
         
+        drawParam.vert0c = v0c;
+        drawParam.vert1c = v1c;
+        drawParam.vert2c = v2c;
+        
         NEVector3 v0t = convertToEyeSpace(v0);
         NEVector3 v1t = convertToEyeSpace(v1);
         NEVector3 v2t = convertToEyeSpace(v2);
@@ -202,6 +208,12 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
         NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);
         NEVector3 normal2c = convertVectorToCameraSpace(noraml2, originPosC);
+        
+        drawParam.normal0c = normal0c;
+        drawParam.normal1c = normal1c;
+        drawParam.normal2c = normal2c;
+        
+        prepareDrawFace(aface, drawParam);
         
 //        float pointInVew0 = [self pointInVewForVector3:v0t];
 //        float pointInVew1 = [self pointInVewForVector3:v1t];
@@ -277,7 +289,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 
                 //refering the 3 vertice
                 
-                long tColor = colorBlendResult(color, pointc, preDefinedNormalC, nullptr);
+                long tColor = colorBlendResult(color, pointc, preDefinedNormalC, drawParam,  nullptr);
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                     continue;

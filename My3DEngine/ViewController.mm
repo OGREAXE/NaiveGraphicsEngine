@@ -59,13 +59,13 @@
     loadParam.rotation = NEVector3Make(M_PI_2, 0, 0);
     loadParam.width = 6;
     
-//    [loader loadFbx:@"duck" param:loadParam];
+    [loader loadFbx:@"duck" param:loadParam];
     
     loadParam.position = NEVector3Make(5, 5, 0);
     loadParam.rotation = NEVector3Make(0, 0, M_PI_2);
     loadParam.width = 10;
 
-    [loader loadFbx:@"MFBX" param:loadParam];
+//    [loader loadFbx:@"MFBX" param:loadParam];
     
     [loader upload];
     

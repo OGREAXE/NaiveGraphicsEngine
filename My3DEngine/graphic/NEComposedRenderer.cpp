@@ -9,6 +9,8 @@
 #include "NEComposedRenderer.hpp"
 #include <math.h>
 
+#define NE_USE_AVG_INTENSITY
+
 #define NE_TRUE_LIGHT
 
 inline long getColorWithIntensity(long color, float intensity){
@@ -42,6 +44,10 @@ inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVe
     return lightAngle;
 }
 
+inline float getIntensityFromLightAngle(float angle){
+    return (1. - cosf(angle))/2.;
+}
+
 inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector3 & lightPos, NEVector3 & normal, float fade){
     float lightAngle = getLightToPointAngle(point, lightPos, normal);
     
@@ -52,7 +58,8 @@ inline long generateBlendResultWithColor(long color, NEVector3 & point, NEVector
         fade = 0.9;
     }
     
-    long tColor = getColorWithIntensity(color, fade * (1. - cosf(lightAngle))/2.);
+    float intensity = getIntensityFromLightAngle(lightAngle);
+    long tColor = getColorWithIntensity(color, fade * intensity);
     
     return tColor;
 }
@@ -77,11 +84,48 @@ void NEComposedRenderer::prepareDrawMeshes(const std::vector<NEMesh> &meshes){
     _dotLight0->renderIfNeed(meshes);
 }
 
+void NEComposedRenderer::prepareDrawFace(const NEFace &face, DrawParam &param){
+    float lightAngle0 = getLightToPointAngle(param.vert0c, _dotLightPositionInCameraSpace, param.normal0c);
+    float lightAngle1 = getLightToPointAngle(param.vert1c, _dotLightPositionInCameraSpace, param.normal1c);
+    float lightAngle2 = getLightToPointAngle(param.vert2c, _dotLightPositionInCameraSpace, param.normal2c);
+    
+    param.intensity0 = getIntensityFromLightAngle(lightAngle0);
+    param.intensity1 = getIntensityFromLightAngle(lightAngle1);
+    param.intensity2 = getIntensityFromLightAngle(lightAngle2);
+}
+
 void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
     _device->presentRenderBuffer(_renderBuffer, _renderBufferSize, 0, nullptr);
 }
 
-float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo){
+#ifdef NE_USE_AVG_INTENSITY
+
+float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo){
+    
+    float lightAngle = getLightToPointAngle(position, _dotLightPositionInCameraSpace, normal);
+        
+    float fade = 1;
+    
+    NEVector3 worldPos = camera.getWorldPosition(position);
+    
+    if (!_dotLight0->canTouchPosition(worldPos)) {
+        fade = 0.9;
+    }
+    
+    if(lightAngle < M_PI_2){
+        fade *= 0.9;
+    }
+
+    float intensity = getIntensityForTriangle3(position, param.vert0c, param.vert1c, param.vert2c, param.intensity0, param.intensity1, param.intensity2);
+    
+    long tColor = getColorWithIntensity(color, fade * intensity);
+    
+    return tColor;
+}
+
+#else
+
+float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo){
 #ifdef NE_TRUE_LIGHT
     
     NEVector3 worldPos = camera.getWorldPosition(position);
@@ -89,12 +133,11 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEV
     float fade = 1;
     
     if (!_dotLight0->canTouchPosition(worldPos)) {
-//        float lightAngle = M_PI_2;
-//        long tColor = getColorWithIntensity(color,  (1. - cosf(lightAngle))/2.);
-//        return tColor;
         fade = 0.8;
     }
 #endif
-    
+
     return generateBlendResultWithColor(color, position, _dotLightPositionInCameraSpace, normal, fade);
 }
+
+#endif

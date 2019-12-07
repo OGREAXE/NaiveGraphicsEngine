@@ -28,7 +28,9 @@ protected:
     
     virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes);
     
-    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal, void *extraInfo);
+    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo);
+    
+    virtual void prepareDrawFace(const NEFace &face, DrawParam &param);
 public:
     NEComposedRenderer(int width, int height):NEStandardRenderer(width, height){
 //        NEStandardRenderer(width, height);
