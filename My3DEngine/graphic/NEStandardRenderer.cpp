@@ -10,6 +10,8 @@
 #include "NECommon.h"
 #include <math.h>
 
+#define TRIANGLE_VERT_DEPTH_TEST
+
 NEVector3 vectorFromVertice(const NEVertice & vert){
     NEVector3 v = {vert.x, vert.y, vert.z};
     return v;
@@ -208,6 +210,24 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector2 v0InView = pointInVewForVector3(v0t);
         NEVector2 v1InView = pointInVewForVector3(v1t);
         NEVector2 v2InView = pointInVewForVector3(v2t);
+        
+/*#ifdef TRIANGLE_VERT_DEPTH_TEST
+#define isOutOfView(v) (v.x > depthBufWidth || v.x < 0 || v.y > depthBufHeight || v.y < 0)
+        int depthBufWidth = _depthBuffer.getWidth();
+        int depthBufHeight = _depthBuffer.getHeight();
+        if (isOutOfView(v0InView) && isOutOfView(v1InView) &&
+            isOutOfView(v2InView)) {
+            continue;
+        }
+        
+        DepthInfo info0 = _depthBuffer.getInfo(v0InView.x, v0InView.y);
+        DepthInfo info1 = _depthBuffer.getInfo(v1InView.x, v1InView.y);
+        DepthInfo info2 = _depthBuffer.getInfo(v2InView.x, v2InView.y);
+        if (v0t.z > info0.z && v1t.z > info1.z && v2t.z > info2.z) {
+            //all 3 vert of face fail z test
+            continue;
+        }
+#endif*/
         
         float minx = MIN(MIN(v0InView.x, v1InView.x), v2InView.x);
         float miny = MIN(MIN(v0InView.y, v1InView.y), v2InView.y);

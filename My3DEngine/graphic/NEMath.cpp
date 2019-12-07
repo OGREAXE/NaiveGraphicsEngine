@@ -132,6 +132,16 @@ float NEVector3Length(NEVector3 vector)
     return sqrt(vector.v[0] * vector.v[0] + vector.v[1] * vector.v[1] + vector.v[2] * vector.v[2]);
 }
 
+float NEVector2Length(NEVector2 vector)
+{
+    return sqrt(vector.v[0] * vector.v[0] + vector.v[1] * vector.v[1]);
+}
+
+float NEVector2Distance(NEVector2 vectorStart, NEVector2 vectorEnd)
+{
+    return NEVector2Length(NEVector2Subtract(vectorEnd, vectorStart));
+}
+
 float NEVector3Distance(NEVector3 vectorStart, NEVector3 vectorEnd)
 {
     return NEVector3Length(NEVector3Subtract(vectorEnd, vectorStart));
@@ -541,8 +551,33 @@ NEVector3 NEVector3MultiplyScalar(NEVector3 vector, float value){
     return v;
 }
 
-float getIntensityForTriangle(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2){
-    return 0;
+float getIntensityForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, NEVector2 v2, float intensity0, float intensity1, float intensity2){
+    
+    bool canJoint = true;
+    
+    NEVector2 joint = getJointPoint(v0, v1, v2, p, &canJoint);
+    
+    float lengh01 = NEVector2Distance(v0, v1);
+    float lengh0j = NEVector2Distance(v0, joint);
+    
+    float lengh2p = NEVector2Distance(v2, p);
+    float lengh2j = NEVector2Distance(v2, joint);
+    
+    float intensityJ = (intensity1 - intensity0) * lengh0j/lengh01 + intensity0;
+    
+    float intensityX = (intensityJ - intensity2) * lengh2p/lengh2j + intensity2;
+    
+    return intensityX;
+}
+
+float getIntensityForTriangle3(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2){
+    NEVector2 p = NEVector2Make(point.x, point.y);
+    
+    NEVector2 v0 = NEVector2Make(vert0.x, vert0.y);
+    NEVector2 v1 = NEVector2Make(vert1.x, vert1.y);
+    NEVector2 v2 = NEVector2Make(vert2.x, vert2.y);
+    
+    return getIntensityForTriangle2(p, v0, v1, v2, intensity0, intensity1, intensity2);
 }
 
 NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line2Start, NEVector2 line2end, bool *canJoint){

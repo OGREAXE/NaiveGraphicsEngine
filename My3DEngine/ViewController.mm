@@ -34,6 +34,13 @@
     return;
      */
     
+//    float intensity = getIntensityForTriangle2(NEVector2Make(4.9, 2.1), NEVector2Make(2, 1), NEVector2Make(5, 2), NEVector2Make(3, 3), 1, 2, 3);
+    
+    /*float intensity = getIntensityForTriangle2(NEVector2Make(1.5, 1), NEVector2Make(1, 1), NEVector2Make(3, 1), NEVector2Make(2, 1), 1, 2, 3);
+    
+    NSLog(@"intensity is %f",intensity);
+    return;*/
+    
 //    _lineFrameMode = YES;
     // Do any additional setup after loading the view.
     
