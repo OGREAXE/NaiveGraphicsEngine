@@ -106,7 +106,7 @@ void CNEAssReader::InitMesh(unsigned int Index, const aiMesh* paiMesh)
         aFace.aIndex = face.mIndices[0];
         aFace.bIndex = face.mIndices[1];
         aFace.cIndex = face.mIndices[2];
-        aFace.color = 0xffffff;
+        aFace.color = 0xffff00;
         aMesh.faces.push_back(aFace);
     }
     

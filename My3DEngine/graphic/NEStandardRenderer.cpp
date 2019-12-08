@@ -201,9 +201,9 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v1t = convertToEyeSpace(v1);
         NEVector3 v2t = convertToEyeSpace(v2);
         
-        NEVector3 noraml0 = _v0.normal;
-        NEVector3 noraml1 = _v1.normal;
-        NEVector3 noraml2 = _v2.normal;
+        NEVector3 noraml0 = convertNormal(_v0.normal, mesh);
+        NEVector3 noraml1 = convertNormal(_v1.normal, mesh);
+        NEVector3 noraml2 = convertNormal(_v2.normal, mesh);
         
         NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
         NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);

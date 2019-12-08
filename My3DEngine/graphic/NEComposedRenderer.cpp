@@ -101,20 +101,23 @@ void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
 #ifdef NE_USE_AVG_INTENSITY
 
 float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo){
-    
-    float lightAngle = getLightToPointAngle(position, _dotLightPositionInCameraSpace, normal);
         
     float fade = 1;
-    
+
+#ifdef NE_TRUE_LIGHT
     NEVector3 worldPos = camera.getWorldPosition(position);
-    
     if (!_dotLight0->canTouchPosition(worldPos)) {
         fade = 0.9;
     }
+#endif
+    
+    /*
+     float lightAngle = getLightToPointAngle(position, _dotLightPositionInCameraSpace, normal);
     
     if(lightAngle < M_PI_2){
-        fade *= 0.9;
+        fade = 0.9;
     }
+     */
 
     float intensity = getIntensityForTriangle3(position, param.vert0c, param.vert1c, param.vert2c, param.intensity0, param.intensity1, param.intensity2);
     
