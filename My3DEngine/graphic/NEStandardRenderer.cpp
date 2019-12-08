@@ -56,6 +56,12 @@ NEVector3 vectorFromVertice(const NEVertice & vert, const NEMesh &mesh){
     return v;
 }
 
+NEStandardRenderer::NEStandardRenderer(int width, int height):_screenWidth(width), _screenHeight(height){
+    _renderBuffer = nullptr;
+    camera.setWindow(width, height);
+    _depthBuffer.resetSize(width * COORD_AMPLIFY_FACTOR, height * COORD_AMPLIFY_FACTOR);
+}
+
 NEVector3 NEStandardRenderer::convertToCameraSpace(NEVector3 originalPoint){
     return getPositionInCameraCoordinateSystem(originalPoint, camera.position, camera.lookAtDirection, camera.yAxis);
 }
