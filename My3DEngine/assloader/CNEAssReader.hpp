@@ -18,6 +18,11 @@
 #include <assimp/postprocess.h>
 #include "NEMesh.h"
 
+typedef struct tagLoadParam {
+    NEVector3 position;
+    NEVector3 rotation;
+    float width;
+} NELoadAssParam;
 
 class CNEAssReader {
     bool InitFromScene(const aiScene* pScene, const std::string& Filename);

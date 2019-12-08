@@ -30,6 +30,8 @@ public:
     NECamera();
     NECamera(NEFrustum frustum):frustum(frustum){}
     
+    void setWindow(float width, float height);
+    
     void lookAtPoint(NEVector3 direction);
 
     void normalize();

@@ -12,8 +12,19 @@
 
 NECamera::NECamera(){
     NEFrustum fru;
-    fru.r = 0.2;
-    fru.t = 0.2;
+    fru.r = 0.2; //x
+    fru.t = 0.2; //y
+    
+    fru.near = 1;
+    fru.far = 100;
+    
+    this->frustum = fru;
+}
+
+void NECamera::setWindow(float width, float height){
+    NEFrustum fru;
+    fru.r = 0.2; //x
+    fru.t = fru.r * height/width; //y
     
     fru.near = 1;
     fru.far = 100;

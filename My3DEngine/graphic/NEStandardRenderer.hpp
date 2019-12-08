@@ -84,6 +84,7 @@ public:
 public:
     NEStandardRenderer(int width, int height):_screenWidth(width), _screenHeight(height){
         _renderBuffer = nullptr;
+        camera.setWindow(width, height);
         _depthBuffer.resetSize(width * COORD_AMPLIFY_FACTOR, height * COORD_AMPLIFY_FACTOR);
     }
     

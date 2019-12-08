@@ -11,12 +11,6 @@
 #include "NEMesh.h"
 #include "CNEAssReader.hpp"
 
-typedef struct tagLoadParam {
-    NEVector3 position;
-    NEVector3 rotation;
-    float width;
-} NELoadAssParam;
-
 NS_ASSUME_NONNULL_BEGIN
 
 @class NEAssLoader;
