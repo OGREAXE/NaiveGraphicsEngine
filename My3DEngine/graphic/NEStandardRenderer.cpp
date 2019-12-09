@@ -22,21 +22,37 @@ NEVector3 vectorFromVertice(const NEVertice & vert, float range, float width){
     return v;
 }
 
-NEVector3 convertNormal(const NEVector3 & normal, const NEMesh &mesh){
+NEVector3 convertNormal(const NEVector3 & normal, NEMatrix3 *rotation_mat_x, NEMatrix3 *rotation_mat_y, NEMatrix3 *rotation_mat_z){
     NEVector3 n = normal;
     
-    if (mesh.roatation.x != 0) {
-        n = rotationByAngle(n, NEVector3Make(1, 0, 0), mesh.roatation.x);
+    if (rotation_mat_x) {
+        n = rotationByMatrix(n, *rotation_mat_x);
     }
-    if (mesh.roatation.y != 0) {
-        n = rotationByAngle(n, NEVector3Make(0, 1, 0), mesh.roatation.y);
+    if (rotation_mat_y) {
+        n = rotationByMatrix(n, *rotation_mat_y);
     }
-    if (mesh.roatation.z != 0) {
-        n = rotationByAngle(n, NEVector3Make(0, 0, 1), mesh.roatation.z);
+    if (rotation_mat_z) {
+        n = rotationByMatrix(n, *rotation_mat_z);
     }
     
     return n;
 }
+
+//NEVector3 convertNormal(const NEVector3 & normal, const NEMesh &mesh){
+//    NEVector3 n = normal;
+//
+//    if (mesh.roatation.x != 0) {
+//        n = rotationByAngle(n, NEVector3Make(1, 0, 0), mesh.roatation.x);
+//    }
+//    if (mesh.roatation.y != 0) {
+//        n = rotationByAngle(n, NEVector3Make(0, 1, 0), mesh.roatation.y);
+//    }
+//    if (mesh.roatation.z != 0) {
+//        n = rotationByAngle(n, NEVector3Make(0, 0, 1), mesh.roatation.z);
+//    }
+//
+//    return n;
+//}
 
 NEVector3 vectorFromVertice(const NEVertice & vert, const NEMesh &mesh){
     NEVector3 v = vectorFromVertice(vert, mesh.range, mesh.width);
@@ -190,6 +206,12 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
     
     DrawParam drawParam;
     
+    NEMatrix3 meshRotationMat_x =  makeRotationMatrix(NEVector3Make(1, 0, 0), mesh.roatation.x);
+    NEMatrix3 meshRotationMat_y =  makeRotationMatrix(NEVector3Make(0, 1, 0), mesh.roatation.y);
+    NEMatrix3 meshRotationMat_z =  makeRotationMatrix(NEVector3Make(0, 0, 1), mesh.roatation.z);
+    
+    NEVector3 dummyNormal = NEVector3Make(0, 0, 0);
+    
     for (const NEFace & aface : mesh.faces) {
         long long color = aface.color;
 //        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
@@ -198,8 +220,8 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
         const NEVertice & _v2 = mesh.vertices[aface.cIndex];
         
-        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
-        _normal = convertNormal(_normal, mesh);
+//        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
+//        _normal = convertNormal(_normal, mesh);
         
         NEVector3 v0 = vectorFromVertice(_v0, mesh);
         NEVector3 v1 = vectorFromVertice(_v1, mesh);
@@ -217,9 +239,9 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v1t = convertToEyeSpace(v1);
         NEVector3 v2t = convertToEyeSpace(v2);
         
-        NEVector3 noraml0 = convertNormal(_v0.normal, mesh);
-        NEVector3 noraml1 = convertNormal(_v1.normal, mesh);
-        NEVector3 noraml2 = convertNormal(_v2.normal, mesh);
+        NEVector3 noraml0 = convertNormal(_v0.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
+        NEVector3 noraml1 = convertNormal(_v1.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
+        NEVector3 noraml2 = convertNormal(_v2.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
         
         NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
         NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);
@@ -282,7 +304,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         //preDefined Normal affects light blend effect
 //        NEVector3 preDefinedNormalt = [self convertVectorToEyeSpace:_normal originInEyeSpace:originPosT];
         
-        NEVector3 preDefinedNormalC = convertVectorToCameraSpace(_normal, originPosC);
+//        NEVector3 preDefinedNormalC = convertVectorToCameraSpace(_normal, originPosC);
         
         float reverseHorizontalFactor = (1 / (screenWidth/2));
         float reverseVerticalFactor = (1 / (screenHeight/2));
@@ -304,8 +326,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
                 
                 //refering the 3 vertice
-                
-                long tColor = colorBlendResult(color, pointc, preDefinedNormalC, drawParam,  nullptr);
+                long tColor = colorBlendResult(color, pointc, dummyNormal, drawParam,  nullptr);
                 
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                     continue;
