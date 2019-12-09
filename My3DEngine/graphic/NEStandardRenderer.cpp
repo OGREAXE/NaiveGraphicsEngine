@@ -321,8 +321,6 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 //the point in eye space inside the triangle
                 NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
                 
-                NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
-                
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                     continue;
                 }
@@ -333,6 +331,8 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
 #define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
                 if (point.z < oldZ) {
                     //refering the 3 vertice
+                    NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
+                    
                     long tColor = colorBlendResult(color, pointc, dummyNormal, drawParam,  nullptr);
                     
                     long oldIndex = info.additionalInfo;
