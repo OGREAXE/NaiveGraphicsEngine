@@ -658,6 +658,7 @@
 				F364EFC6239CB188004B0CF4 /* Sources */,
 				F364EFC7239CB188004B0CF4 /* Frameworks */,
 				F364EFC8239CB188004B0CF4 /* CopyFiles */,
+				F364F08A239DEC92004B0CF4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -754,6 +755,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F364F08A239DEC92004B0CF4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "graphics_dir=\"${PROJECT_DIR}/My3DEngine/graphic\"\ncp -rf \"${graphics_dir}\"/*.hpp /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\ncp -rf \"${graphics_dir}\"/*.h /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D4085B592361A14A00ACDC70 /* Sources */ = {

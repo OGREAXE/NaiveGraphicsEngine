@@ -106,9 +106,9 @@ inline bool isPointInsideTriangle(NEVector2 &p, NEVector2 &p0, NEVector2 &p1, NE
     
 #define testPoint(point, start, end) ((point.x - start.x) * (end.y - start.y) - (end.x - start.x) * (point.y - start.y));
     
-    int t0 = testPoint(p, p0, p1);
-    int t1 = testPoint(p, p1, p2);
-    int t2 = testPoint(p, p2, p0);
+    float t0 = testPoint(p, p0, p1);
+    float t1 = testPoint(p, p1, p2);
+    float t2 = testPoint(p, p2, p0);
     
     if ((t0 >= 0 && t1 >= 0 && t2 >= 0) ||
     (t0 <= 0 && t1 <= 0 && t2 <= 0)){
@@ -147,6 +147,14 @@ NEVector2 NEStandardRenderer::pointInVewForVector3(NEVector3 vector){
     float screen_y = ( 1 -  vector.y)* height/2;
     
     return NEVector2Make(screen_x, screen_y);
+}
+
+void NEStandardRenderer::createRenderBuffer(int size){
+    if (size > 0) {
+        _renderBuffer =
+        (RenderBufferType *)
+        malloc(sizeof(RenderBufferType) * size);
+    }
 }
 
 
@@ -337,4 +345,9 @@ inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVe
     float lightAngle = getAngleBetweenVectors(lightOnPointVec, preDefinedNormal);
 
     return lightAngle;
+}
+
+void NEStandardRenderer::createDefaultRenderBuffer(){
+    createRenderBuffer(_screenHeight * _screenWidth);
+    _renderBufferSize = 0;
 }

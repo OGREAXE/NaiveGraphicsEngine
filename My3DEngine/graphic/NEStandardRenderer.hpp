@@ -59,13 +59,7 @@ protected:
     
     NEVector2 pointInVewForVector3(NEVector3 vector);
     
-    void createRenderBuffer(int size){
-        if (size > 0) {
-            _renderBuffer =
-            (RenderBufferType *)
-            malloc(sizeof(RenderBufferType) * size);
-        }
-    }
+    void createRenderBuffer(int size);
     
 protected:
     //overwrite this method to do color blending/lighting
@@ -94,10 +88,7 @@ public:
 //    }
     
     //called after setScreenSize
-    void createDefaultRenderBuffer(){
-        createRenderBuffer(_screenHeight * _screenWidth);
-        _renderBufferSize = 0;
-    }
+    void createDefaultRenderBuffer();
     
     NEDepthBuffer &depthBuffer(){return _depthBuffer;}
     
