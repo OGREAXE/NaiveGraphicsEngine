@@ -27,6 +27,14 @@ public:
     NEVector3 worldYAxisInCameraCoord;
     NEVector3 worldZAxisInCameraCoord;
     
+    //world to camera matrixes
+    NEMatrix3 rotation_w2c_z_axis_mat;
+    NEMatrix3 rotation_w2c_y_axis_mat;
+    
+    //camera to world matrixes
+    NEMatrix3 rotation_c2w_z_axis_mat;
+    NEMatrix3 rotation_c2w_y_axis_mat;
+    
     NECamera();
     NECamera(NEFrustum frustum):frustum(frustum){}
     
@@ -52,13 +60,14 @@ public:
         worldZAxisInCameraCoord = getPositionInCameraCoordinateSystem(NEVector3Make(0, 0, 1), position, lookAtDirection, yAxis);
         
         worldZAxisInCameraCoord = NEVector3Subtract(worldZAxisInCameraCoord, worldIOriginInCameraCoord);
+        
+        NEGetCoordConvertionRotationMatrixes(worldIOriginInCameraCoord, worldZAxisInCameraCoord, worldYAxisInCameraCoord, &rotation_c2w_z_axis_mat, &rotation_c2w_y_axis_mat);
     }
     
     inline NEVector3 getWorldPosition(NEVector3 &positionInCameraSpace){
-//        convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
+//        return convertPositionFromOriginalCoordSystem(positionInCameraSpace, worldIOriginInCameraCoord, worldZAxisInCameraCoord, worldYAxisInCameraCoord);
         
-        return convertPositionFromOriginalCoordSystem(positionInCameraSpace, worldIOriginInCameraCoord, worldZAxisInCameraCoord, worldYAxisInCameraCoord);
-
+        return convertPositionFromOriginalCoordSystem2(positionInCameraSpace, worldIOriginInCameraCoord, &rotation_c2w_z_axis_mat, &rotation_c2w_y_axis_mat);
 
     }
 };

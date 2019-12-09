@@ -156,7 +156,11 @@ NEVector3 reverseVector(NEVector3 vec);
 
 NEVector3 translationByVector(NEVector3 aPoint, NEVector3 translationVector);
 
+void NEGetCoordConvertionRotationMatrixes(NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis, NEMatrix3 * outRotationZMatrix, NEMatrix3 * outRotationYMatrix);
+
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
+
+NEVector3 convertPositionFromOriginalCoordSystem2(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix);
 
 NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
 

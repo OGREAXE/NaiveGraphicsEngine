@@ -192,6 +192,39 @@ NEVector3 translationByVector(NEVector3 aPoint, NEVector3 translationVector){
 
 #define FLOAT_EQUAL(a, b) (fabs(a - b) <= 0.0000002)
 
+void NEGetCoordConvertionRotationMatrixes(NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis, NEMatrix3 * outRotationZMatrix, NEMatrix3 * outRotationYMatrix){
+    //now rotate z axis
+    NEVector3 rotAxis = vectorCrossProduct(coordZAxis, NEVector3Make(0, 0, 1.));
+    
+    float rotZAngle = getAngleBetweenVectors(NEVector3Make(0, 0, 1.), coordZAxis);
+    
+    *outRotationZMatrix = makeRotationMatrix(rotAxis, rotZAngle);
+    
+    NEVector3 newCoordYAxis = rotationByMatrix(coordYAxis, *outRotationZMatrix);
+    //angle between coordY axis and world y axis
+    float rotYAngle = getAngleBetweenVectors(NEVector3Make(0, 1., 0), newCoordYAxis);
+    
+    if (!FLOAT_EQUAL(rotYAngle, M_PI)) {
+        NEVector3 rotYAxis = vectorCrossProduct(newCoordYAxis, NEVector3Make(0, 1., 0));
+        *outRotationYMatrix = makeRotationMatrix(rotYAxis, rotYAngle);
+        
+    } else {
+        //when angle is 180, the vector cross result is a plane rather than a vector, so handle otherwise
+        NEVector3 rotYAxis = NEVector3Make(0, 0, 1);
+        *outRotationYMatrix = makeRotationMatrix(rotYAxis, rotYAngle);
+    }
+}
+
+NEVector3 convertPositionFromOriginalCoordSystem2(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix){
+    NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
+    
+    newPosition = rotationByMatrix(newPosition, *rotationZMatrix);
+    
+    newPosition = rotationByMatrix(newPosition, *rotationYMatrix);
+    
+    return newPosition;
+}
+
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis){
 //    return targetOldPosition;
     // 0 + b* 0 + c = 0
