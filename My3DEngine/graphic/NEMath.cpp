@@ -215,7 +215,7 @@ void NEGetCoordConvertionRotationMatrixes(NEVector3 coordOrigin, NEVector3 coord
     }
 }
 
-NEVector3 convertPositionFromOriginalCoordSystem2(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix){
+NEVector3 NEPostionConvertFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix){
     NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
     
     newPosition = rotationByMatrix(newPosition, *rotationZMatrix);

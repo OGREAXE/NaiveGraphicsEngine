@@ -61,14 +61,24 @@ public:
         
         worldZAxisInCameraCoord = NEVector3Subtract(worldZAxisInCameraCoord, worldIOriginInCameraCoord);
         
+        NEGetCoordConvertionRotationMatrixes(position, lookAtDirection, yAxis, &rotation_w2c_z_axis_mat, &rotation_w2c_y_axis_mat);
+        
         NEGetCoordConvertionRotationMatrixes(worldIOriginInCameraCoord, worldZAxisInCameraCoord, worldYAxisInCameraCoord, &rotation_c2w_z_axis_mat, &rotation_c2w_y_axis_mat);
     }
     
     inline NEVector3 getWorldPosition(NEVector3 &positionInCameraSpace){
 //        return convertPositionFromOriginalCoordSystem(positionInCameraSpace, worldIOriginInCameraCoord, worldZAxisInCameraCoord, worldYAxisInCameraCoord);
         
-        return convertPositionFromOriginalCoordSystem2(positionInCameraSpace, worldIOriginInCameraCoord, &rotation_c2w_z_axis_mat, &rotation_c2w_y_axis_mat);
+        return NEPostionConvertFromOriginalCoordSystem(positionInCameraSpace, worldIOriginInCameraCoord, &rotation_c2w_z_axis_mat, &rotation_c2w_y_axis_mat);
 
+    }
+    
+    inline NEVector3 positionInCameraCoordinateSystem(NEVector3 &worldPosition){
+        NEVector3 pos = NEPostionConvertFromOriginalCoordSystem(worldPosition, position, &rotation_w2c_z_axis_mat, &rotation_w2c_y_axis_mat);
+        
+        //rotate it by 180 degrees around y axis to turn into eye space (in accordance with opengl frustum)
+        NEVector3 ret = { - pos.x, pos.y, - pos.z};
+        return ret;
     }
 };
 

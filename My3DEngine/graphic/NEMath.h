@@ -160,7 +160,7 @@ void NEGetCoordConvertionRotationMatrixes(NEVector3 coordOrigin, NEVector3 coord
 
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
-NEVector3 convertPositionFromOriginalCoordSystem2(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix);
+NEVector3 NEPostionConvertFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix);
 
 NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
 

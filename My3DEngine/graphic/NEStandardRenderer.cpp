@@ -63,7 +63,9 @@ NEStandardRenderer::NEStandardRenderer(int width, int height):_screenWidth(width
 }
 
 NEVector3 NEStandardRenderer::convertToCameraSpace(NEVector3 originalPoint){
-    return getPositionInCameraCoordinateSystem(originalPoint, camera.position, camera.lookAtDirection, camera.yAxis);
+//    return getPositionInCameraCoordinateSystem(originalPoint, camera.position, camera.lookAtDirection, camera.yAxis);
+    
+    return camera.positionInCameraCoordinateSystem(originalPoint);
 }
 
 NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 originalPoint){
