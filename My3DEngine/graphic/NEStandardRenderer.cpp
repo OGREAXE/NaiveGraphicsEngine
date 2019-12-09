@@ -88,13 +88,11 @@ NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 originalPoint){
     
     NEVector3 point =  convertToCameraSpace(originalPoint);
     
-    NEVector3 pointTran;
+//    if (shouldTrimPoint(point, camera.frustum)) {
+//
+//    }
     
-    if (shouldTrimPoint(point, camera.frustum)) {
-        
-    }
-    
-    pointTran = perspetiveProjectPoint(point, camera.frustum);
+    NEVector3 pointTran = perspetiveProjectPoint(point, camera.frustum);
     
     return pointTran;
 }
@@ -325,9 +323,6 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 
                 NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
                 
-                //refering the 3 vertice
-                long tColor = colorBlendResult(color, pointc, dummyNormal, drawParam,  nullptr);
-                
                 if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                     continue;
                 }
@@ -337,6 +332,9 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 
 #define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
                 if (point.z < oldZ) {
+                    //refering the 3 vertice
+                    long tColor = colorBlendResult(color, pointc, dummyNormal, drawParam,  nullptr);
+                    
                     long oldIndex = info.additionalInfo;
                     if (_renderBuffer) {
                         if (oldIndex > 0) {
