@@ -18,8 +18,12 @@
 
 class NEComposedRenderer:public NEStandardRenderer{
     NEDotLight *_dotLight0;
+    
     NEVector3 _dotLightPositionInCameraSpace;
+    
     NEDisplayDevice *_device;
+    
+    bool _trueShadow;
     
 protected:
     NEComposedRenderer();
@@ -35,7 +39,10 @@ public:
     NEComposedRenderer(int width, int height):NEStandardRenderer(width, height){
 //        NEStandardRenderer(width, height);
         createDefaultRenderBuffer();
+        _trueShadow = true;
     }
+    
+    void setTrueShadow(bool trueShadow){ _trueShadow = trueShadow;}
     
     ~NEComposedRenderer(){
         NESafeDelete(_dotLight0);

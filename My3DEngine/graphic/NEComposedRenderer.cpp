@@ -104,12 +104,12 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEV
         
     float fade = 1;
 
-#ifdef NE_TRUE_LIGHT
-    NEVector3 worldPos = camera.getWorldPosition(position);
-    if (!_dotLight0->canTouchPosition(worldPos)) {
-        fade = 0.9;
+    if (_trueShadow) {
+        NEVector3 worldPos = camera.getWorldPosition(position);
+        if (!_dotLight0->canTouchPosition(worldPos)) {
+            fade = 0.9;
+        }
     }
-#endif
     
     /*
      float lightAngle = getLightToPointAngle(position, _dotLightPositionInCameraSpace, normal);
