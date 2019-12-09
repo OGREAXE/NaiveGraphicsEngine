@@ -563,7 +563,13 @@ float getIntensityForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, NEVector
     float lengh2p = NEVector2Distance(v2, p);
     float lengh2j = NEVector2Distance(v2, joint);
     
+    if (lengh01 == 0 || lengh2j == 0) {
+        return (intensity0 + intensity1 + intensity2)/3;
+    }
+    
     float intensityJ = (intensity1 - intensity0) * lengh0j/lengh01 + intensity0;
+    
+    
     
     float intensityX = (intensityJ - intensity2) * lengh2p/lengh2j + intensity2;
     

@@ -11,7 +11,7 @@
 
 #define NE_USE_AVG_INTENSITY
 
-#define NE_TRUE_LIGHT
+//#define NE_TRUE_LIGHT
 
 inline long getColorWithIntensity(long color, float intensity){
 //    if (intensity > maxIntensity) {

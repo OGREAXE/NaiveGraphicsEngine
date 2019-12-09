@@ -49,6 +49,18 @@
 		F364EF7F2399F8DB004B0CF4 /* NEDotLightRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF7D2399F8DB004B0CF4 /* NEDotLightRenderer.cpp */; };
 		F364EF832399FBE1004B0CF4 /* NEDisplayDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF812399FBE1004B0CF4 /* NEDisplayDevice.cpp */; };
 		F364EF89239A02A3004B0CF4 /* NECoreGraphicsDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F364EF87239A02A3004B0CF4 /* NECoreGraphicsDevice.mm */; };
+		F364EF97239BB31C004B0CF4 /* MFBX.fbx in Resources */ = {isa = PBXBuildFile; fileRef = F364EF96239BB31A004B0CF4 /* MFBX.fbx */; };
+		F364EFCE239CB188004B0CF4 /* NaiveGraphics.m in Sources */ = {isa = PBXBuildFile; fileRef = F364EFCD239CB188004B0CF4 /* NaiveGraphics.m */; };
+		F364EFCF239CB188004B0CF4 /* NaiveGraphics.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F364EFCC239CB188004B0CF4 /* NaiveGraphics.h */; };
+		F364F03F239CB335004B0CF4 /* NEMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F329F7752366DC2A000CA7F7 /* NEMath.cpp */; };
+		F364F041239CB335004B0CF4 /* NEDepthBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44026D5238107FF00435316 /* NEDepthBuffer.cpp */; };
+		F364F044239CB335004B0CF4 /* NEStandardRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F33730F92398ECEE00AA54D6 /* NEStandardRenderer.cpp */; };
+		F364F046239CB335004B0CF4 /* NECamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F33730FC2398F02200AA54D6 /* NECamera.cpp */; };
+		F364F048239CB335004B0CF4 /* NEComposedRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F332954E23993AB600A87B14 /* NEComposedRenderer.cpp */; };
+		F364F04A239CB335004B0CF4 /* NEDotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF7A2399F88D004B0CF4 /* NEDotLight.cpp */; };
+		F364F04C239CB335004B0CF4 /* NEDotLightRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF7D2399F8DB004B0CF4 /* NEDotLightRenderer.cpp */; };
+		F364F04E239CB335004B0CF4 /* NEDisplayDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF812399FBE1004B0CF4 /* NEDisplayDevice.cpp */; };
+		F364F04F239CC001004B0CF4 /* CNEAssReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +79,19 @@
 			remoteInfo = My3DEngine;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F364EFC8239CB188004B0CF4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				F364EFCF239CB188004B0CF4 /* NaiveGraphics.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D4085B5D2361A14A00ACDC70 /* My3DEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = My3DEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -212,6 +237,10 @@
 		F364EF822399FBE1004B0CF4 /* NEDisplayDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NEDisplayDevice.hpp; sourceTree = "<group>"; };
 		F364EF87239A02A3004B0CF4 /* NECoreGraphicsDevice.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NECoreGraphicsDevice.mm; sourceTree = "<group>"; };
 		F364EF88239A02A3004B0CF4 /* NECoreGraphicsDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NECoreGraphicsDevice.hpp; sourceTree = "<group>"; };
+		F364EF96239BB31A004B0CF4 /* MFBX.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = MFBX.fbx; sourceTree = "<group>"; };
+		F364EFCA239CB188004B0CF4 /* libNaiveGraphics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNaiveGraphics.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F364EFCC239CB188004B0CF4 /* NaiveGraphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NaiveGraphics.h; sourceTree = "<group>"; };
+		F364EFCD239CB188004B0CF4 /* NaiveGraphics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NaiveGraphics.m; sourceTree = "<group>"; };
 		F3D9F041238A8A4C00EE98C2 /* NEMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMesh.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -242,6 +271,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F364EFC7239CB188004B0CF4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -253,6 +289,7 @@
 				D4085B5F2361A14A00ACDC70 /* My3DEngine */,
 				D4085B7B2361A14C00ACDC70 /* My3DEngineTests */,
 				D4085B862361A14C00ACDC70 /* My3DEngineUITests */,
+				F364EFCB239CB188004B0CF4 /* NaiveGraphics */,
 				D4085B5E2361A14A00ACDC70 /* Products */,
 				D4085B972361A38200ACDC70 /* Frameworks */,
 			);
@@ -264,6 +301,7 @@
 				D4085B5D2361A14A00ACDC70 /* My3DEngine.app */,
 				D4085B782361A14C00ACDC70 /* My3DEngineTests.xctest */,
 				D4085B832361A14C00ACDC70 /* My3DEngineUITests.xctest */,
+				F364EFCA239CB188004B0CF4 /* libNaiveGraphics.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -520,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				F364EF782399F3E1004B0CF4 /* Lamborghini_Aventador.fbx */,
+				F364EF96239BB31A004B0CF4 /* MFBX.fbx */,
 				F3542CD2238445890090DD92 /* Cinema4D.fbx */,
 				F309ECA52383D653007344F8 /* box.fbx */,
 				F309ECA32383D5F1007344F8 /* duck.fbx */,
@@ -545,6 +584,15 @@
 				F364EF88239A02A3004B0CF4 /* NECoreGraphicsDevice.hpp */,
 			);
 			path = platform;
+			sourceTree = "<group>";
+		};
+		F364EFCB239CB188004B0CF4 /* NaiveGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				F364EFCC239CB188004B0CF4 /* NaiveGraphics.h */,
+				F364EFCD239CB188004B0CF4 /* NaiveGraphics.m */,
+			);
+			path = NaiveGraphics;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -603,6 +651,23 @@
 			productReference = D4085B832361A14C00ACDC70 /* My3DEngineUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		F364EFC9239CB188004B0CF4 /* NaiveGraphics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F364EFD2239CB188004B0CF4 /* Build configuration list for PBXNativeTarget "NaiveGraphics" */;
+			buildPhases = (
+				F364EFC6239CB188004B0CF4 /* Sources */,
+				F364EFC7239CB188004B0CF4 /* Frameworks */,
+				F364EFC8239CB188004B0CF4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NaiveGraphics;
+			productName = NaiveGraphics;
+			productReference = F364EFCA239CB188004B0CF4 /* libNaiveGraphics.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -623,6 +688,9 @@
 						CreatedOnToolsVersion = 11.1;
 						TestTargetID = D4085B5C2361A14A00ACDC70;
 					};
+					F364EFC9239CB188004B0CF4 = {
+						CreatedOnToolsVersion = 11.2.1;
+					};
 				};
 			};
 			buildConfigurationList = D4085B582361A14A00ACDC70 /* Build configuration list for PBXProject "My3DEngine" */;
@@ -641,6 +709,7 @@
 				D4085B5C2361A14A00ACDC70 /* My3DEngine */,
 				D4085B772361A14C00ACDC70 /* My3DEngineTests */,
 				D4085B822361A14C00ACDC70 /* My3DEngineUITests */,
+				F364EFC9239CB188004B0CF4 /* NaiveGraphics */,
 			);
 		};
 /* End PBXProject section */
@@ -663,6 +732,7 @@
 				F3542CD3238445890090DD92 /* Cinema4D.fbx in Resources */,
 				F309EC952383D0F0007344F8 /* quaternion.inl in Resources */,
 				D4085B6D2361A14C00ACDC70 /* Assets.xcassets in Resources */,
+				F364EF97239BB31C004B0CF4 /* MFBX.fbx in Resources */,
 				D4085B6B2361A14A00ACDC70 /* Main.storyboard in Resources */,
 				F309EC9C2383D0F0007344F8 /* vector3.inl in Resources */,
 				F309EC9E2383D0F0007344F8 /* SmoothingGroups.inl in Resources */,
@@ -725,6 +795,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4085B882361A14C00ACDC70 /* My3DEngineUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F364EFC6239CB188004B0CF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F364F04F239CC001004B0CF4 /* CNEAssReader.cpp in Sources */,
+				F364F03F239CB335004B0CF4 /* NEMath.cpp in Sources */,
+				F364F041239CB335004B0CF4 /* NEDepthBuffer.cpp in Sources */,
+				F364F044239CB335004B0CF4 /* NEStandardRenderer.cpp in Sources */,
+				F364F046239CB335004B0CF4 /* NECamera.cpp in Sources */,
+				F364F048239CB335004B0CF4 /* NEComposedRenderer.cpp in Sources */,
+				F364F04A239CB335004B0CF4 /* NEDotLight.cpp in Sources */,
+				F364F04C239CB335004B0CF4 /* NEDotLightRenderer.cpp in Sources */,
+				F364F04E239CB335004B0CF4 /* NEDisplayDevice.cpp in Sources */,
+				F364EFCE239CB188004B0CF4 /* NaiveGraphics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,6 +1090,36 @@
 			};
 			name = Release;
 		};
+		F364EFD0239CB188004B0CF4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/3rd/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F364EFD1239CB188004B0CF4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/3rd/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1038,6 +1155,15 @@
 			buildConfigurations = (
 				D4085B932361A14C00ACDC70 /* Debug */,
 				D4085B942361A14C00ACDC70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F364EFD2239CB188004B0CF4 /* Build configuration list for PBXNativeTarget "NaiveGraphics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F364EFD0239CB188004B0CF4 /* Debug */,
+				F364EFD1239CB188004B0CF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
