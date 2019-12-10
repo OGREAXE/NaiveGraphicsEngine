@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<NEPolygonLine*>*)lineFrameFromMesh:(NEMesh &)mesh range:(float)range;
 
+- (void)loadModelWithName:(NSString *)modelName ofType:(NSString *)typeName  param:(NELoadAssParam)param;
+
 - (void)loadFbx:(NSString *)modelName param:(NELoadAssParam)param;
 
 - (void)loadDefaultFile;

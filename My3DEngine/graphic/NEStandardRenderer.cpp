@@ -188,7 +188,7 @@ void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
 }
 
 void NEStandardRenderer::drawMesh(const NEMesh &mesh){
-    NELog("mesh draw begin >>>>>>>>>>>>>>");
+    NELog("mesh draw begin >>>>>>>>>> faces:%lu\n", mesh.faces.size());
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     

@@ -229,7 +229,11 @@
 }
 
 - (void)loadFbx:(NSString *)modelName  param:(NELoadAssParam)param{
-    NSString *fileName = [[NSBundle mainBundle] pathForResource:modelName ofType:@"fbx"];
+    [self loadModelWithName:modelName ofType:@"fbx" param:param];
+}
+
+- (void)loadModelWithName:(NSString *)modelName ofType:(NSString *)typeName  param:(NELoadAssParam)param{
+    NSString *fileName = [[NSBundle mainBundle] pathForResource:modelName ofType:typeName];
     
     if (_reader->LoadMesh(fileName.UTF8String)){
         for (NEMesh & mesh : _reader->mMeshes) {
