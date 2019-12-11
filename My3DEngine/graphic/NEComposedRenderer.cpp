@@ -26,9 +26,9 @@ inline long getColorWithIntensity(long color, float intensity){
     long g = (color >>8) & 0xff;
     long b = color & 0xff;
     
-    r *= intensity * intensity;
-    g *= intensity * intensity;
-    b *= intensity * intensity;
+    r *= intensity ;
+    g *= intensity ;
+    b *= intensity ;
     
 //    if (intensity < 0.01){
 //        int k = 0;
@@ -125,7 +125,7 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  Dr
     if (_trueShadow) {
         NEVector3 worldPos = camera.getWorldPosition(position);
         if (!_dotLight0->canTouchPosition(worldPos)) {
-            fade = 0.9;
+            fade = 0.7;
         }
     }
     

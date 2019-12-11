@@ -78,13 +78,13 @@ NEStandardRenderer::NEStandardRenderer(int width, int height):_screenWidth(width
     _depthBuffer.resetSize(width * COORD_AMPLIFY_FACTOR, height * COORD_AMPLIFY_FACTOR);
 }
 
-NEVector3 NEStandardRenderer::convertToCameraSpace(NEVector3 originalPoint){
+NEVector3 NEStandardRenderer::convertToCameraSpace(NEVector3 &originalPoint){
 //    return getPositionInCameraCoordinateSystem(originalPoint, camera.position, camera.lookAtDirection, camera.yAxis);
     
     return camera.positionInCameraCoordinateSystem(originalPoint);
 }
 
-NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 originalPoint){
+NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 &originalPoint){
     
     NEVector3 point =  convertToCameraSpace(originalPoint);
     
@@ -92,9 +92,7 @@ NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 originalPoint){
 //
 //    }
     
-    NEVector3 pointTran = perspetiveProjectPoint(point, camera.frustum);
-    
-    return pointTran;
+    return perspetiveProjectPoint(point, camera.frustum);
 }
 
 NEVector3 NEStandardRenderer::convertVectorToEyeSpace(NEVector3 &aVector, NEVector3 &originInEyeSpace){
@@ -195,7 +193,8 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
     float screenWidth = _screenWidth * COORD_AMPLIFY_FACTOR;
     float screenHeight = _screenHeight * COORD_AMPLIFY_FACTOR;
     
-    NEVector3 originPosC = convertToCameraSpace(NEVector3Make(0, 0, 0));
+    NEVector3 originW = NEVector3Make(0, 0, 0);
+    NEVector3 originPosC = convertToCameraSpace(originW);
     
     //do invert projection test here
 //    [self testInvertProject:mesh];

@@ -42,8 +42,7 @@ DepthInfo NEDepthBuffer::getInfo(int x, int y){
         return {-2, 0, 0};
     }
     
-    DepthInfo info = m_depthInfoMap[y][x];
-    return info;
+    return m_depthInfoMap[y][x];
 }
 
 int NEDepthBuffer::setZ(float zVal, int x, int y){
@@ -55,6 +54,9 @@ int NEDepthBuffer::setZ(float zVal, int x, int y){
 }
 
 float NEDepthBuffer::getZ(int x, int y){
-    DepthInfo info = getInfo(x, y);
-    return info.z;
+    if (x < 0 || x >= m_width || y < 0 || y >= m_height) {
+        return 0;
+    }
+    
+    return m_depthInfoMap[y][x].z;
 }

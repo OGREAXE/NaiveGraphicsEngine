@@ -76,8 +76,8 @@ protected:
 
 protected:
     //util methods
-    NEVector3 convertToCameraSpace(NEVector3 originalPoint);
-    NEVector3 convertToEyeSpace(NEVector3 originalPoint);
+    NEVector3 convertToCameraSpace(NEVector3 &originalPoint);
+    NEVector3 convertToEyeSpace(NEVector3 &originalPoint);
     NEVector3 convertVectorToCameraSpace(NEVector3 &aVector, NEVector3 &originInCameraSpace);
     NEVector3 convertVectorToEyeSpace(NEVector3 &aVector, NEVector3 &originInEyeSpace);
     
