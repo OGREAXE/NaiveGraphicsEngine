@@ -14,6 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class NEPolygonLine;
 
+@protocol NERenderView : UIView
+
+@end
+
 @interface NERenderView : UIView
 
 @property (nonatomic) float moveSpeed;

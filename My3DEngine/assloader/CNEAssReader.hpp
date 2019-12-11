@@ -27,10 +27,13 @@ typedef struct tagLoadParam {
 class CNEAssReader {
     bool InitFromScene(const aiScene* pScene, const std::string& Filename);
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
+    bool InitMaterials(const aiScene* pScene);
 public:
     bool LoadMesh(const std::string& Filename);
     
     std::vector<NEMesh> mMeshes;
+    
+    std::vector<NETexture> mTextures;
 };
 
 #endif /* CNEAssReader_hpp */

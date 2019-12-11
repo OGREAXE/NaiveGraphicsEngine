@@ -204,11 +204,13 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
     
     DrawParam drawParam;
     
+    drawParam.textureParam.hasTexture = mesh.hasTexture;
+    drawParam.textureParam.textureIndex = mesh.textureIndex;
+    
     NEMatrix3 meshRotationMat_x =  makeRotationMatrix(NEVector3Make(1, 0, 0), mesh.roatation.x);
     NEMatrix3 meshRotationMat_y =  makeRotationMatrix(NEVector3Make(0, 1, 0), mesh.roatation.y);
     NEMatrix3 meshRotationMat_z =  makeRotationMatrix(NEVector3Make(0, 0, 1), mesh.roatation.z);
-    
-    NEVector3 dummyNormal = NEVector3Make(0, 0, 0);
+//    NEVector3 dummyNormal = NEVector3Make(0, 0, 0);
     
     for (const NEFace & aface : mesh.faces) {
         long long color = aface.color;
@@ -217,6 +219,10 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         const NEVertice & _v0 = mesh.vertices[aface.aIndex];
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
         const NEVertice & _v2 = mesh.vertices[aface.cIndex];
+        
+        drawParam.textureParam.uv0 = _v0.textureCoord;
+        drawParam.textureParam.uv1 = _v1.textureCoord;
+        drawParam.textureParam.uv2 = _v2.textureCoord;
         
 //        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
 //        _normal = convertNormal(_normal, mesh);
@@ -236,6 +242,10 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v0t = convertToEyeSpace(v0);
         NEVector3 v1t = convertToEyeSpace(v1);
         NEVector3 v2t = convertToEyeSpace(v2);
+        
+        drawParam.vert0t = v0t;
+        drawParam.vert1t = v1t;
+        drawParam.vert2t = v2t;
         
         NEVector3 noraml0 = convertNormal(_v0.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
         NEVector3 noraml1 = convertNormal(_v1.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
@@ -330,10 +340,11 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                 
 #define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
                 if (point.z < oldZ) {
+                    drawParam.position_t = point;
                     //refering the 3 vertice
                     NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
                     
-                    long tColor = colorBlendResult(color, pointc, dummyNormal, drawParam,  nullptr);
+                    long tColor = colorBlendResult(color, pointc, drawParam,  nullptr);
                     
                     long oldIndex = info.additionalInfo;
                     if (_renderBuffer) {

@@ -23,6 +23,7 @@
 
 @implementation NEAssLoader{
     std::vector<NEMesh> _meshes;
+    std::vector<NETexture> _textures;
 }
 
 - (id)init{
@@ -243,6 +244,8 @@
         }
         
         _meshes.insert(_meshes.end(), _reader->mMeshes.begin(), _reader->mMeshes.end());
+        
+        _textures = _reader->mTextures;
     }
 }
 

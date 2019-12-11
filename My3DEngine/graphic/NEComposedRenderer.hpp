@@ -15,6 +15,7 @@
 #include "NEDotLight.hpp"
 #include "NECommon.h"
 #include "NEDisplayDevice.hpp"
+#include "NETextureProvider.hpp"
 
 class NEComposedRenderer:public NEStandardRenderer{
     NEDotLight *_dotLight0;
@@ -22,6 +23,8 @@ class NEComposedRenderer:public NEStandardRenderer{
     NEVector3 _dotLightPositionInCameraSpace;
     
     NEDisplayDevice *_device;
+    
+    NETextureProvider *_textureProvider;
     
     bool _trueShadow;
     
@@ -32,7 +35,7 @@ protected:
     
     virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes);
     
-    virtual float colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo);
+    virtual float colorBlendResult(float color, NEVector3 &position,  DrawParam &param, void *extraInfo);
     
     virtual void prepareDrawFace(const NEFace &face, DrawParam &param);
 public:
@@ -40,6 +43,8 @@ public:
 //        NEStandardRenderer(width, height);
         createDefaultRenderBuffer();
         _trueShadow = true;
+        
+        _textureProvider = nullptr;
     }
     
     void setTrueShadow(bool trueShadow){ _trueShadow = trueShadow;}
@@ -49,6 +54,8 @@ public:
     }
     
     void setDevice(NEDisplayDevice *device){_device = device;}
+    
+    void setTextureProvider(NETextureProvider *provider){_textureProvider = provider;}
     
     void createDotLightAt(NEVector3 position, NEVector3 renderDestination){
         this->_dotLight0 = new NEDotLight();

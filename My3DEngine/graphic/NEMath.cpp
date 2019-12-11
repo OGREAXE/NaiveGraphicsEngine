@@ -323,6 +323,7 @@ NEVector3 getPointInPlane(float x, float y, NEVector3 normal, NEVector3 aPointIn
 }
 
 NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
+    /*
     float m00 = frustum.near / frustum.r;
     
     float m11 = frustum.near / frustum.t;
@@ -332,6 +333,7 @@ NEVector3 perspetiveProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum
     float m23 = - 2 * frustum.far * frustum.near / (frustum.far - frustum.near);
     
     float zn = (m22 * pointInCameraSpace.z + m23)/(-pointInCameraSpace.z);
+     */
     
     NEMatrix4 rotm =
     NEMatrix4Make(/*col0*/
@@ -584,7 +586,7 @@ NEVector3 NEVector3MultiplyScalar(NEVector3 vector, float value){
     return v;
 }
 
-float getIntensityForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, NEVector2 v2, float intensity0, float intensity1, float intensity2){
+float getInterpolatedValueForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, NEVector2 v2, float intensity0, float intensity1, float intensity2){
     
     bool canJoint = true;
     
@@ -609,14 +611,14 @@ float getIntensityForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, NEVector
     return intensityX;
 }
 
-float getIntensityForTriangle3(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2){
+float getInterpolatedValueForTriangle3(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2){
     NEVector2 p = NEVector2Make(point.x, point.y);
     
     NEVector2 v0 = NEVector2Make(vert0.x, vert0.y);
     NEVector2 v1 = NEVector2Make(vert1.x, vert1.y);
     NEVector2 v2 = NEVector2Make(vert2.x, vert2.y);
     
-    return getIntensityForTriangle2(p, v0, v1, v2, intensity0, intensity1, intensity2);
+    return getInterpolatedValueForTriangle2(p, v0, v1, v2, intensity0, intensity1, intensity2);
 }
 
 NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line2Start, NEVector2 line2end, bool *canJoint){

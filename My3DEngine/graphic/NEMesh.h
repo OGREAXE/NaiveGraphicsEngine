@@ -10,6 +10,7 @@
 #define NEMesh_h
 
 #include <vector>
+#include <string>
 #include "NEMath.h"
 
 typedef struct tagNEVertice{
@@ -21,6 +22,8 @@ typedef struct tagNEVertice{
 //    float normal_y;
 //    float normal_z;
     NEVector3 normal;
+    
+    NEVector2 textureCoord;
 } NEVertice;
 
 typedef struct tagNEFace{
@@ -31,6 +34,13 @@ typedef struct tagNEFace{
     long color;
 } NEFace;
 
+typedef struct tagNETexture{
+    std::string path;
+    
+    int width;
+    int height;
+} NETexture;
+
 typedef struct tagNEMesh{
     std::vector<NEVertice> vertices;
     std::vector<NEFace> faces;
@@ -40,6 +50,9 @@ typedef struct tagNEMesh{
     
     NEVector3 position;
     NEVector3 roatation;
+    
+    bool hasTexture = false;
+    int textureIndex;
 } NEMesh;
 
 typedef struct tagNEBoundingBox{

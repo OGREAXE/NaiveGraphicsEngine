@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol NEAssLoaderDelegate <NSObject>
 
+- (void)loader:(NEAssLoader *)loader didLoadMeshGroup:(const std::vector<NEMesh> &)meshes ofName:(NSString *)name;
+
 - (void)loader:(NEAssLoader *)loader didLoadMeshes:(const std::vector<NEMesh> &)meshes;
 
 @end

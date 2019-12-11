@@ -52,7 +52,7 @@
     NEAssLoader * loader = [[NEAssLoader alloc] init];
     loader.delegate = self;
     
-    [loader loadDefaultFile];
+//    [loader loadDefaultFile];
     
     NELoadAssParam loadParam;
     loadParam.position = NEVector3Make(5, 5, 3);

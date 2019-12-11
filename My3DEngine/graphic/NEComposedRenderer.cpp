@@ -92,6 +92,9 @@ void NEComposedRenderer::prepareDrawFace(const NEFace &face, DrawParam &param){
     param.intensity0 = getIntensityFromLightAngle(lightAngle0);
     param.intensity1 = getIntensityFromLightAngle(lightAngle1);
     param.intensity2 = getIntensityFromLightAngle(lightAngle2);
+    
+    //prepare uv params
+    
 }
 
 void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
@@ -100,8 +103,23 @@ void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
 
 #ifdef NE_USE_AVG_INTENSITY
 
-float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo){
+//when texture mapping is enable, mesh color is ignored
+float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  DrawParam &param, void *extraInfo){
+    
+    if (param.textureParam.hasTexture) {
+        //handle texture
+        float texture_u = getInterpolatedValueForTriangle3(param.position_t, param.vert0t, param.vert1t, param.vert2t, param.textureParam.uv0.x/param.vert0c.z, param.textureParam.uv1.x/param.vert1c.z, param.textureParam.uv2.x/param.vert2c.z);
         
+        texture_u = texture_u * position.z;
+        
+        float texture_v = getInterpolatedValueForTriangle3(param.position_t, param.vert0t, param.vert1t, param.vert2t, param.textureParam.uv0.y/param.vert0c.z, param.textureParam.uv1.y/param.vert1c.z, param.textureParam.uv2.y/param.vert2c.z);
+        
+        texture_v = texture_v * position.z;
+        
+        color = _textureProvider->readColorFromTexture(param.textureParam.textureIndex, texture_u, texture_v);
+    }
+    
+    ///
     float fade = 1;
 
     if (_trueShadow) {
@@ -119,7 +137,7 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEV
     }
      */
 
-    float intensity = getIntensityForTriangle3(position, param.vert0c, param.vert1c, param.vert2c, param.intensity0, param.intensity1, param.intensity2);
+    float intensity = getInterpolatedValueForTriangle3(position, param.vert0c, param.vert1c, param.vert2c, param.intensity0, param.intensity1, param.intensity2);
     
     long tColor = getColorWithIntensity(color, fade * intensity);
     
@@ -128,7 +146,7 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEV
 
 #else
 
-float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, NEVector3 &normal,  DrawParam &param, void *extraInfo){
+float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position, DrawParam &param, void *extraInfo){
 #ifdef NE_TRUE_LIGHT
     
     NEVector3 worldPos = camera.getWorldPosition(position);
