@@ -62,6 +62,7 @@
 		F364F04E239CB335004B0CF4 /* NEDisplayDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF812399FBE1004B0CF4 /* NEDisplayDevice.cpp */; };
 		F364F04F239CC001004B0CF4 /* CNEAssReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */; };
 		F3BFC57E23A0968300FE6B50 /* NETextureProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3BFC57C23A0968300FE6B50 /* NETextureProvider.cpp */; };
+		F3BFC58423A111C300FE6B50 /* NECoreGraphicsTextureProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = F3BFC58323A111C300FE6B50 /* NECoreGraphicsTextureProvider.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -244,6 +245,8 @@
 		F364EFCD239CB188004B0CF4 /* NaiveGraphics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NaiveGraphics.m; sourceTree = "<group>"; };
 		F3BFC57C23A0968300FE6B50 /* NETextureProvider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NETextureProvider.cpp; sourceTree = "<group>"; };
 		F3BFC57D23A0968300FE6B50 /* NETextureProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NETextureProvider.hpp; sourceTree = "<group>"; };
+		F3BFC58223A111C200FE6B50 /* NECoreGraphicsTextureProvider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NECoreGraphicsTextureProvider.hpp; sourceTree = "<group>"; };
+		F3BFC58323A111C300FE6B50 /* NECoreGraphicsTextureProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NECoreGraphicsTextureProvider.mm; sourceTree = "<group>"; };
 		F3D9F041238A8A4C00EE98C2 /* NEMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMesh.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -585,6 +588,8 @@
 		F364EF802399FB8C004B0CF4 /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				F3BFC58223A111C200FE6B50 /* NECoreGraphicsTextureProvider.hpp */,
+				F3BFC58323A111C300FE6B50 /* NECoreGraphicsTextureProvider.mm */,
 				F364EF87239A02A3004B0CF4 /* NECoreGraphicsDevice.mm */,
 				F364EF88239A02A3004B0CF4 /* NECoreGraphicsDevice.hpp */,
 			);
@@ -798,6 +803,7 @@
 				D44026D7238107FF00435316 /* NEDepthBuffer.cpp in Sources */,
 				F332955023993AB600A87B14 /* NEComposedRenderer.cpp in Sources */,
 				F364EF7F2399F8DB004B0CF4 /* NEDotLightRenderer.cpp in Sources */,
+				F3BFC58423A111C300FE6B50 /* NECoreGraphicsTextureProvider.mm in Sources */,
 				D4085B622361A14A00ACDC70 /* AppDelegate.m in Sources */,
 				F329F7762366DC2B000CA7F7 /* NEMath.cpp in Sources */,
 				F309EE1D2383F2FD007344F8 /* CNEAssReader.cpp in Sources */,
