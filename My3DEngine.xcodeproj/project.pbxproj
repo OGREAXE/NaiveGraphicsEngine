@@ -61,6 +61,7 @@
 		F364F04C239CB335004B0CF4 /* NEDotLightRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF7D2399F8DB004B0CF4 /* NEDotLightRenderer.cpp */; };
 		F364F04E239CB335004B0CF4 /* NEDisplayDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F364EF812399FBE1004B0CF4 /* NEDisplayDevice.cpp */; };
 		F364F04F239CC001004B0CF4 /* CNEAssReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F309EE1B2383F2FD007344F8 /* CNEAssReader.cpp */; };
+		F3BFC57E23A0968300FE6B50 /* NETextureProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3BFC57C23A0968300FE6B50 /* NETextureProvider.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -241,6 +242,8 @@
 		F364EFCA239CB188004B0CF4 /* libNaiveGraphics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNaiveGraphics.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F364EFCC239CB188004B0CF4 /* NaiveGraphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NaiveGraphics.h; sourceTree = "<group>"; };
 		F364EFCD239CB188004B0CF4 /* NaiveGraphics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NaiveGraphics.m; sourceTree = "<group>"; };
+		F3BFC57C23A0968300FE6B50 /* NETextureProvider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NETextureProvider.cpp; sourceTree = "<group>"; };
+		F3BFC57D23A0968300FE6B50 /* NETextureProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NETextureProvider.hpp; sourceTree = "<group>"; };
 		F3D9F041238A8A4C00EE98C2 /* NEMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEMesh.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -369,6 +372,8 @@
 				F364EF7E2399F8DB004B0CF4 /* NEDotLightRenderer.hpp */,
 				F364EF812399FBE1004B0CF4 /* NEDisplayDevice.cpp */,
 				F364EF822399FBE1004B0CF4 /* NEDisplayDevice.hpp */,
+				F3BFC57C23A0968300FE6B50 /* NETextureProvider.cpp */,
+				F3BFC57D23A0968300FE6B50 /* NETextureProvider.hpp */,
 			);
 			path = graphic;
 			sourceTree = "<group>";
@@ -798,6 +803,7 @@
 				F309EE1D2383F2FD007344F8 /* CNEAssReader.cpp in Sources */,
 				D4085B732361A14C00ACDC70 /* main.m in Sources */,
 				D4085BF52361A82200ACDC70 /* NEPolygonLine.m in Sources */,
+				F3BFC57E23A0968300FE6B50 /* NETextureProvider.cpp in Sources */,
 				D4085B652361A14A00ACDC70 /* SceneDelegate.m in Sources */,
 				F364EF89239A02A3004B0CF4 /* NECoreGraphicsDevice.mm in Sources */,
 			);
