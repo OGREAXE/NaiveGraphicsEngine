@@ -94,7 +94,11 @@ void NEComposedRenderer::prepareDrawFace(const NEFace &face, DrawParam &param){
     param.intensity2 = getIntensityFromLightAngle(lightAngle2);
     
     //prepare uv params
+    param.textureParam.uv0_z = NEVector2Make(param.textureParam.uv0.x/param.vert0c.z, param.textureParam.uv0.y/param.vert0c.z);
     
+    param.textureParam.uv1_z = NEVector2Make(param.textureParam.uv1.x/param.vert1c.z, param.textureParam.uv1.y/param.vert1c.z);
+    
+    param.textureParam.uv2_z = NEVector2Make(param.textureParam.uv2.x/param.vert2c.z, param.textureParam.uv2.y/param.vert2c.z);
 }
 
 void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
@@ -108,13 +112,9 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  Dr
     
     if (param.textureParam.hasTexture) {
         //handle texture
-        float texture_u = getInterpolatedValueForTriangle3(param.position_t, param.vert0t, param.vert1t, param.vert2t, param.textureParam.uv0.x/param.vert0c.z, param.textureParam.uv1.x/param.vert1c.z, param.textureParam.uv2.x/param.vert2c.z);
+        float texture_u = position.z * getInterpolatedValueForTriangle3(param.position_t, param.vert0t, param.vert1t, param.vert2t, param.textureParam.uv0_z.x, param.textureParam.uv1_z.x, param.textureParam.uv2_z.x);
         
-        texture_u = texture_u * position.z;
-        
-        float texture_v = getInterpolatedValueForTriangle3(param.position_t, param.vert0t, param.vert1t, param.vert2t, param.textureParam.uv0.y/param.vert0c.z, param.textureParam.uv1.y/param.vert1c.z, param.textureParam.uv2.y/param.vert2c.z);
-        
-        texture_v = texture_v * position.z;
+        float texture_v = position.z * getInterpolatedValueForTriangle3(param.position_t, param.vert0t, param.vert1t, param.vert2t, param.textureParam.uv0_z.y, param.textureParam.uv1_z.y, param.textureParam.uv2_z.y);
         
         color = _textureProvider->readColorFromTexture(param.textureParam.textureIndex, texture_u, texture_v);
     }

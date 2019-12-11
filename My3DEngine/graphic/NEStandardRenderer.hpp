@@ -22,8 +22,9 @@ typedef struct tagTextureParam {
     NEVector2 uv1;
     NEVector2 uv2;
     
-    NEVector4 equation_coeffient_u;
-    NEVector4 equation_coeffient_v;
+    NEVector2 uv0_z; // = uv0/z
+    NEVector2 uv1_z;
+    NEVector2 uv2_z;
     
     bool hasTexture;
     int textureIndex;
