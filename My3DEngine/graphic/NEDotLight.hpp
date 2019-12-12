@@ -19,6 +19,10 @@ class NEDotLight {
     NEDotLightRenderer *_renderer;
     
     bool _needRedrawMap;
+    
+    NEVector3 _positionInRealCameraSpace;
+    NEVector3 _zAxisInRealCameraSpace;
+    NEVector3 _yAxisInRealCameraSpace;
 public:
     NEDotLight(){
         _renderer = new NEDotLightRenderer(1500, 1500);
@@ -52,6 +56,21 @@ public:
         int res =_renderer->testPosition_world(worldPos);
         
         return res == 1;
+    }
+    
+    void updateGeometricsByRealCamera(NECamera &realCamera){
+        NECamera &lightCam = _renderer->camera;
+        
+        _positionInRealCameraSpace = convertPositionFromOriginalCoordSystem(lightCam.position, realCamera.position, realCamera.lookAtDirection, realCamera.yAxis);
+        
+        _zAxisInRealCameraSpace = NEConvertVectorToCoordSystem( lightCam.lookAtDirection, realCamera.position, realCamera.lookAtDirection, realCamera.yAxis);
+        
+        _yAxisInRealCameraSpace = NEConvertVectorToCoordSystem( lightCam.yAxis, realCamera.position, realCamera.lookAtDirection, realCamera.yAxis);
+        
+    }
+    
+    NEVector3 convertPostionInRealCameraSpaceToLightSpace(NEVector3 &positionInRealCamSpace){
+        return convertPositionFromOriginalCoordSystem(positionInRealCamSpace, _positionInRealCameraSpace, _zAxisInRealCameraSpace, _yAxisInRealCameraSpace);
     }
 };
 

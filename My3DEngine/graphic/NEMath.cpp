@@ -663,3 +663,8 @@ NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line
     return NEVector2Make(x, y);
     
 }
+
+NEVector3 NEConvertVectorToCoordSystem(NEVector3 aVectorInOldSystem, NEVector3 targetSystemOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis){
+    NEVector3 vectorT = convertPositionFromOriginalCoordSystem(aVectorInOldSystem, targetSystemOrigin, coordZAxis, coordYAxis);
+    return NEVector3Subtract(vectorT, targetSystemOrigin);
+}

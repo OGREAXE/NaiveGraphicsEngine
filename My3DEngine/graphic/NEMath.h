@@ -160,7 +160,7 @@ void NEGetCoordConvertionRotationMatrixes(NEVector3 coordOrigin, NEVector3 coord
 
 NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
-NEVector3 NEPostionConvertFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix);
+NEVector3 NEPostionConvertFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOriginInWorld, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix);
 
 NEVector3 getPositionInCameraCoordinateSystem(NEVector3 worldPosition, NEVector3 cameraPositionInWorld, NEVector3 cameraLookAt, NEVector3 cameraYAxisInWorld);
 
@@ -198,6 +198,8 @@ NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line
 float getInterpolatedValueForTriangle3(NEVector3 point, NEVector3 vert0, NEVector3 vert1, NEVector3 vert2, float intensity0, float intensity1, float intensity2);
 
 float getInterpolatedValueForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, NEVector2 v2, float intensity0, float intensity1, float intensity2);
+
+NEVector3 NEConvertVectorToCoordSystem(NEVector3 aVectorInOldSystem, NEVector3 targetSystemOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
 #ifdef __cplusplus
 }
