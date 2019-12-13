@@ -55,6 +55,29 @@ typedef struct tagDrawParam {
     float intensity1;
     float intensity2;
     
+    //interpolated value
+    //when newline is set to true, need to cal the following interpolate arguments
+    bool newLine = true;
+    
+    NEVector2 jointLeft;
+    NEVector2 jointRight;
+    
+    float interpl_start;
+    float interpl_end;
+    
+    float interpl_uz_start;
+    float interpl_uz_end;
+    float interpl_uz_diff;
+    
+    float interpl_vz_start;
+    float interpl_vz_end;
+    float interpl_vz_diff;
+    
+    float interpl_intensity_start;
+    float interpl_intensity_end;
+    float interpl_intensity_diff;
+    
+    float interpl_divide_factor;
 } DrawParam;
 
 class NEStandardRenderer {

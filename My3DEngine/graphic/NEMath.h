@@ -201,6 +201,7 @@ float getInterpolatedValueForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, 
 
 NEVector3 NEConvertVectorToCoordSystem(NEVector3 aVectorInOldSystem, NEVector3 targetSystemOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
+
 #ifdef __cplusplus
 }
 #endif

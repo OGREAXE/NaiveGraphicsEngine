@@ -317,6 +317,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         float reverseVerticalFactor = (1 / (screenHeight/2));
         
         for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
+            drawParam.newLine = true;
             for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
                 NEVector2 p = NEVector2Make(x, y);
                 //performance bottleneck
