@@ -12,6 +12,9 @@
 bool CNEAssReader::LoadMesh(const std::string& Filename){
     bool Ret = false;
     
+    mMeshes.clear();
+    mTextures.clear();
+    
    Assimp::Importer Importer;
 
    const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
