@@ -17,7 +17,20 @@
 
 typedef long long RenderBufferType;
 
+enum NETextureType
+{
+    NETextureType_NONE = 0,
+    NETextureType_DIFFUSE = 1,
+    NETextureType_SPECULAR = 2,
+};
+
 typedef struct tagTextureParam {
+    NETextureType type;
+    int index;
+    std::string name;
+} NETexureParam;
+
+typedef struct tagMaterialParam {
     NEVector2 uv0;
     NEVector2 uv1;
     NEVector2 uv2;
@@ -26,9 +39,19 @@ typedef struct tagTextureParam {
     NEVector2 uv1_z;
     NEVector2 uv2_z;
     
+    float interpl_uz_start;
+    float interpl_uz_end;
+    float interpl_uz_diff;
+    
+    float interpl_vz_start;
+    float interpl_vz_end;
+    float interpl_vz_diff;
+    
     bool hasTexture;
-    int textureIndex;
-} TextureParam;
+    int materialIndex;
+    
+    std::vector<NETexureParam> textureStack;
+} NEMaterialParam;
 
 typedef struct tagDrawParam {
     //params pass down
@@ -48,7 +71,7 @@ typedef struct tagDrawParam {
     NEVector3 vert1t;
     NEVector3 vert2t;
     
-    TextureParam textureParam;
+    NEMaterialParam material;
     
     //params pass back up
     float intensity0;
@@ -59,26 +82,18 @@ typedef struct tagDrawParam {
     //when newline is set to true, need to cal the following interpolate arguments
     bool newLine = true;
     
-    NEVector2 jointLeft;
-    NEVector2 jointRight;
+    NEVector2 interpolate_jointLeft;
+    NEVector2 interpolate_jointRight;
     
-    float interpl_start;
-    float interpl_end;
-    
-    float interpl_uz_start;
-    float interpl_uz_end;
-    float interpl_uz_diff;
-    
-    float interpl_vz_start;
-    float interpl_vz_end;
-    float interpl_vz_diff;
+//    float interpl_start;
+//    float interpl_end;
     
     float interpl_intensity_start;
     float interpl_intensity_end;
     float interpl_intensity_diff;
     
     float interpl_divide_factor;
-} DrawParam;
+} ShaderParam;
 
 class NEStandardRenderer {
 private:
@@ -112,14 +127,14 @@ protected:
 protected:
     //overwrite this method to do color blending/lighting
     //all parameters are in camera space
-    virtual float colorBlendResult(float color, NEVector3 &position, DrawParam &param,  void *extraInfo){return color;}
+    virtual float FragmentShaderFunc(float color, NEVector3 &position, ShaderParam &param,  void *extraInfo){return color;}
     
     //overwrite this method to prepare for drawing
     virtual void prepareDrawMeshes(const std::vector<NEMesh> &meshes){};
     
     virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes){};
     
-    virtual void prepareDrawFace(const NEFace &face, DrawParam &param){};
+    virtual void prepareDrawFace(const NEFace &face, ShaderParam &param){};
 public:
     //public members
     NECamera camera;

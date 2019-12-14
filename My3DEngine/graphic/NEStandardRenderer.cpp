@@ -201,10 +201,10 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
 //    return;
     //end test
     
-    DrawParam drawParam;
+    ShaderParam drawParam;
     
-    drawParam.textureParam.hasTexture = mesh.hasTexture;
-    drawParam.textureParam.textureIndex = mesh.textureIndex;
+    drawParam.material.hasTexture = mesh.hasTexture;
+    drawParam.material.materialIndex = mesh.textureIndex;
     
     NEMatrix3 meshRotationMat_x =  makeRotationMatrix(NEVector3Make(1, 0, 0), mesh.roatation.x);
     NEMatrix3 meshRotationMat_y =  makeRotationMatrix(NEVector3Make(0, 1, 0), mesh.roatation.y);
@@ -219,9 +219,9 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         const NEVertice & _v1 = mesh.vertices[aface.bIndex];
         const NEVertice & _v2 = mesh.vertices[aface.cIndex];
         
-        drawParam.textureParam.uv0 = _v0.textureCoord;
-        drawParam.textureParam.uv1 = _v1.textureCoord;
-        drawParam.textureParam.uv2 = _v2.textureCoord;
+        drawParam.material.uv0 = _v0.textureCoord;
+        drawParam.material.uv1 = _v1.textureCoord;
+        drawParam.material.uv2 = _v2.textureCoord;
         
 //        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
 //        _normal = convertNormal(_normal, mesh);
@@ -344,7 +344,7 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                     //refering the 3 vertice
                     NEVector3 pointc = invertPerspetiveProject(point, camera.frustum);
                     
-                    long tColor = colorBlendResult(color, pointc, drawParam,  nullptr);
+                    long tColor = FragmentShaderFunc(color, pointc, drawParam,  nullptr);
                     
                     long oldIndex = info.additionalInfo;
                     if (_renderBuffer) {

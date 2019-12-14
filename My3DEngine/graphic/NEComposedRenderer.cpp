@@ -106,7 +106,7 @@ void NEComposedRenderer::prepareDrawMeshes(const std::vector<NEMesh> &meshes){
     _dotLight0->renderIfNeed(meshes);
 }
 
-void NEComposedRenderer::prepareDrawFace(const NEFace &face, DrawParam &param){
+void NEComposedRenderer::prepareDrawFace(const NEFace &face, ShaderParam &param){
     float lightAngle0 = getLightToPointAngle(param.vert0c, _dotLightPositionInCameraSpace, param.normal0c);
     float lightAngle1 = getLightToPointAngle(param.vert1c, _dotLightPositionInCameraSpace, param.normal1c);
     float lightAngle2 = getLightToPointAngle(param.vert2c, _dotLightPositionInCameraSpace, param.normal2c);
@@ -116,11 +116,11 @@ void NEComposedRenderer::prepareDrawFace(const NEFace &face, DrawParam &param){
     param.intensity2 = getIntensityFromLightAngle(lightAngle2);
     
     //prepare uv params
-    param.textureParam.uv0_z = NEVector2Make(param.textureParam.uv0.x/param.vert0c.z, param.textureParam.uv0.y/param.vert0c.z);
+    param.material.uv0_z = NEVector2Make(param.material.uv0.x/param.vert0c.z, param.material.uv0.y/param.vert0c.z);
     
-    param.textureParam.uv1_z = NEVector2Make(param.textureParam.uv1.x/param.vert1c.z, param.textureParam.uv1.y/param.vert1c.z);
+    param.material.uv1_z = NEVector2Make(param.material.uv1.x/param.vert1c.z, param.material.uv1.y/param.vert1c.z);
     
-    param.textureParam.uv2_z = NEVector2Make(param.textureParam.uv2.x/param.vert2c.z, param.textureParam.uv2.y/param.vert2c.z);
+    param.material.uv2_z = NEVector2Make(param.material.uv2.x/param.vert2c.z, param.material.uv2.y/param.vert2c.z);
 }
 
 void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
@@ -167,7 +167,9 @@ void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
 //}
 
 
-float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  DrawParam &param, void *extraInfo){
+float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  ShaderParam &param, void *extraInfo){
+    
+    NEMaterialParam & diffuse = param.material;
     
     if (param.newLine) {
         param.newLine = false;
@@ -178,9 +180,9 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  Dr
         NEVector2 v1t = {param.vert1t.x, param.vert1t.y};
         NEVector2 v2t = {param.vert2t.x, param.vert2t.y};
         
-        VectorWithPayload v0 = {v0t, param.textureParam.uv0_z.x, param.textureParam.uv0_z.y, param.intensity0};
-        VectorWithPayload v1 = {v1t, param.textureParam.uv1_z.x, param.textureParam.uv1_z.y, param.intensity1};
-        VectorWithPayload v2 = {v2t, param.textureParam.uv2_z.x, param.textureParam.uv2_z.y, param.intensity2};
+        VectorWithPayload v0 = {v0t, param.material.uv0_z.x, param.material.uv0_z.y, param.intensity0};
+        VectorWithPayload v1 = {v1t, param.material.uv1_z.x, param.material.uv1_z.y, param.intensity1};
+        VectorWithPayload v2 = {v2t, param.material.uv2_z.x, param.material.uv2_z.y, param.intensity2};
         
         NLine line0 = {&v0, &v1};
         NLine line1 = {&v0, &v2};
@@ -239,32 +241,32 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  Dr
             jointRight.payload2 = (lineRight->end->payload2 - lineRight->start->payload2) * ratioR + lineRight->start->payload2;
         }
         
-        param.interpl_uz_start = jointLeft.payload0;
-        param.interpl_vz_start = jointLeft.payload1;
+        diffuse.interpl_uz_start = jointLeft.payload0;
+        diffuse.interpl_vz_start = jointLeft.payload1;
         param.interpl_intensity_start = jointLeft.payload2;
         
-        param.interpl_uz_end = jointRight.payload0;
-        param.interpl_vz_end = jointRight.payload1;
+        diffuse.interpl_uz_end = jointRight.payload0;
+        diffuse.interpl_vz_end = jointRight.payload1;
         param.interpl_intensity_end = jointRight.payload2;
         
-        param.interpl_uz_diff = param.interpl_uz_end - param.interpl_uz_start;
-        param.interpl_vz_diff = param.interpl_vz_end - param.interpl_vz_start;
+        diffuse.interpl_uz_diff = diffuse.interpl_uz_end - diffuse.interpl_uz_start;
+        diffuse.interpl_vz_diff = diffuse.interpl_vz_end - diffuse.interpl_vz_start;
         param.interpl_intensity_diff = param.interpl_intensity_end - param.interpl_intensity_start;
         
-        param.jointLeft = jointLeft.vec;
-        param.jointRight = jointRight.vec;
+        param.interpolate_jointLeft = jointLeft.vec;
+        param.interpolate_jointRight = jointRight.vec;
         
-        param.interpl_divide_factor = 1/(param.jointRight.x - param.jointLeft.x);
+        param.interpl_divide_factor = 1/(param.interpolate_jointRight.x - param.interpolate_jointLeft.x);
     }
     
-    float distance = (param.position_t.x - param.jointLeft.x) * param.interpl_divide_factor;
+    float distanceFactor = (param.position_t.x - param.interpolate_jointLeft.x) * param.interpl_divide_factor;
     
-    if (param.textureParam.hasTexture) {
+    if (param.material.hasTexture) {
         //handle texture
-        float texture_u = position.z * (param.interpl_uz_diff * distance + param.interpl_uz_start);
-        float texture_v = position.z * (param.interpl_vz_diff * distance + param.interpl_vz_start);
+        float texture_u = position.z * (diffuse.interpl_uz_diff * distanceFactor + diffuse.interpl_uz_start);
+        float texture_v = position.z * (diffuse.interpl_vz_diff * distanceFactor + diffuse.interpl_vz_start);
 
-        color = _textureProvider->readColorFromTexture(param.textureParam.textureIndex, texture_u, texture_v);
+        color = _textureProvider->readColorFromTexture(param.material.materialIndex, texture_u, texture_v);
     }
     
     ///
@@ -287,7 +289,7 @@ float NEComposedRenderer::colorBlendResult(float color, NEVector3 &position,  Dr
 
 //    float intensity = getInterpolatedValueForTriangle3(position, param.vert0c, param.vert1c, param.vert2c, param.intensity0, param.intensity1, param.intensity2);
     
-    float intensity = param.interpl_intensity_diff * distance + param.interpl_intensity_start;
+    float intensity = param.interpl_intensity_diff * distanceFactor + param.interpl_intensity_start;
     
 //    float intensity = 1;
     

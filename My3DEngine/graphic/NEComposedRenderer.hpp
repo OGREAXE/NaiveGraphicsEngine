@@ -35,9 +35,9 @@ protected:
     
     virtual void finishDrawMeshes(const std::vector<NEMesh> &meshes);
     
-    virtual float colorBlendResult(float color, NEVector3 &position,  DrawParam &param, void *extraInfo);
+    virtual float FragmentShaderFunc(float color, NEVector3 &position,  ShaderParam &param, void *extraInfo);
     
-    virtual void prepareDrawFace(const NEFace &face, DrawParam &param);
+    virtual void prepareDrawFace(const NEFace &face, ShaderParam &param);
 public:
     NEComposedRenderer(int width, int height):NEStandardRenderer(width, height){
 //        NEStandardRenderer(width, height);

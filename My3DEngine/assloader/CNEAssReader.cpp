@@ -21,8 +21,7 @@ bool CNEAssReader::LoadMesh(const std::string& Filename){
 
    if (pScene) {
        Ret = InitFromScene(pScene, Filename);
-   }
-   else {
+   } else {
        printf("Error parsing '%s': '%s'\n", Filename.c_str(), Importer.GetErrorString());
    }
 
@@ -64,14 +63,6 @@ void CNEAssReader::InitMesh(unsigned int Index, const aiMesh* paiMesh)
         const aiVector3D* pPos = &(paiMesh->mVertices[i]);
         const aiVector3D* pNormal = &(paiMesh->mNormals[i])?: &Zero3D;
         const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ? &(paiMesh->mTextureCoords[0][i]) : &Zero3D;
-
-//        printf("vertice %d, x:%.5f, y:%.5f, z:%.5f, ", i, pPos->x, pPos->y, pPos->z);
-        
-//        Vertex v(Vector3f(pPos->x, pPos->y, pPos->z),
-//                Vector2f(pTexCoord->x, pTexCoord->y),
-//                Vector3f(pNormal->x, pNormal->y, pNormal->z));
-//
-//        Vertices.push_back(v);
         
         NEVertice vertice = {pPos->x, pPos->y, pPos->z, pNormal->x, pNormal->y, pNormal->z, pTexCoord->x, pTexCoord->y};
         aMesh.vertices.push_back(vertice);
@@ -136,6 +127,18 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
             aiString Path;
             
             if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+                NETexture texture;
+                texture.path = Path.data;
+                
+                mTextures.push_back(texture);
+                
+            }
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_SPECULAR) > 0) {
+            aiString Path;
+            
+            if (pMaterial->GetTexture(aiTextureType_SPECULAR, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
                 NETexture texture;
                 texture.path = Path.data;
                 
