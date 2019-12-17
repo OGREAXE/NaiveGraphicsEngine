@@ -169,7 +169,20 @@ void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
 
 float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  ShaderParam &param, void *extraInfo){
     
-    NEMaterialParam & diffuse = param.material;
+    NEMaterialParam & materialParam = param.material;
+    
+    NEMaterial & material = _materials[materialParam.materialIndex];
+    
+    if (materialParam.hasTexture) {
+        if (materialParam.textureStack.size() == 0) {
+            NETexture tex;
+            for (int i : material.textureStack) {
+                if(_textureProvider->getTexture(i, tex)){
+                    materialParam.textureStack.push_back(tex);
+                }
+            }
+        }
+    }
     
     if (param.newLine) {
         param.newLine = false;
@@ -241,16 +254,16 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
             jointRight.payload2 = (lineRight->end->payload2 - lineRight->start->payload2) * ratioR + lineRight->start->payload2;
         }
         
-        diffuse.interpl_uz_start = jointLeft.payload0;
-        diffuse.interpl_vz_start = jointLeft.payload1;
+        materialParam.interpl_uz_start = jointLeft.payload0;
+        materialParam.interpl_vz_start = jointLeft.payload1;
         param.interpl_intensity_start = jointLeft.payload2;
         
-        diffuse.interpl_uz_end = jointRight.payload0;
-        diffuse.interpl_vz_end = jointRight.payload1;
+        materialParam.interpl_uz_end = jointRight.payload0;
+        materialParam.interpl_vz_end = jointRight.payload1;
         param.interpl_intensity_end = jointRight.payload2;
         
-        diffuse.interpl_uz_diff = diffuse.interpl_uz_end - diffuse.interpl_uz_start;
-        diffuse.interpl_vz_diff = diffuse.interpl_vz_end - diffuse.interpl_vz_start;
+        materialParam.interpl_uz_diff = materialParam.interpl_uz_end - materialParam.interpl_uz_start;
+        materialParam.interpl_vz_diff = materialParam.interpl_vz_end - materialParam.interpl_vz_start;
         param.interpl_intensity_diff = param.interpl_intensity_end - param.interpl_intensity_start;
         
         param.interpolate_jointLeft = jointLeft.vec;
@@ -263,10 +276,18 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
     
     if (param.material.hasTexture) {
         //handle texture
-        float texture_u = position.z * (diffuse.interpl_uz_diff * distanceFactor + diffuse.interpl_uz_start);
-        float texture_v = position.z * (diffuse.interpl_vz_diff * distanceFactor + diffuse.interpl_vz_start);
+        float texture_u = position.z * (materialParam.interpl_uz_diff * distanceFactor + materialParam.interpl_uz_start);
+        float texture_v = position.z * (materialParam.interpl_vz_diff * distanceFactor + materialParam.interpl_vz_start);
 
-        color = _textureProvider->readColorFromTexture(param.material.materialIndex, texture_u, texture_v);
+        for (int i = 0; i < material.textureStack.size(); i++) {
+            NETexture & texture = materialParam.textureStack[i];
+            if (texture.type == NETextureType_DIFFUSE) {
+                float diffuseColor = _textureProvider->readColorFromTexture(material.textureStack[i], texture_u, texture_v);
+                color = diffuseColor;
+            }
+        }
+        
+//        color = _textureProvider->readColorFromTexture(param.material.materialIndex, texture_u, texture_v);
     }
     
     ///

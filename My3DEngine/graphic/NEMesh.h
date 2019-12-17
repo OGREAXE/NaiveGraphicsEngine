@@ -13,6 +13,13 @@
 #include <string>
 #include "NEMath.h"
 
+enum NETextureType
+{
+    NETextureType_NONE = 0,
+    NETextureType_DIFFUSE = 1,
+    NETextureType_SPECULAR = 2,
+};
+
 typedef struct tagNEVertice{
     float x;
     float y;
@@ -34,11 +41,17 @@ typedef struct tagNEFace{
     long color;
 } NEFace;
 
+typedef struct tagNEMaterial{
+    std::vector<int> textureStack;
+} NEMaterial;
+
 typedef struct tagNETexture{
     std::string path;
     
     int width;
     int height;
+    
+    NETextureType type;
 } NETexture;
 
 typedef struct tagNEMesh{
@@ -52,7 +65,7 @@ typedef struct tagNEMesh{
     NEVector3 roatation;
     
     bool hasTexture = false;
-    int textureIndex;
+    int materialIndex;
 } NEMesh;
 
 typedef struct tagNEBoundingBox{

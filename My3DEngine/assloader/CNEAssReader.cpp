@@ -9,23 +9,57 @@
 #include "CNEAssReader.hpp"
 #include <vector>
 
-bool CNEAssReader::LoadMesh(const std::string& Filename){
+bool CNEAssReader::LoadFile(const std::string& Filename){
+    return this->LoadFile(Filename, nullptr);
+}
+
+bool CNEAssReader::LoadFile(const std::string& Filename, NELoadAssParam *ploadParam){
     bool Ret = false;
     
+    _textureIndexOffset = 0;
+    _materialIndexOffset = 0;
+    
+    if (ploadParam) {
+       NELoadAssParam &param = *ploadParam;
+       
+       _textureIndexOffset = param.textureIndexOffset;
+       _materialIndexOffset = param.materialIndexOffset;
+    }
+     
     mMeshes.clear();
     mTextures.clear();
+    mMaterials.clear();
+     
+    Assimp::Importer Importer;
+
+    const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+
+    if (pScene) {
+        Ret = InitFromScene(pScene, Filename);
+    } else {
+        printf("Error parsing '%s': '%s'\n", Filename.c_str(), Importer.GetErrorString());
+    }
     
-   Assimp::Importer Importer;
+    if (ploadParam) {
+        NELoadAssParam &param = *ploadParam;
+        
+        float range = 0;
+        for (NEMesh & mesh : mMeshes) {
+            mesh.position = param.position;
+            mesh.roatation = param.rotation;
+            mesh.width = param.width;
+            if (mesh.range > range) {
+                range = mesh.range;
+            }
+            mesh.materialIndex += param.materialIndexOffset;
+        }
+        
+        for (NEMesh & mesh : mMeshes) {
+            mesh.range = range;
+        }
+    }
 
-   const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
-
-   if (pScene) {
-       Ret = InitFromScene(pScene, Filename);
-   } else {
-       printf("Error parsing '%s': '%s'\n", Filename.c_str(), Importer.GetErrorString());
-   }
-
-   return Ret;
+    return Ret;
 }
 
 bool CNEAssReader::InitFromScene(const aiScene* pScene, const std::string& Filename)
@@ -110,7 +144,7 @@ void CNEAssReader::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 #define abs(a) (a<0?-a:a)
 #define absMax(a, b) (abs(a)>abs(b)?abs(a):abs(b))
     aMesh.hasTexture = paiMesh->HasTextureCoords(0);
-    aMesh.textureIndex = paiMesh->mMaterialIndex;
+    aMesh.materialIndex = paiMesh->mMaterialIndex;
     aMesh.range =
     absMax(absMax(absMax(absMax(absMax(maxx, minx), maxy), miny), maxz), minz);
     mMeshes.push_back(aMesh);
@@ -123,14 +157,22 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
     for (unsigned int i = 0 ; i < pScene->mNumMaterials ; i++) {
         const aiMaterial* pMaterial = pScene->mMaterials[i];
         
+        NEMaterial material;
+        
         if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aiString Path;
             
             if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
                 NETexture texture;
                 texture.path = Path.data;
+                texture.type = NETextureType::NETextureType_DIFFUSE;
                 
                 mTextures.push_back(texture);
+                
+                int index = (int)mTextures.size() - 1;
+                material.textureStack.push_back(index + _textureIndexOffset);
+                
+                
                 
             }
         }
@@ -141,11 +183,17 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
             if (pMaterial->GetTexture(aiTextureType_SPECULAR, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
                 NETexture texture;
                 texture.path = Path.data;
+                texture.type = NETextureType::NETextureType_SPECULAR;
                 
                 mTextures.push_back(texture);
                 
+                int index = (int)mTextures.size() - 1;
+                material.textureStack.push_back(index + _textureIndexOffset);
+                
             }
         }
+        
+        mMaterials.push_back(material);
     }
     
     return true;

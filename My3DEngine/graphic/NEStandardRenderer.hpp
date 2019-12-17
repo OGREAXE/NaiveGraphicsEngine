@@ -17,13 +17,6 @@
 
 typedef long long RenderBufferType;
 
-enum NETextureType
-{
-    NETextureType_NONE = 0,
-    NETextureType_DIFFUSE = 1,
-    NETextureType_SPECULAR = 2,
-};
-
 typedef struct tagTextureParam {
     NETextureType type;
     int index;
@@ -50,7 +43,7 @@ typedef struct tagMaterialParam {
     bool hasTexture;
     int materialIndex;
     
-    std::vector<NETexureParam> textureStack;
+    std::vector<NETexture> textureStack;
 } NEMaterialParam;
 
 typedef struct tagDrawParam {

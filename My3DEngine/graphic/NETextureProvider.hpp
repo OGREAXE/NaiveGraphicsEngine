@@ -10,6 +10,7 @@
 #define NETextureProvider_hpp
 
 #include <stdio.h>
+#include "NEMesh.h"
 
 class NETextureProvider {
 public:
@@ -17,6 +18,8 @@ public:
     
     virtual void release(int textureIndex) = 0;
     virtual void releaseAll() = 0;
+    
+    virtual bool getTexture(int texIndex, NETexture & tex) = 0;
 };
 
 #endif /* NETextureProvider_hpp */

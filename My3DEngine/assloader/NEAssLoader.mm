@@ -236,7 +236,7 @@
 - (void)loadModelWithName:(NSString *)modelName ofType:(NSString *)typeName  param:(NELoadAssParam)param{
     NSString *fileName = [[NSBundle mainBundle] pathForResource:modelName ofType:typeName];
     
-    if (_reader->LoadMesh(fileName.UTF8String)){
+    if (_reader->LoadFile(fileName.UTF8String)){
         for (NEMesh & mesh : _reader->mMeshes) {
             mesh.position = param.position;
             mesh.roatation = param.rotation;

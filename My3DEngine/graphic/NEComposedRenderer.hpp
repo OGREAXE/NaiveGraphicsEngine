@@ -26,6 +26,8 @@ class NEComposedRenderer:public NEStandardRenderer{
     
     NETextureProvider *_textureProvider;
     
+    std::vector<NEMaterial> _materials;
+    
     bool _trueShadow;
     
 protected:
@@ -55,7 +57,9 @@ public:
     
     void setDevice(NEDisplayDevice *device){_device = device;}
     
-    void setTextureProvider(NETextureProvider *provider){_textureProvider = provider;}
+    void setTextureProvider(NETextureProvider *provider){ _textureProvider = provider; }
+    
+    void setMaterials(std::vector<NEMaterial> &materials){ _materials = materials; }
     
     void createDotLightAt(NEVector3 position, NEVector3 renderDestination){
         this->_dotLight0 = new NEDotLight();

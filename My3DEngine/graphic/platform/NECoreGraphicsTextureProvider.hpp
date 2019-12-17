@@ -28,6 +28,12 @@ public:
         }
     }
     
+    virtual bool getTexture(int texIndex, NETexture & tex){
+        //todo add range check
+        tex = _textures[texIndex];
+        return true;
+    }
+    
     virtual long readColorFromTexture(int textureIndex, float u, float v);
     
     void release(int textureIndex) {};
