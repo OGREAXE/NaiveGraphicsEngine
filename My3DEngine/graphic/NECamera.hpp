@@ -13,8 +13,8 @@
 #include "NEMath.h"
 
 class NECamera {
-    
-    
+private:
+    bool _isOthorgraphics = false;
 public:
     NEVector3 position; //position in world coordinate
     NEVector3 lookAtDirection;
@@ -39,6 +39,9 @@ public:
     NECamera(NEFrustum frustum):frustum(frustum){}
     
     void setWindow(float width, float height);
+    
+    void setOthorgraphics(bool othor) {_isOthorgraphics = othor;}
+    bool isOthorgraphics(){return _isOthorgraphics;}
     
     void lookAtPoint(NEVector3 direction);
 

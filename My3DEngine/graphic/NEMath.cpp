@@ -382,6 +382,54 @@ NEVector3 invertPerspetiveProject(NEVector3 pointInEyeSpace, NEFrustum frustum){
     return NEVector3Make(xe, ye, ze);
 }
 
+NEVector3 orhographicProjectPoint(NEVector3 pointInCameraSpace, NEFrustum frustum){
+    NEMatrix4 rotm =
+    NEMatrix4Make(/*col0*/
+                   1 / frustum.r,
+                   0,
+                   0,
+                   0,
+                   /*col01*/
+                   0,
+                   1 / frustum.t,
+                   0,
+                   0,
+                   /*col02*/
+                   0,
+                   0,
+                  - 2 / (frustum.far - frustum.near),
+                   0,
+                   /*col03*/
+                   0,
+                   0,
+                   - (frustum.far + frustum.near) / (frustum.far - frustum.near),
+                   1);
+    
+    NEVector4 point4 = NEVector4MakeWithVector3(pointInCameraSpace, 1);
+    
+    NEVector4 res = NEMatrix4MultiplyVector4(rotm, point4);
+
+    NEVector3 res3 = NEVector3Make(res.x / res.w, res.y / res.w, res.z / res.w);
+    
+    return res3;
+}
+
+NEVector3 invertOrthographicsProject(NEVector3 pointInEyeSpace, NEFrustum frustum){
+    float m00 = 1 / frustum.r;
+    
+    float m11 = 1 / frustum.t;
+    
+    float m22 = - 2 / (frustum.far - frustum.near);
+    
+    float m23 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
+    
+    float ze = (pointInEyeSpace.z - m23) / m22;
+    float xe = pointInEyeSpace.x * m00;
+    float ye = pointInEyeSpace.y * m11;
+    
+    return NEVector3Make(xe, ye, ze);
+}
+
 NEVector3 getVerticalVec(NEVector3 vec, float *px, float *py, float *pz){
     if (!px) {
         if (vec.x != 0) {

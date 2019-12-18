@@ -782,7 +782,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "graphics_dir=\"${PROJECT_DIR}/My3DEngine/graphic\"\ncp -rf \"${graphics_dir}\"/*.hpp /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\ncp -rf \"${graphics_dir}\"/*.h /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\n";
+			shellScript = "graphics_dir=\"${PROJECT_DIR}/My3DEngine/graphic\"\nloader_dir=\"${PROJECT_DIR}/My3DEngine/assloader\"\ncp -rf \"${graphics_dir}\"/*.hpp /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\ncp -rf \"${graphics_dir}\"/*.h /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\ncp -rf \"${loader_dir}\"/CNEAssReader.hpp /Users/liangzhiyuan01_new/Documents/workspace/NEDemo_Mac/3rd/include/NGE/\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
