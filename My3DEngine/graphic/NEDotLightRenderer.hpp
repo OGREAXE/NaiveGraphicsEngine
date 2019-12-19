@@ -22,19 +22,24 @@ public:
         
         NEFrustum fru;
         
-        if (camera.isOthorgraphics()) {
-            fru.r = 20;
-            fru.t = 20;
-            fru.near = 1;
-        } else {
-            fru.r = 1;
-            fru.t = 1;
-            fru.near = 1;
-        }
-        
+//        if (camera.isOthorgraphics()) {
+//            fru.r = 20;
+//            fru.t = 20;
+//            fru.near = 1;
+//        } else {
+//            fru.r = 1;
+//            fru.t = 1;
+//            fru.near = 1;
+//        }
+//
+        fru.r = 20;
+        fru.t = 20;
+        fru.near = 1;
         fru.far = 100;
         
-        camera.frustum = fru;
+//        camera.frustum = fru;
+        
+        camera.resetFrustum(fru);
     }
     
     void clear(){_depthBuffer.resetSize();_renderBufferSize = 0;}

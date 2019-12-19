@@ -36,6 +36,64 @@ void NECamera::setWindow(float width, float height){
     fru.far = 100;
     
     this->frustum = fru;
+    
+    initProjectMatrix();
+}
+
+void NECamera::initProjectMatrix(){
+    _perspectiveProjectionMatrix =
+    NEMatrix4Make(/*col0*/
+                   frustum.near/frustum.r,
+                   0,
+                   0,
+                   0,
+                   /*col01*/
+                   0,
+                   frustum.near/frustum.t,
+                   0,
+                   0,
+                   /*col02*/
+                   0,
+                   0,
+                  - (frustum.far + frustum.near) / (frustum.far - frustum.near),
+                  - 1,
+                   /*col03*/
+                   0,
+                   0,
+                   - 2 * frustum.far * frustum.near / (frustum.far - frustum.near),
+                   0);
+    
+    _othorgraphicsProjectionMatrix =
+    NEMatrix4Make(/*col0*/
+                   1 / frustum.r,
+                   0,
+                   0,
+                   0,
+                   /*col01*/
+                   0,
+                   1 / frustum.t,
+                   0,
+                   0,
+                   /*col02*/
+                   0,
+                   0,
+                  - 2 / (frustum.far - frustum.near),
+                   0,
+                   /*col03*/
+                   0,
+                   0,
+                   - (frustum.far + frustum.near) / (frustum.far - frustum.near),
+                   1);
+    
+    _perspetiveInvertProjection.m00 = frustum.near / frustum.r;
+    _perspetiveInvertProjection.m11 = frustum.near / frustum.t;
+    _perspetiveInvertProjection.m22 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
+    _perspetiveInvertProjection.m23 = - 2 * frustum.far * frustum.near / (frustum.far - frustum.near);
+    
+    _othorInvertProjection.m00 = 1 / frustum.r;
+    _othorInvertProjection.m11 = 1 / frustum.t;
+    _othorInvertProjection.m22 = - 2 / (frustum.far - frustum.near);
+    _othorInvertProjection.m23 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
 }
 
 void NECamera::lookAtPoint(NEVector3 pointToLookAt){
@@ -79,4 +137,33 @@ void NECamera::rotateByNearVerticallyByDegree(float degree){
     this->lookAtDirection = rotationByAngle(this->lookAtDirection, this->xAxis, degree);
     
     this->position = rotationByAngleAroundLine2(this->position, this->xAxis, pointInRotatedAxis, degree);
+}
+
+
+NEVector3 NECamera::projectPoint(NEVector3 &pointInCameraSpace){
+    if (_isOthorgraphics) {
+        NEVector4 point4 = NEVector4MakeWithVector3(pointInCameraSpace, 1);
+        NEVector4 res = NEMatrix4MultiplyVector4(_othorgraphicsProjectionMatrix, point4);
+        return NEVector3Make(res.x / res.w, res.y / res.w, res.z / res.w);
+    } else {
+        NEVector4 point4 = NEVector4MakeWithVector3(pointInCameraSpace, 1);
+        NEVector4 res = NEMatrix4MultiplyVector4(_perspectiveProjectionMatrix, point4);
+        return NEVector3Make(res.x / res.w, res.y / res.w, res.z / res.w);
+    }
+}
+
+NEVector3 NECamera::invertProject(NEVector3 &pointInEyeSpace){
+    if (_isOthorgraphics) {
+        float ze = (pointInEyeSpace.z - _othorInvertProjection.m23) / _othorInvertProjection.m22;
+        float xe = pointInEyeSpace.x / _othorInvertProjection.m00;
+        float ye = pointInEyeSpace.y / _othorInvertProjection.m11;
+        
+        return NEVector3Make(xe, ye, ze);
+    } else {
+        float ze = - _perspetiveInvertProjection.m23 / (pointInEyeSpace.z + _perspetiveInvertProjection.m22);
+        float xe = pointInEyeSpace.x * (-ze) / _perspetiveInvertProjection.m00;
+        float ye = pointInEyeSpace.y * (-ze) / _perspetiveInvertProjection.m11;
+        
+        return NEVector3Make(xe, ye, ze);
+    }
 }

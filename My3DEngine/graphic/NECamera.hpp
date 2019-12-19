@@ -12,9 +12,24 @@
 #include <stdio.h>
 #include "NEMath.h"
 
+typedef struct tagInvertProjection {
+    float m00 = 0;
+    float m11 = 0;
+    float m22 = 0;
+    float m23 = 0;
+} InvertProjection;
+
 class NECamera {
 private:
     bool _isOthorgraphics = false;
+    
+    //project and invert project by frustum
+    NEMatrix4 _perspectiveProjectionMatrix;
+    NEMatrix4 _othorgraphicsProjectionMatrix;
+    InvertProjection _perspetiveInvertProjection;
+    InvertProjection _othorInvertProjection;
+private:
+    void initProjectMatrix();
 public:
     NEVector3 position; //position in world coordinate
     NEVector3 lookAtDirection;
@@ -39,6 +54,8 @@ public:
     NECamera(NEFrustum frustum):frustum(frustum){}
     
     void setWindow(float width, float height);
+    
+    void resetFrustum(NEFrustum &f){frustum = f; initProjectMatrix();}
     
     void setOthorgraphics(bool othor) {_isOthorgraphics = othor;}
     bool isOthorgraphics(){return _isOthorgraphics;}
@@ -83,6 +100,10 @@ public:
         NEVector3 ret = { - pos.x, pos.y, - pos.z};
         return ret;
     }
+    
+    NEVector3 projectPoint(NEVector3 &pointInCameraSpace);
+
+    NEVector3 invertProject(NEVector3 &pointInEyeSpace);
 };
 
 #endif /* NECamera_hpp */

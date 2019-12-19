@@ -88,17 +88,13 @@ NEVector3 NEStandardRenderer::convertToEyeSpace(NEVector3 &originalPoint){
     
     NEVector3 point =  convertToCameraSpace(originalPoint);
     
-//    if (shouldTrimPoint(point, camera.frustum)) {
-//
+//    if (!camera.isOthorgraphics()) {
+//        return perspetiveProjectPoint(point, camera.frustum);
+//    } else {
+//        return orhographicProjectPoint(point, camera.frustum);
 //    }
     
-    if (!camera.isOthorgraphics()) {
-        return perspetiveProjectPoint(point, camera.frustum);
-    } else {
-        return orhographicProjectPoint(point, camera.frustum);
-    }
-    
-//    return orhographicProjectPoint(point, camera.frustum);
+    return camera.projectPoint(point);
 }
 
 NEVector3 NEStandardRenderer::convertVectorToEyeSpace(NEVector3 &aVector, NEVector3 &originInEyeSpace){
@@ -350,11 +346,13 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
                     drawParam.position_t = point;
                     //refering the 3 vertice
                     NEVector3 pointc ;
-                    if (camera.isOthorgraphics()) {
-                        pointc = invertOrthographicsProject(point, camera.frustum);
-                    } else {
-                        pointc = invertPerspetiveProject(point, camera.frustum);
-                    }
+//                    if (camera.isOthorgraphics()) {
+//                        pointc = invertOrthographicsProject(point, camera.frustum);
+//                    } else {
+//                        pointc = invertPerspetiveProject(point, camera.frustum);
+//                    }
+                    
+                    pointc = camera.invertProject(point);
                     
                     long tColor = FragmentShaderFunc(color, pointc, drawParam,  nullptr);
                     
