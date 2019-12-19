@@ -19,7 +19,7 @@ int NEDotLightRenderer::testPosition_world(NEVector3 & worldPos){
 //    }
     
     float mapZ = _depthBuffer.getZ(vInView.x, vInView.y);
-    if (vt.z <= mapZ || fabs(vt.z - mapZ) < 0.0005) {
+    if (vt.z <= mapZ || fabs(vt.z - mapZ) < 0.002) {
         return 1;
     }
     
