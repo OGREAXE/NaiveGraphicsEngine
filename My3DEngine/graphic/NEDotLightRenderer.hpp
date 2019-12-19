@@ -17,11 +17,21 @@ class NEDotLightRenderer : public NEStandardRenderer {
     
 public:
     NEDotLightRenderer(int width, int height):NEStandardRenderer(width,height){
-        NEFrustum fru;
-        fru.r = 0.2;
-        fru.t = 0.2;
         
-        fru.near = 0.2;
+        camera.setOthorgraphics(true);
+        
+        NEFrustum fru;
+        
+        if (camera.isOthorgraphics()) {
+            fru.r = 20;
+            fru.t = 20;
+            fru.near = 1;
+        } else {
+            fru.r = 1;
+            fru.t = 1;
+            fru.near = 1;
+        }
+        
         fru.far = 100;
         
         camera.frustum = fru;

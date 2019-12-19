@@ -420,12 +420,12 @@ NEVector3 invertOrthographicsProject(NEVector3 pointInEyeSpace, NEFrustum frustu
     float m11 = 1 / frustum.t;
     
     float m22 = - 2 / (frustum.far - frustum.near);
-    
+            
     float m23 = - (frustum.far + frustum.near) / (frustum.far - frustum.near);
     
     float ze = (pointInEyeSpace.z - m23) / m22;
-    float xe = pointInEyeSpace.x * m00;
-    float ye = pointInEyeSpace.y * m11;
+    float xe = pointInEyeSpace.x / m00;
+    float ye = pointInEyeSpace.y / m11;
     
     return NEVector3Make(xe, ye, ze);
 }

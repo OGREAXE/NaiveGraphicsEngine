@@ -25,7 +25,7 @@ void NECamera::setWindow(float width, float height){
     NEFrustum fru;
     
     if (_isOthorgraphics) {
-        fru.r = 20; //x
+        fru.r = 15; //x
         fru.t = fru.r * height/width; //y
     } else {
         fru.r = 0.2; //x
