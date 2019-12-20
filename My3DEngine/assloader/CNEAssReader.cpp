@@ -7,6 +7,7 @@
 //
 
 #include "CNEAssReader.hpp"
+#include "NECommon.h"
 #include <vector>
 
 bool CNEAssReader::LoadFile(const std::string& Filename){
@@ -52,6 +53,10 @@ bool CNEAssReader::LoadFile(const std::string& Filename, NELoadAssParam *ploadPa
                 range = mesh.range;
             }
             mesh.materialIndex += param.materialIndexOffset;
+            
+            if (mesh.materialIndex == 17) {
+                int i = 0;
+            }
         }
         
         for (NEMesh & mesh : mMeshes) {
@@ -191,6 +196,54 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
                 material.textureStack.push_back(index + _textureIndexOffset);
                 
             }
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_SHININESS) > 0){
+            aiString Path;
+            
+            if (pMaterial->GetTexture(aiTextureType_SHININESS, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+                NETexture texture;
+                texture.path = Path.data;
+                texture.type = NETextureType::NETextureType_GLOSS;
+                
+                mTextures.push_back(texture);
+                
+                int index = (int)mTextures.size() - 1;
+                material.textureStack.push_back(index + _textureIndexOffset);
+                
+            }
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_AMBIENT) > 0){
+            NELog("aiTextureType_AMBIENT\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_EMISSIVE) > 0){
+            NELog("aiTextureType_EMISSIVE\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_HEIGHT) > 0){
+            NELog("aiTextureType_HEIGHT\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_NORMALS) > 0){
+            NELog("aiTextureType_NORMALS\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_OPACITY) > 0){
+            NELog("aiTextureType_OPACITY\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_DISPLACEMENT) > 0){
+            NELog("aiTextureType_DISPLACEMENT\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_LIGHTMAP) > 0){
+            NELog("aiTextureType_LIGHTMAP\n");
+        }
+        
+        if (pMaterial->GetTextureCount(aiTextureType_REFLECTION) > 0){
+            NELog("aiTextureType_REFLECTION\n");
         }
         
         mMaterials.push_back(material);

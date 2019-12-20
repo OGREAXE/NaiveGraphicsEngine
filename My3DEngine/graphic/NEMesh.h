@@ -18,6 +18,7 @@ enum NETextureType
     NETextureType_NONE = 0,
     NETextureType_DIFFUSE = 1,
     NETextureType_SPECULAR = 2,
+    NETextureType_GLOSS = 3,
 };
 
 typedef struct tagNEVertice{

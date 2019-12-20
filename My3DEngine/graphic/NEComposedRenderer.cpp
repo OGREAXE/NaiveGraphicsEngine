@@ -285,6 +285,9 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
                 float diffuseColor = _textureProvider->readColorFromTexture(material.textureStack[i], texture_u, texture_v);
                 color = diffuseColor;
             }
+//            else if (texture.type == NETextureType_SPECULAR) {
+//                float specColor = _textureProvider->readColorFromTexture(material.textureStack[i], texture_u, texture_v);
+//            }
         }
         
 //        color = _textureProvider->readColorFromTexture(param.material.materialIndex, texture_u, texture_v);
