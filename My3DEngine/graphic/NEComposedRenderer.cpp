@@ -8,17 +8,16 @@
 
 #include "NEComposedRenderer.hpp"
 #include <math.h>
+#include "NEMesh.h"
 
-typedef struct tagVectorWithPayload {
+typedef struct tagPosition2dWithPayload {
     NEVector2 vec;
-    float payload0 = 0;
-    float payload1 = 0;
-    float payload2 = 0;
-} VectorWithPayload;
+    float payload[kPayloadMaxCount];
+} Position2DWithPayload;
 
 typedef struct tagNLine {
-    VectorWithPayload *start;
-    VectorWithPayload *end;
+    Position2DWithPayload *start;
+    Position2DWithPayload *end;
 } NLine;
 
 inline float getJointXByY(float y, NEVector2 &lstart, NEVector2 &lend){
@@ -188,6 +187,8 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
         }
     }
     
+    int payloadSize = 6;
+    
     if (param.newLine) {
         param.newLine = false;
         
@@ -197,9 +198,9 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
         NEVector2 v1t = {param.vert1t.x, param.vert1t.y};
         NEVector2 v2t = {param.vert2t.x, param.vert2t.y};
         
-        VectorWithPayload v0 = {v0t, param.material.uv0_z.x, param.material.uv0_z.y, param.intensity0};
-        VectorWithPayload v1 = {v1t, param.material.uv1_z.x, param.material.uv1_z.y, param.intensity1};
-        VectorWithPayload v2 = {v2t, param.material.uv2_z.x, param.material.uv2_z.y, param.intensity2};
+        Position2DWithPayload v0 = {v0t, param.material.uv0_z.x, param.material.uv0_z.y, param.intensity0, param.normal0c.x, param.normal0c.y, param.normal0c.z};
+        Position2DWithPayload v1 = {v1t, param.material.uv1_z.x, param.material.uv1_z.y, param.intensity1, param.normal1c.x, param.normal1c.y, param.normal1c.z};
+        Position2DWithPayload v2 = {v2t, param.material.uv2_z.x, param.material.uv2_z.y, param.intensity2, param.normal2c.x, param.normal2c.y, param.normal2c.z};
         
         NLine line0 = {&v0, &v1};
         NLine line1 = {&v0, &v2};
@@ -218,7 +219,7 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
             lineRight = &line1;
         }
         
-        VectorWithPayload jointLeft, jointRight;
+        Position2DWithPayload jointLeft, jointRight;
         
         float jxl = getJointXByY(positionT.y, (*lineLeft).start->vec, (*lineLeft).end->vec);
         float jxr = getJointXByY(positionT.y, (*lineRight).start->vec, (*lineRight).end->vec);
@@ -244,31 +245,42 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
             float l_js = NEVector2Distance(lineLeft->start->vec, jointLeft.vec);
             float ratioL = l_js / l_es;
             
-            jointLeft.payload0 = (lineLeft->end->payload0 - lineLeft->start->payload0) * ratioL + lineLeft->start->payload0;
-            jointLeft.payload1 = (lineLeft->end->payload1 - lineLeft->start->payload1) * ratioL + lineLeft->start->payload1;
-            jointLeft.payload2 = (lineLeft->end->payload2 - lineLeft->start->payload2 ) * ratioL + lineLeft->start->payload2;
+//            jointLeft.payload0 = (lineLeft->end->payload0 - lineLeft->start->payload0) * ratioL + lineLeft->start->payload0;
+//            jointLeft.payload1 = (lineLeft->end->payload1 - lineLeft->start->payload1) * ratioL + lineLeft->start->payload1;
+//            jointLeft.payload2 = (lineLeft->end->payload2 - lineLeft->start->payload2 ) * ratioL + lineLeft->start->payload2;
+//
+            for (int i = 0; i < payloadSize; i++) {
+                jointLeft.payload[i] = (lineLeft->end->payload[i] - lineLeft->start->payload[i]) * ratioL + lineLeft->start->payload[i];
+            }
         }
         {
             float r_es = NEVector2Distance(lineRight->start->vec, lineRight->end->vec);
             float r_js = NEVector2Distance(lineRight->start->vec, jointRight.vec);
             float ratioR = r_js / r_es;
             
-            jointRight.payload0 = (lineRight->end->payload0 - lineRight->start->payload0) * ratioR + lineRight->start->payload0;
-            jointRight.payload1 = (lineRight->end->payload1 - lineRight->start->payload1) * ratioR + lineRight->start->payload1;
-            jointRight.payload2 = (lineRight->end->payload2 - lineRight->start->payload2) * ratioR + lineRight->start->payload2;
+//            jointRight.payload0 = (lineRight->end->payload0 - lineRight->start->payload0) * ratioR + lineRight->start->payload0;
+//            jointRight.payload1 = (lineRight->end->payload1 - lineRight->start->payload1) * ratioR + lineRight->start->payload1;
+//            jointRight.payload2 = (lineRight->end->payload2 - lineRight->start->payload2) * ratioR + lineRight->start->payload2;
+            
+            for (int i = 0; i < payloadSize; i++) {
+                jointRight.payload[i] = (lineRight->end->payload[i] - lineRight->start->payload[i]) * ratioR + lineRight->start->payload[i];
+            }
         }
         
-        materialParam.interpl_uz_start = jointLeft.payload0;
-        materialParam.interpl_vz_start = jointLeft.payload1;
-        param.interpl_intensity_start = jointLeft.payload2;
+//        materialParam.interpl_uz_start = jointLeft.payload0;
+//        materialParam.interpl_vz_start = jointLeft.payload1;
+//        param.interpl_intensity_start = jointLeft.payload2;
+//
+//
+//
+//        materialParam.interpl_uz_diff = materialParam.interpl_uz_end - materialParam.interpl_uz_start;
+//        materialParam.interpl_vz_diff = materialParam.interpl_vz_end - materialParam.interpl_vz_start;
+//        param.interpl_intensity_diff = param.interpl_intensity_end - param.interpl_intensity_start;
         
-        materialParam.interpl_uz_end = jointRight.payload0;
-        materialParam.interpl_vz_end = jointRight.payload1;
-        param.interpl_intensity_end = jointRight.payload2;
-        
-        materialParam.interpl_uz_diff = materialParam.interpl_uz_end - materialParam.interpl_uz_start;
-        materialParam.interpl_vz_diff = materialParam.interpl_vz_end - materialParam.interpl_vz_start;
-        param.interpl_intensity_diff = param.interpl_intensity_end - param.interpl_intensity_start;
+        for (int i = 0; i < payloadSize; i++) {
+            param.payload_interpl_start[i] = jointLeft.payload[i];
+            param.payload_interpl_length[i] = jointRight.payload[i] - jointLeft.payload[i];
+        }
         
         param.interpolate_jointLeft = jointLeft.vec;
         param.interpolate_jointRight = jointRight.vec;
@@ -280,8 +292,11 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
     
     if (param.material.hasTexture) {
         //handle texture
-        float texture_u = position.z * (materialParam.interpl_uz_diff * distanceFactor + materialParam.interpl_uz_start);
-        float texture_v = position.z * (materialParam.interpl_vz_diff * distanceFactor + materialParam.interpl_vz_start);
+//        float texture_u = position.z * (materialParam.interpl_uz_diff * distanceFactor + materialParam.interpl_uz_start);
+//        float texture_v = position.z * (materialParam.interpl_vz_diff * distanceFactor + materialParam.interpl_vz_start);
+        
+        float texture_u = position.z * (param.payload_interpl_length[NE_PAYLOAD_UZ_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_UZ_INDEX]);
+        float texture_v = position.z * (param.payload_interpl_length[NE_PAYLOAD_VZ_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_VZ_INDEX]);
 
         for (int i = 0; i < material.textureStack.size(); i++) {
             NETexture & texture = materialParam.textureStack[i];
@@ -293,8 +308,6 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
 //                float specColor = _textureProvider->readColorFromTexture(material.textureStack[i], texture_u, texture_v);
 //            }
         }
-        
-//        color = _textureProvider->readColorFromTexture(param.material.materialIndex, texture_u, texture_v);
     }
     
     ///
@@ -307,17 +320,9 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
         }
     }
     
-    /*
-     float lightAngle = getLightToPointAngle(position, _dotLightPositionInCameraSpace, normal);
     
-    if(lightAngle < M_PI_2){
-        fade = 0.9;
-    }
-     */
-
-//    float intensity = getInterpolatedValueForTriangle3(position, param.vert0c, param.vert1c, param.vert2c, param.intensity0, param.intensity1, param.intensity2);
-    
-    float intensity = param.interpl_intensity_diff * distanceFactor + param.interpl_intensity_start;
+//    float intensity = param.interpl_intensity_diff * distanceFactor + param.interpl_intensity_start;
+    float intensity = param.payload_interpl_length[NE_PAYLOAD_INTENSITY_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_INTENSITY_INDEX];
     
 //    float intensity = 1;
     

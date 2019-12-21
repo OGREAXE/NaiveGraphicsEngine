@@ -17,6 +17,15 @@
 
 typedef long long RenderBufferType;
 
+#define kPayloadMaxCount 6
+
+#define NE_PAYLOAD_UZ_INDEX 0
+#define NE_PAYLOAD_VZ_INDEX 1
+#define NE_PAYLOAD_INTENSITY_INDEX 2
+#define NE_PAYLOAD_NORMAL_X_INDEX 3
+#define NE_PAYLOAD_NORMAL_Y_INDEX 4
+#define NE_PAYLOAD_NORMAL_Z_INDEX 5
+
 typedef struct tagTextureParam {
     NETextureType type;
     int index;
@@ -32,13 +41,13 @@ typedef struct tagMaterialParam {
     NEVector2 uv1_z;
     NEVector2 uv2_z;
     
-    float interpl_uz_start;
-    float interpl_uz_end;
-    float interpl_uz_diff;
-    
-    float interpl_vz_start;
-    float interpl_vz_end;
-    float interpl_vz_diff;
+//    float interpl_uz_start;
+//    float interpl_uz_end;
+//    float interpl_uz_diff;
+//
+//    float interpl_vz_start;
+//    float interpl_vz_end;
+//    float interpl_vz_diff;
     
     bool hasTexture;
     int materialIndex;
@@ -64,6 +73,10 @@ typedef struct tagDrawParam {
     NEVector3 vert1t;
     NEVector3 vert2t;
     
+    NEVector3 normal0t;
+    NEVector3 normal1t;
+    NEVector3 normal2t;
+    
     NEMaterialParam material;
     
     //params pass back up
@@ -81,11 +94,15 @@ typedef struct tagDrawParam {
 //    float interpl_start;
 //    float interpl_end;
     
-    float interpl_intensity_start;
-    float interpl_intensity_end;
-    float interpl_intensity_diff;
+//    float interpl_intensity_start;
+//    float interpl_intensity_end;
+//    float interpl_intensity_diff;
     
     float interpl_divide_factor;
+    
+    //payloads
+    float payload_interpl_start[kPayloadMaxCount];
+    float payload_interpl_length[kPayloadMaxCount];
 } ShaderParam;
 
 class NEStandardRenderer {
