@@ -181,7 +181,9 @@ void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
     
     for (int i = 0; i < meshes.size(); i++) {
         const NEMesh & mesh = meshes[i];
-        drawMesh(mesh);
+        if (!mesh.hidden) {
+            drawMesh(mesh);
+        }
     }
     
     finishDrawMeshes(meshes);

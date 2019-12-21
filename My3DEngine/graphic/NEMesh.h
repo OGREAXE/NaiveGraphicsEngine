@@ -88,6 +88,8 @@ typedef struct tagNEMesh{
     int materialIndex;
     
     std::string name;
+    
+    bool hidden = false;
 } NEMesh;
 
 typedef struct tagNEBoundingBox{
