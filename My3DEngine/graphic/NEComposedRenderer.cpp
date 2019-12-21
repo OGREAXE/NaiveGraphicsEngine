@@ -173,6 +173,10 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
     
     NEMaterial & material = _materials[materialParam.materialIndex];
     
+    if (material.diffuse.exist) {
+        color = material.diffuse.value;
+    }
+    
     if (materialParam.hasTexture) {
         if (materialParam.textureStack.size() == 0) {
             NETexture tex;

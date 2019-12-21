@@ -54,9 +54,6 @@ bool CNEAssReader::LoadFile(const std::string& Filename, NELoadAssParam *ploadPa
             }
             mesh.materialIndex += param.materialIndexOffset;
             
-            if (mesh.materialIndex == 17) {
-                int i = 0;
-            }
         }
         
         for (NEMesh & mesh : mMeshes) {
@@ -88,6 +85,7 @@ void CNEAssReader::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 //    std::vector<NEFace> faces;
     
     NEMesh aMesh;
+    aMesh.name = paiMesh->mName.C_Str();
  
     const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
     
@@ -182,6 +180,22 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
             }
         }
         
+        if (pMaterial->GetTextureCount(aiTextureType_AMBIENT) > 0) {
+            aiString Path;
+            
+            if (pMaterial->GetTexture(aiTextureType_AMBIENT, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+                NETexture texture;
+                texture.path = Path.data;
+                texture.type = NETextureType::NETextureType_AMBIENT;
+                
+                mTextures.push_back(texture);
+                
+                int index = (int)mTextures.size() - 1;
+                material.textureStack.push_back(index + _textureIndexOffset);
+                
+            }
+        }
+        
         if (pMaterial->GetTextureCount(aiTextureType_SPECULAR) > 0) {
             aiString Path;
             
@@ -214,10 +228,6 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
             }
         }
         
-        if (pMaterial->GetTextureCount(aiTextureType_AMBIENT) > 0){
-            NELog("aiTextureType_AMBIENT\n");
-        }
-        
         if (pMaterial->GetTextureCount(aiTextureType_EMISSIVE) > 0){
             NELog("aiTextureType_EMISSIVE\n");
         }
@@ -246,7 +256,39 @@ bool CNEAssReader::InitMaterials(const aiScene* pScene)
             NELog("aiTextureType_REFLECTION\n");
         }
         
+        aiColor3D diffuseColor(0.f,0.f,0.f);
+        if(pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor) == aiReturn_SUCCESS){
+            material.diffuse.exist = true;
+            material.diffuse.value = aiColorToLong(diffuseColor);
+        }
+        
+        aiColor3D ambientColor(0.f,0.f,0.f);
+        if(pMaterial->Get(AI_MATKEY_COLOR_AMBIENT, ambientColor) == aiReturn_SUCCESS){
+            material.ambient.exist = true;
+            material.ambient.value = aiColorToLong(ambientColor);
+        }
+        
+        aiColor3D specColor(0.f,0.f,0.f);
+        if(pMaterial->Get(AI_MATKEY_COLOR_SPECULAR, specColor) == aiReturn_SUCCESS){
+            material.specular.exist = true;
+            material.specular.value = aiColorToLong(specColor);
+        }
+        
+        ai_real gloss = 0;
+        if(pMaterial->Get(AI_MATKEY_SHININESS, gloss) == aiReturn_SUCCESS){
+            material.gloss.exist = true;
+            material.gloss.value = gloss;
+        }
+        
+        aiColor3D transparentColor(0.f,0.f,0.f);
+        if(pMaterial->Get(AI_MATKEY_COLOR_TRANSPARENT, transparentColor) == aiReturn_SUCCESS){
+            material.transparency.exist = true;
+            material.transparency.value = aiColorToLong(transparentColor);
+        }
+        
+        //add the material
         mMaterials.push_back(material);
+        
     }
     
     return true;

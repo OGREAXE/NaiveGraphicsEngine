@@ -13,12 +13,23 @@
 #include <string>
 #include "NEMath.h"
 
+typedef struct tagNEMaterialColor{
+    bool exist = false;
+    long value = 0;
+} NEMaterialColor;
+
+typedef struct tagNEMaterialFloat{
+    bool exist = false;
+    float value = 0;
+} NEMaterialFloat;
+
 enum NETextureType
 {
     NETextureType_NONE = 0,
-    NETextureType_DIFFUSE = 1,
-    NETextureType_SPECULAR = 2,
-    NETextureType_GLOSS = 3,
+    NETextureType_DIFFUSE,
+    NETextureType_AMBIENT,
+    NETextureType_SPECULAR,
+    NETextureType_GLOSS,
 };
 
 typedef struct tagNEVertice{
@@ -43,7 +54,15 @@ typedef struct tagNEFace{
 } NEFace;
 
 typedef struct tagNEMaterial{
+    //texture stack for blendding color
     std::vector<int> textureStack;
+    
+    //if texture stack is not present, use below attributes
+    NEMaterialColor diffuse;
+    NEMaterialColor ambient;
+    NEMaterialColor specular;
+    NEMaterialColor transparency;
+    NEMaterialFloat gloss;
 } NEMaterial;
 
 typedef struct tagNETexture{
@@ -67,6 +86,8 @@ typedef struct tagNEMesh{
     
     bool hasTexture = false;
     int materialIndex;
+    
+    std::string name;
 } NEMesh;
 
 typedef struct tagNEBoundingBox{

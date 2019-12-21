@@ -349,7 +349,19 @@ static inline CGFloat revertScreenVerticalPos(int screenY, CGFloat reverseFactor
 }
 
 - (void)doDrawRectPlus:(CGRect)rect{
-    _renderer->drawMeshes(_meshes);
+    
+    static int round = 0;
+    auto meshes = _meshes;
+    
+    if (round >= meshes.size()) {
+        round = 0;
+    }
+    
+    auto mesh = meshes[round ++ ];
+    meshes.clear();
+    meshes.push_back(mesh);
+    
+    _renderer->drawMeshes(meshes);
 }
 
 - (void)doDrawRect:(CGRect)rect{

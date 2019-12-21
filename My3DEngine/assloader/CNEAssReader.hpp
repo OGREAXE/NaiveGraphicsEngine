@@ -18,6 +18,14 @@
 #include <assimp/postprocess.h>
 #include "NEMesh.h"
 
+static long aiColorToLong(aiColor3D & aiColor){
+    long redPart = aiColor.r * 0xff ;
+    long greenPart = aiColor.g * 0xff ;
+    long bluePart = aiColor.b * 0xff ;
+    
+    return redPart << 16 | greenPart << 8 | bluePart;
+}
+
 typedef struct tagLoadParam {
     NEVector3 position;
     NEVector3 rotation;
