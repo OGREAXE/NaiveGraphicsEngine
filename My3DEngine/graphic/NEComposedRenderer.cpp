@@ -165,6 +165,28 @@ void NEComposedRenderer::finishDrawMeshes(const std::vector<NEMesh> &meshes){
 //    return tColor;
 //}
 
+inline NELong calSpecularColor(NELong color, NELong specColor, NELong gloss, ShaderParam &param, NECamera &camera, float distanceFactor, NEVector3 & worldPos, NEVector3 &lightPos){
+    float worldNormalx = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_X_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_X_INDEX]);
+    float worldNormaly = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_Y_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_Y_INDEX]);
+    float worldNormalz = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_Z_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_Z_INDEX]);
+    
+    NEVector3 worldNormal = NENormalize(NEVector3Make(worldNormalx, worldNormaly, worldNormalz));
+    
+//                specColor = 0xffffff;
+//                float gloss = 3;
+    
+    NEVector3 viewDir = NENormalize(NEVector3Subtract(camera.position, worldPos));
+    NEVector3 lightDir = NENormalize(NEVector3Subtract(lightPos, worldPos));
+    NEVector3 halfDir = NENormalize(NEVector3Add(lightDir, viewDir));
+    
+    float specAngle = saturate(NEVector3DotProduct(halfDir, worldNormal));
+    float f = pow(specAngle, gloss);
+    
+    color = colorAdd(color, colorMul(specColor, f));
+    
+    return color;
+}
+
 
 float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  ShaderParam &param, void *extraInfo){
     
@@ -292,7 +314,18 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
     
     NEVector3 worldPos = camera.getWorldPosition(position);
     
-    if (param.material.hasTexture) {
+    float shadowFade = 1;
+
+    if (_trueShadow) {
+        if (!_dotLight0->canTouchPosition(worldPos)) {
+            shadowFade = 0.7;
+        }
+    }
+    
+    float intensity = param.payload_interpl_length[NE_PAYLOAD_INTENSITY_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_INTENSITY_INDEX];
+    
+    
+    if (material.textureStack.size() > 0) {
         //handle texture
 //        float texture_u = position.z * (materialParam.interpl_uz_diff * distanceFactor + materialParam.interpl_uz_start);
 //        float texture_v = position.z * (materialParam.interpl_vz_diff * distanceFactor + materialParam.interpl_vz_start);
@@ -305,60 +338,63 @@ float NEComposedRenderer::FragmentShaderFunc(float color, NEVector3 &position,  
             if (texture.type == NETextureType_DIFFUSE) {
                 float diffuseColor = _textureProvider->readColorFromTexture(material.textureStack[i], texture_u, texture_v);
                 color = diffuseColor;
+                color = getColorWithIntensity(color, shadowFade * intensity);
             }
             else if (texture.type == NETextureType_SPECULAR) {
                 
-                float worldNormalx = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_X_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_X_INDEX]);
-                float worldNormaly = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_Y_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_Y_INDEX]);
-                float worldNormalz = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_Z_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_Z_INDEX]);
-                
-                NEVector3 worldNormal = NENormalize(NEVector3Make(worldNormalx, worldNormaly, worldNormalz));
-                
                 NELong specColor = _textureProvider->readColorFromTexture(material.textureStack[i], texture_u, texture_v);
-                
-//                specColor = 0xffffff;
                 float gloss = material.gloss.value;
-//                float gloss = 3;
                 
-                NEVector3 viewDir = NENormalize(NEVector3Subtract(camera.position, worldPos));
-//                NEVector3 lightDir = NEVector3Negate(NENormalize(_dotLight0->getDirection_world()));
-//                NEVector3 lightDir = (NENormalize(_dotLight0->getDirection_world()));
-                NEVector3 lightDir = NENormalize(NEVector3Subtract(_dotLight0->position(), worldPos));
-                NEVector3 halfDir = NENormalize(NEVector3Add(lightDir, viewDir));
+//                float worldNormalx = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_X_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_X_INDEX]);
+//                float worldNormaly = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_Y_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_Y_INDEX]);
+//                float worldNormalz = (param.payload_interpl_length[NE_PAYLOAD_NORMAL_Z_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_NORMAL_Z_INDEX]);
+//
+//                NEVector3 worldNormal = NENormalize(NEVector3Make(worldNormalx, worldNormaly, worldNormalz));
+//
+////                specColor = 0xffffff;
+////                float gloss = 3;
+//
+//                NEVector3 viewDir = NENormalize(NEVector3Subtract(camera.position, worldPos));
+//                NEVector3 lightDir = NENormalize(NEVector3Subtract(_dotLight0->position(), worldPos));
+//                NEVector3 halfDir = NENormalize(NEVector3Add(lightDir, viewDir));
+//
+//                float specAngle = saturate(NEVector3DotProduct(halfDir, worldNormal));
+//                float f = pow(specAngle, gloss);
+//
+//                color = colorAdd(color, colorMul(specColor, f));
                 
-                float specAngle = saturate(NEVector3DotProduct(halfDir, worldNormal));
-                float f = pow(specAngle, gloss);
-                
-                if(f > 0){
-                    int i = 0;
-                }
-                
-                NELong specResultColor = colorMul(specColor, f);
-                
-                color = colorAdd(color, specResultColor);
-//                color = specResultColor;
+                color = calSpecularColor(color, specColor, gloss, param, camera, distanceFactor, worldPos, _dotLight0->position());
             }
         }
+    } else {
+        if (material.diffuse.exist) {
+            NELong diffuse = material.diffuse.value;
+            color = diffuse;
+        }
+        
+        if (material.specular.exist) {
+            NELong specColor = material.specular.value;
+            float gloss = material.gloss.value;
+            color = calSpecularColor(color, specColor, gloss, param, camera, distanceFactor, worldPos, _dotLight0->position());
+        }
+        
+        color = getColorWithIntensity(color, shadowFade * intensity);
     }
     
     ///
-    float fade = 1;
-
-    if (_trueShadow) {
-        if (!_dotLight0->canTouchPosition(worldPos)) {
-            fade = 0.7;
-        }
-    }
+//    float shadowFade = 1;
+//
+//    if (_trueShadow) {
+//        if (!_dotLight0->canTouchPosition(worldPos)) {
+//            shadowFade = 0.7;
+//        }
+//    }
+//
+//    float intensity = param.payload_interpl_length[NE_PAYLOAD_INTENSITY_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_INTENSITY_INDEX];
+//
+//    long tColor = getColorWithIntensity(color, shadowFade * intensity);
     
-    
-//    float intensity = param.interpl_intensity_diff * distanceFactor + param.interpl_intensity_start;
-    float intensity = param.payload_interpl_length[NE_PAYLOAD_INTENSITY_INDEX] * distanceFactor + param.payload_interpl_start[NE_PAYLOAD_INTENSITY_INDEX];
-    
-//    float intensity = 1;
-    
-    long tColor = getColorWithIntensity(color, fade * intensity);
-    
-    return tColor;
+    return color;
 }
 
 #else
