@@ -42,6 +42,10 @@ public:
         _renderer->camera.lookAtPoint(destinationPoint);
     }
     
+    NEVector3 getDirection_world(){
+        return _renderer->camera.lookAtDirection;
+    }
+    
     void prepareRander(){
         _renderer->camera.updateWorldAxis();
     }

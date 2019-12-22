@@ -110,9 +110,9 @@ void NECamera::lookAtPoint(NEVector3 pointToLookAt){
 }
 
 void NECamera::normalize(){
-    this->lookAtDirection = getNormalizedVector(this->lookAtDirection);
-    this->xAxis = getNormalizedVector(this->xAxis);
-    this->yAxis = getNormalizedVector(this->yAxis);
+    this->lookAtDirection = NENormalize(this->lookAtDirection);
+    this->xAxis = NENormalize(this->xAxis);
+    this->yAxis = NENormalize(this->yAxis);
 }
 
 void NECamera::rotateByNearHorizontallyByDegree(float degree){

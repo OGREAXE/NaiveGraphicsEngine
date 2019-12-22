@@ -19,6 +19,8 @@ extern "C"{
 #define NE_RESULT_FAIL 1
 #define NE_RESULT_OK 0
 
+typedef unsigned long NELong;
+
 ///vector definitions
 //typedef GLKVector2 NEVector2;
 union _NEVector2
@@ -109,6 +111,8 @@ NEVector3 NEMatrix3MultiplyVector3(NEMatrix3 matrixLeft, NEVector3 vectorRight);
 
 NEVector4 NEMatrix4MultiplyVector4(NEMatrix4 matrixLeft, NEVector4 vectorRight);
 
+NEVector3 NEVector3Add(NEVector3 vectorLeft, NEVector3 vectorRight);
+
 NEVector2 NEVector2Subtract(NEVector2 vectorLeft, NEVector2 vectorRight);
 
 NEVector3 NEVector3Subtract(NEVector3 vectorLeft, NEVector3 vectorRight);
@@ -123,7 +127,7 @@ NEMatrix4 NEMatrix4Make(float m00, float m01, float m02, float m03,
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float angle);
 
 ///a*b
-float vectorDotProduct(NEVector3 vec0,NEVector3 vec1);
+float NEVector3DotProduct(NEVector3 vec0,NEVector3 vec1);
 
 NEVector3 vectorCrossProduct(NEVector3 vec0, NEVector3 vec1);
 
@@ -152,7 +156,7 @@ NEVector3 rotationByAngleAroundLine2(NEVector3 aPoint, NEVector3 lineVec, NEVect
 
 NEVector3 rotationByMatrix(NEVector3 aPoint, NEMatrix3 rotationMatrix);
 
-NEVector3 reverseVector(NEVector3 vec);
+NEVector3 NEVector3Negate(NEVector3 vec);
 
 NEVector3 translationByVector(NEVector3 aPoint, NEVector3 translationVector);
 
@@ -176,7 +180,7 @@ NEVector3 getVerticalVec(NEVector3 vec, float *x, float *y, float *z);
 
 NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * pointsBuf, int maxBufSize, int * bufSize);
 
-NEVector3 getNormalizedVector(NEVector3  original);
+NEVector3 NENormalize(NEVector3  original);
 
 NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint);
 
@@ -205,6 +209,11 @@ float getInterpolatedValueForTriangle2(NEVector2 p, NEVector2 v0, NEVector2 v1, 
 
 NEVector3 NEConvertVectorToCoordSystem(NEVector3 aVectorInOldSystem, NEVector3 targetSystemOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis);
 
+float saturate(float val);
+
+NELong colorMul(NELong color, float f);
+
+NELong colorAdd(NELong color, NELong color2);
 
 #ifdef __cplusplus
 }

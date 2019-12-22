@@ -55,6 +55,14 @@ NEVector4 NEMatrix4MultiplyVector4(NEMatrix4 matrixLeft, NEVector4 vectorRight)
     return v;
 }
 
+NEVector3 NEVector3Add(NEVector3 vectorLeft, NEVector3 vectorRight)
+{
+    NEVector3 v = { vectorLeft.v[0] + vectorRight.v[0],
+                     vectorLeft.v[1] + vectorRight.v[1],
+                     vectorLeft.v[2] + vectorRight.v[2] };
+    return v;
+}
+
 //#define NEVector2Subtract(a, b) GLKVector2Subtract(a, b)
 NEVector2 NEVector2Subtract(NEVector2 vectorLeft, NEVector2 vectorRight)
 {
@@ -86,7 +94,7 @@ NEMatrix4 NEMatrix4Make(float m00, float m01, float m02, float m03,
 }
 
 NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float radians){
-   NEVector3 v = getNormalizedVector(rotationAxis);
+   NEVector3 v = NENormalize(rotationAxis);
    float cos = cosf(radians);
    float cosp = 1.0f - cos;
    float sin = sinf(radians);
@@ -107,7 +115,7 @@ NEMatrix3 makeRotationMatrix(NEVector3 rotationAxis, float radians){
 }
 
 ///a*b
-float vectorDotProduct(NEVector3 vec0,NEVector3 vec1){
+float NEVector3DotProduct(NEVector3 vec0,NEVector3 vec1){
     return vec0.x * vec1.x + vec0.y * vec1.y + vec0.z * vec1.z;
 }
 
@@ -117,7 +125,7 @@ float vectorMagnitude(NEVector3 vec){
 }
 
 float getAngleBetweenVectors(NEVector3 vec0,NEVector3 vec1){
-    float result = vectorDotProduct(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
+    float result = NEVector3DotProduct(vec0, vec1) /(vectorMagnitude(vec0) * vectorMagnitude(vec1));
     if (result < -1) {
         result = -1;
     } else if (result > 1) {
@@ -182,7 +190,7 @@ NEVector3 vectorCrossProduct(NEVector3 vec0, NEVector3 vec1){
     return cv;
 }
 
-NEVector3 reverseVector(NEVector3 vec){
+NEVector3 NEVector3Negate(NEVector3 vec){
     return NEVector3Make(- vec.x, - vec.y, - vec.z);
 }
 
@@ -216,7 +224,7 @@ void NEGetCoordConvertionRotationMatrixes(NEVector3 coordOrigin, NEVector3 coord
 }
 
 NEVector3 NEPostionConvertFromOriginalCoordSystem(NEVector3 targetOldPosition, NEVector3 coordOrigin, NEMatrix3 *rotationZMatrix, NEMatrix3 *rotationYMatrix){
-    NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
+    NEVector3 newPosition = translationByVector(targetOldPosition, NEVector3Negate(coordOrigin));
     
     newPosition = rotationByMatrix(newPosition, *rotationZMatrix);
     
@@ -235,7 +243,7 @@ NEVector3 convertPositionFromOriginalCoordSystem(NEVector3 targetOldPosition, NE
     // cos(angle) = ab/|a||b|
     
     //firstly we translate the target origin to world
-    NEVector3 newPosition = translationByVector(targetOldPosition, reverseVector(coordOrigin));
+    NEVector3 newPosition = translationByVector(targetOldPosition, NEVector3Negate(coordOrigin));
     
     //now rotate z axis
     NEVector3 rotAxis = vectorCrossProduct(coordZAxis, NEVector3Make(0, 0, 1.));
@@ -589,7 +597,7 @@ NE_RESULT getPointsArrayInLine(NEVector3 start, NEVector3 end, NEVector3 * point
     
 }
 
-NEVector3 getNormalizedVector(NEVector3  original){
+NEVector3 NENormalize(NEVector3  original){
     NEVector3 n;
     float d = sqrtf(powf(original.x, 2) + powf(original.y, 2) + powf(original.z, 2));
     n.x = original.x/d;
@@ -608,7 +616,7 @@ NEVector3 getPlaneNormal(NEVector3 p0, NEVector3 p1, NEVector3 p2){
 NEVector3 getProjectedPointInLine(NELine line, NEVector3 otherPoint){
     NEVector3 pointTrans = NEVector3Make(otherPoint.x - line.pointInLine.x, otherPoint.y - line.pointInLine.y, otherPoint.z - line.pointInLine.z);
     
-    NEVector3 normVec = getNormalizedVector(line.vector);
+    NEVector3 normVec = NENormalize(line.vector);
     
     float deno = powf(normVec.x, 2) + powf(normVec.y, 2) + powf(normVec.z, 2);
     
@@ -715,4 +723,60 @@ NEVector2 getJointPoint(NEVector2 line1Start, NEVector2 line1end, NEVector2 line
 NEVector3 NEConvertVectorToCoordSystem(NEVector3 aVectorInOldSystem, NEVector3 targetSystemOrigin, NEVector3 coordZAxis, NEVector3 coordYAxis){
     NEVector3 vectorT = convertPositionFromOriginalCoordSystem(aVectorInOldSystem, targetSystemOrigin, coordZAxis, coordYAxis);
     return NEVector3Subtract(vectorT, targetSystemOrigin);
+}
+
+float saturate(float val){
+    if (val < 0) {
+        return 0;
+    }
+    else if (val > 1) {
+        return 1;
+    }
+    else {
+        return val;
+    }
+}
+
+NELong colorMul(NELong color, float f){
+    NELong r = (color >>16) & 0xff;
+    NELong g = (color >>8) & 0xff;
+    NELong b = color & 0xff;
+    
+    r = r * f ;
+    g = g * f ;
+    b = b * f ;
+    
+//    if (intensity < 0.01){
+//        int k = 0;
+//    }
+    
+    return (r ) <<16 | (g ) <<8 | (b );
+}
+
+NELong colorAdd(NELong color, NELong color2){
+    NELong r = (color >>16) & 0xff;
+    NELong g = (color >>8) & 0xff;
+    NELong b = color & 0xff;
+        
+    NELong r2 = (color2 >>16) & 0xff;
+    NELong g2 = (color2 >>8) & 0xff;
+    NELong b2 = color2 & 0xff;
+    
+    NELong r0 = r + r2;
+    NELong g0 = g + g2;
+    NELong b0 = b + b2;
+    
+    if (r0 > 0xff) {
+        r0 = 0xff;
+    }
+    
+    if (g0 > 0xff) {
+        g0 = 0xff;
+    }
+    
+    if (b0 > 0xff) {
+        b0 = 0xff;
+    }
+        
+    return r0 <<16 | g0 <<8 | b0;
 }

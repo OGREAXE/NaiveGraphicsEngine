@@ -57,6 +57,16 @@ typedef struct tagMaterialParam {
 
 typedef struct tagDrawParam {
     //params pass down
+    
+    //world space
+//    NEVector3 vert0;
+//    NEVector3 vert1;
+//    NEVector3 vert2;
+    
+    NEVector3 normal0;
+    NEVector3 normal1;
+    NEVector3 normal2;
+    
     //camera space
     NEVector3 vert0c;
     NEVector3 vert1c;
@@ -72,10 +82,6 @@ typedef struct tagDrawParam {
     NEVector3 vert0t;
     NEVector3 vert1t;
     NEVector3 vert2t;
-    
-    NEVector3 normal0t;
-    NEVector3 normal1t;
-    NEVector3 normal2t;
     
     NEMaterialParam material;
     

@@ -235,6 +235,10 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 v1 = vectorFromVertice(_v1, mesh);
         NEVector3 v2 = vectorFromVertice(_v2, mesh);
         
+//        drawParam.vert0 = v0;
+//        drawParam.vert1 = v1;
+//        drawParam.vert2 = v2;
+//        
         NEVector3 v0c = convertToCameraSpace(v0);
         NEVector3 v1c = convertToCameraSpace(v1);
         NEVector3 v2c = convertToCameraSpace(v2);
@@ -254,6 +258,10 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
         NEVector3 noraml0 = convertNormal(_v0.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
         NEVector3 noraml1 = convertNormal(_v1.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
         NEVector3 noraml2 = convertNormal(_v2.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
+        
+        drawParam.normal0 = noraml0;
+        drawParam.normal1 = noraml1;
+        drawParam.normal2 = noraml2;
         
         NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
         NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);
