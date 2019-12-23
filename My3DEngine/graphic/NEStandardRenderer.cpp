@@ -359,7 +359,7 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
             //the point in eye space inside the triangle
             NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
             
-            _depthBufferMutex.lock();
+//            _depthBufferMutex.lock();
             
             if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
                 continue;
@@ -367,7 +367,7 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
             
             DepthInfo info = _depthBuffer.getInfo(x, y);
             
-            _depthBufferMutex.unlock();
+//            _depthBufferMutex.unlock();
             float oldZ = info.z;
             
 #define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
@@ -387,26 +387,26 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
                 
                 long oldIndex = info.additionalInfo;
                 if (_renderBuffer) {
-                    _renderBufferMutex.lock();
                     if (oldIndex > 0) {
                         oldIndex --;
                         _renderBuffer[oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, tColor)
                         ;
                     } else {
+                        _renderBufferMutex.lock();
                         _renderBuffer[_renderBufferSize] = COMPOSE_RENDER_BUF_VAL(x, y, tColor);
                         _renderBufferSize ++;
-                        
                         info.additionalInfo = _renderBufferSize;
+                        _renderBufferMutex.unlock();
                     }
-                    _renderBufferMutex.unlock();
+                    
                 }
                 
                 info.z = point.z;
                 info.color = tColor;
                 
-                _depthBufferMutex.lock();
+//                _depthBufferMutex.lock();
                 _depthBuffer.setInfo(info, x, y);
-                _depthBufferMutex.unlock();
+//                _depthBufferMutex.unlock();
             } else {
 //                    int i = 0;
             }
