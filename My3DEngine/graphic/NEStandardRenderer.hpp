@@ -10,6 +10,7 @@
 #define NEStandardRenderer_hpp
 
 #include <stdio.h>
+#include <mutex>
 #include "NEDepthBuffer.hpp"
 #include "NECamera.hpp"
 #include "NEMesh.h"
@@ -113,7 +114,19 @@ typedef struct tagDrawParam {
 
 class NEStandardRenderer {
 private:
+    //mutex
+    std::mutex _meshMutex;
+    std::mutex _depthBufferMutex;
+    std::mutex _renderBufferMutex;
+
+    int MTMeshDispatchIndex = 0;
     
+    int threadCount = 4;
+    
+    bool fetchMesh(NEMesh & mesh, const std::vector<NEMesh> &meshes);
+    bool fetchFace(NEFace & mesh, const std::vector<NEFace> &faces);
+    
+    void drawFace(const NEFace &aface,const NEMesh &mesh,  NEVector3 &originPosC,  ShaderParam &drawParam, NEMatrix3 &meshRotationMat_x, NEMatrix3 &meshRotationMat_y, NEMatrix3 &meshRotationMat_z);
 protected:
     NEStandardRenderer(){}
     

@@ -9,6 +9,7 @@
 #include "NEStandardRenderer.hpp"
 #include "NECommon.h"
 #include <math.h>
+#include <thread>
 
 #define TRIANGLE_VERT_DEPTH_TEST
 
@@ -173,11 +174,47 @@ void NEStandardRenderer::createRenderBuffer(int size){
     }
 }
 
+bool NEStandardRenderer::fetchMesh(NEMesh & mesh, const std::vector<NEMesh> &meshes){
+    std::lock_guard<std::mutex> lg(_meshMutex);
+    
+    if (MTMeshDispatchIndex >= meshes.size()) {
+        return false;
+    }
+    
+    mesh = meshes[MTMeshDispatchIndex ++];
+    
+    return true;
+}
+
+bool NEStandardRenderer::fetchFace(NEFace & mesh, const std::vector<NEFace> &faces){
+    std::lock_guard<std::mutex> lg(_meshMutex);
+    
+    if (MTMeshDispatchIndex >= faces.size()) {
+        return false;
+    }
+    
+    mesh = faces[MTMeshDispatchIndex ++];
+    
+    return true;
+}
 
 void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
     _depthBuffer.resetSize();
     
     prepareDrawMeshes(meshes);
+    
+//    for (int i = 0; i < threadCount; i++) {
+//        std::thread threadDrawMesh([this, meshes]{
+//            NEMesh mesh;
+//            while(this->fetchMesh(mesh, meshes)){
+//                if (!mesh.hidden) {
+//                    this->drawMesh(mesh);
+//                }
+//            }
+//        });
+//
+//        threadDrawMesh.join();
+//    }
     
     for (int i = 0; i < meshes.size(); i++) {
         const NEMesh & mesh = meshes[i];
@@ -187,15 +224,200 @@ void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
     }
     
     finishDrawMeshes(meshes);
+    
+    MTMeshDispatchIndex = 0;
+}
+
+void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVector3 &originPosC,  ShaderParam &drawParam, NEMatrix3 &meshRotationMat_x, NEMatrix3 &meshRotationMat_y, NEMatrix3 &meshRotationMat_z){
+    float screenWidth = _screenWidth * COORD_AMPLIFY_FACTOR;
+    float screenHeight = _screenHeight * COORD_AMPLIFY_FACTOR;
+    
+    long long color = aface.color;
+    //        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
+            
+    const NEVertice & _v0 = mesh.vertices[aface.aIndex];
+    const NEVertice & _v1 = mesh.vertices[aface.bIndex];
+    const NEVertice & _v2 = mesh.vertices[aface.cIndex];
+    
+    drawParam.material.uv0 = _v0.textureCoord;
+    drawParam.material.uv1 = _v1.textureCoord;
+    drawParam.material.uv2 = _v2.textureCoord;
+    
+//        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
+//        _normal = convertNormal(_normal, mesh);
+    
+    NEVector3 v0 = vectorFromVertice(_v0, mesh);
+    NEVector3 v1 = vectorFromVertice(_v1, mesh);
+    NEVector3 v2 = vectorFromVertice(_v2, mesh);
+    
+//        drawParam.vert0 = v0;
+//        drawParam.vert1 = v1;
+//        drawParam.vert2 = v2;
+//
+    NEVector3 v0c = convertToCameraSpace(v0);
+    NEVector3 v1c = convertToCameraSpace(v1);
+    NEVector3 v2c = convertToCameraSpace(v2);
+    
+    drawParam.vert0c = v0c;
+    drawParam.vert1c = v1c;
+    drawParam.vert2c = v2c;
+    
+    NEVector3 v0t = convertToEyeSpace(v0);
+    NEVector3 v1t = convertToEyeSpace(v1);
+    NEVector3 v2t = convertToEyeSpace(v2);
+    
+    drawParam.vert0t = v0t;
+    drawParam.vert1t = v1t;
+    drawParam.vert2t = v2t;
+    
+    NEVector3 noraml0 = convertNormal(_v0.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
+    NEVector3 noraml1 = convertNormal(_v1.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
+    NEVector3 noraml2 = convertNormal(_v2.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
+    
+    drawParam.normal0 = noraml0;
+    drawParam.normal1 = noraml1;
+    drawParam.normal2 = noraml2;
+    
+    NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
+    NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);
+    NEVector3 normal2c = convertVectorToCameraSpace(noraml2, originPosC);
+    
+    drawParam.normal0c = normal0c;
+    drawParam.normal1c = normal1c;
+    drawParam.normal2c = normal2c;
+    
+    prepareDrawFace(aface, drawParam);
+    
+//        float pointInVew0 = [self pointInVewForVector3:v0t];
+//        float pointInVew1 = [self pointInVewForVector3:v1t];
+//        float pointInVew2 = [self pointInVewForVector3:v2t];
+    
+    NEVector2 v0InView = pointInVewForVector3(v0t);
+    NEVector2 v1InView = pointInVewForVector3(v1t);
+    NEVector2 v2InView = pointInVewForVector3(v2t);
+    
+/*#ifdef TRIANGLE_VERT_DEPTH_TEST
+#define isOutOfView(v) (v.x > depthBufWidth || v.x < 0 || v.y > depthBufHeight || v.y < 0)
+    int depthBufWidth = _depthBuffer.getWidth();
+    int depthBufHeight = _depthBuffer.getHeight();
+    if (isOutOfView(v0InView) && isOutOfView(v1InView) &&
+        isOutOfView(v2InView)) {
+        continue;
+    }
+    
+    DepthInfo info0 = _depthBuffer.getInfo(v0InView.x, v0InView.y);
+    DepthInfo info1 = _depthBuffer.getInfo(v1InView.x, v1InView.y);
+    DepthInfo info2 = _depthBuffer.getInfo(v2InView.x, v2InView.y);
+    if (v0t.z > info0.z && v1t.z > info1.z && v2t.z > info2.z) {
+        //all 3 vert of face fail z test
+        continue;
+    }
+#endif*/
+    
+    float minx = MIN(MIN(v0InView.x, v1InView.x), v2InView.x);
+    float miny = MIN(MIN(v0InView.y, v1InView.y), v2InView.y);
+    
+    if (minx < 0) {minx = 0;}
+    if (miny < 0) {miny = 0;}
+    
+    float maxx = MAX(MAX(v0InView.x, v1InView.x), v2InView.x);
+    float maxy = MAX(MAX(v0InView.y, v1InView.y), v2InView.y);
+    
+    if (maxx > screenWidth) {maxx = screenWidth;}
+    if (maxy > screenHeight) {maxy = screenHeight;}
+    
+    NEBoundingBox boundingBox;
+    boundingBox.startX = (int)minx;
+    boundingBox.startY = (int)miny;
+    
+    boundingBox.endX = (int)maxx;
+    boundingBox.endY = (int)maxy;
+    
+    //normalReal is the normal calculated from 3 vertices
+    NEVector3 normalRealt = getPlaneNormal(v0t, v1t, v2t);
+    
+    //preDefined Normal affects light blend effect
+//        NEVector3 preDefinedNormalt = [self convertVectorToEyeSpace:_normal originInEyeSpace:originPosT];
+    
+//        NEVector3 preDefinedNormalC = convertVectorToCameraSpace(_normal, originPosC);
+    
+    float reverseHorizontalFactor = (1 / (screenWidth/2));
+    float reverseVerticalFactor = (1 / (screenHeight/2));
+    
+    for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
+        drawParam.newLine = true;
+        for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
+            NEVector2 p = NEVector2Make(x, y);
+            //performance bottleneck
+            if (!isPointInsideTriangle(p, v0InView, v1InView, v2InView)) {
+                continue;
+            }
+                
+            float revertX = revertScreenHorizatalPos(x, reverseHorizontalFactor);
+            float revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
+            
+            //the point in eye space inside the triangle
+            NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
+            
+            _depthBufferMutex.lock();
+            
+            if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
+                continue;
+            }
+            
+            DepthInfo info = _depthBuffer.getInfo(x, y);
+            
+            _depthBufferMutex.unlock();
+            float oldZ = info.z;
+            
+#define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
+            if (point.z < oldZ) {
+                drawParam.position_t = point;
+                //refering the 3 vertice
+                NEVector3 pointc ;
+//                    if (camera.isOthorgraphics()) {
+//                        pointc = invertOrthographicsProject(point, camera.frustum);
+//                    } else {
+//                        pointc = invertPerspetiveProject(point, camera.frustum);
+//                    }
+                
+                pointc = camera.invertProject(point);
+                
+                long tColor = FragmentShaderFunc(color, pointc, drawParam,  nullptr);
+                
+                long oldIndex = info.additionalInfo;
+                if (_renderBuffer) {
+                    _renderBufferMutex.lock();
+                    if (oldIndex > 0) {
+                        oldIndex --;
+                        _renderBuffer[oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, tColor)
+                        ;
+                    } else {
+                        _renderBuffer[_renderBufferSize] = COMPOSE_RENDER_BUF_VAL(x, y, tColor);
+                        _renderBufferSize ++;
+                        
+                        info.additionalInfo = _renderBufferSize;
+                    }
+                    _renderBufferMutex.unlock();
+                }
+                
+                info.z = point.z;
+                info.color = tColor;
+                
+                _depthBufferMutex.lock();
+                _depthBuffer.setInfo(info, x, y);
+                _depthBufferMutex.unlock();
+            } else {
+//                    int i = 0;
+            }
+        }
+    }
 }
 
 void NEStandardRenderer::drawMesh(const NEMesh &mesh){
     NELog("mesh draw begin >>>>>>>>>> faces:%lu\n", mesh.faces.size());
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
-    
-    float screenWidth = _screenWidth * COORD_AMPLIFY_FACTOR;
-    float screenHeight = _screenHeight * COORD_AMPLIFY_FACTOR;
     
     NEVector3 originW = NEVector3Make(0, 0, 0);
     NEVector3 originPosC = convertToCameraSpace(originW);
@@ -216,180 +438,52 @@ void NEStandardRenderer::drawMesh(const NEMesh &mesh){
     NEMatrix3 meshRotationMat_z =  makeRotationMatrix(NEVector3Make(0, 0, 1), mesh.roatation.z);
 //    NEVector3 dummyNormal = NEVector3Make(0, 0, 0);
     
-    for (const NEFace & aface : mesh.faces) {
-        long long color = aface.color;
-//        CGContextSetFillColorWithColor(context, HEXRGBCOLOR(aface.color).CGColor);
-        
-        const NEVertice & _v0 = mesh.vertices[aface.aIndex];
-        const NEVertice & _v1 = mesh.vertices[aface.bIndex];
-        const NEVertice & _v2 = mesh.vertices[aface.cIndex];
-        
-        drawParam.material.uv0 = _v0.textureCoord;
-        drawParam.material.uv1 = _v1.textureCoord;
-        drawParam.material.uv2 = _v2.textureCoord;
-        
-//        NEVector3 _normal = mixNormal(_v0.normal, _v1.normal, _v2.normal);
-//        _normal = convertNormal(_normal, mesh);
-        
-        NEVector3 v0 = vectorFromVertice(_v0, mesh);
-        NEVector3 v1 = vectorFromVertice(_v1, mesh);
-        NEVector3 v2 = vectorFromVertice(_v2, mesh);
-        
-//        drawParam.vert0 = v0;
-//        drawParam.vert1 = v1;
-//        drawParam.vert2 = v2;
-//        
-        NEVector3 v0c = convertToCameraSpace(v0);
-        NEVector3 v1c = convertToCameraSpace(v1);
-        NEVector3 v2c = convertToCameraSpace(v2);
-        
-        drawParam.vert0c = v0c;
-        drawParam.vert1c = v1c;
-        drawParam.vert2c = v2c;
-        
-        NEVector3 v0t = convertToEyeSpace(v0);
-        NEVector3 v1t = convertToEyeSpace(v1);
-        NEVector3 v2t = convertToEyeSpace(v2);
-        
-        drawParam.vert0t = v0t;
-        drawParam.vert1t = v1t;
-        drawParam.vert2t = v2t;
-        
-        NEVector3 noraml0 = convertNormal(_v0.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
-        NEVector3 noraml1 = convertNormal(_v1.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
-        NEVector3 noraml2 = convertNormal(_v2.normal, &meshRotationMat_x, &meshRotationMat_y, &meshRotationMat_z);
-        
-        drawParam.normal0 = noraml0;
-        drawParam.normal1 = noraml1;
-        drawParam.normal2 = noraml2;
-        
-        NEVector3 normal0c = convertVectorToCameraSpace(noraml0, originPosC);
-        NEVector3 normal1c = convertVectorToCameraSpace(noraml1, originPosC);
-        NEVector3 normal2c = convertVectorToCameraSpace(noraml2, originPosC);
-        
-        drawParam.normal0c = normal0c;
-        drawParam.normal1c = normal1c;
-        drawParam.normal2c = normal2c;
-        
-        prepareDrawFace(aface, drawParam);
-        
-//        float pointInVew0 = [self pointInVewForVector3:v0t];
-//        float pointInVew1 = [self pointInVewForVector3:v1t];
-//        float pointInVew2 = [self pointInVewForVector3:v2t];
-        
-        NEVector2 v0InView = pointInVewForVector3(v0t);
-        NEVector2 v1InView = pointInVewForVector3(v1t);
-        NEVector2 v2InView = pointInVewForVector3(v2t);
-        
-/*#ifdef TRIANGLE_VERT_DEPTH_TEST
-#define isOutOfView(v) (v.x > depthBufWidth || v.x < 0 || v.y > depthBufHeight || v.y < 0)
-        int depthBufWidth = _depthBuffer.getWidth();
-        int depthBufHeight = _depthBuffer.getHeight();
-        if (isOutOfView(v0InView) && isOutOfView(v1InView) &&
-            isOutOfView(v2InView)) {
-            continue;
-        }
-        
-        DepthInfo info0 = _depthBuffer.getInfo(v0InView.x, v0InView.y);
-        DepthInfo info1 = _depthBuffer.getInfo(v1InView.x, v1InView.y);
-        DepthInfo info2 = _depthBuffer.getInfo(v2InView.x, v2InView.y);
-        if (v0t.z > info0.z && v1t.z > info1.z && v2t.z > info2.z) {
-            //all 3 vert of face fail z test
-            continue;
-        }
-#endif*/
-        
-        float minx = MIN(MIN(v0InView.x, v1InView.x), v2InView.x);
-        float miny = MIN(MIN(v0InView.y, v1InView.y), v2InView.y);
-        
-        if (minx < 0) {minx = 0;}
-        if (miny < 0) {miny = 0;}
-        
-        float maxx = MAX(MAX(v0InView.x, v1InView.x), v2InView.x);
-        float maxy = MAX(MAX(v0InView.y, v1InView.y), v2InView.y);
-        
-        if (maxx > screenWidth) {maxx = screenWidth;}
-        if (maxy > screenHeight) {maxy = screenHeight;}
-        
-        NEBoundingBox boundingBox;
-        boundingBox.startX = (int)minx;
-        boundingBox.startY = (int)miny;
-        
-        boundingBox.endX = (int)maxx;
-        boundingBox.endY = (int)maxy;
-        
-        //normalReal is the normal calculated from 3 vertices
-        NEVector3 normalRealt = getPlaneNormal(v0t, v1t, v2t);
-        
-        //preDefined Normal affects light blend effect
-//        NEVector3 preDefinedNormalt = [self convertVectorToEyeSpace:_normal originInEyeSpace:originPosT];
-        
-//        NEVector3 preDefinedNormalC = convertVectorToCameraSpace(_normal, originPosC);
-        
-        float reverseHorizontalFactor = (1 / (screenWidth/2));
-        float reverseVerticalFactor = (1 / (screenHeight/2));
-        
-        for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
-            drawParam.newLine = true;
-            for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
-                NEVector2 p = NEVector2Make(x, y);
-                //performance bottleneck
-                if (!isPointInsideTriangle(p, v0InView, v1InView, v2InView)) {
-                    continue;
-                }
-                    
-                float revertX = revertScreenHorizatalPos(x, reverseHorizontalFactor);
-                float revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
-                
-                //the point in eye space inside the triangle
-                NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
-                
-                if (x > _depthBuffer.getWidth() || x < 0 || y > _depthBuffer.getHeight() || y < 0) {
-                    continue;
-                }
-                
-                DepthInfo info = _depthBuffer.getInfo(x, y);
-                float oldZ = info.z;
-                
-#define COMPOSE_RENDER_BUF_VAL(x, y, color) ((x | (y << 16)) | (color << 32))
-                if (point.z < oldZ) {
-                    drawParam.position_t = point;
-                    //refering the 3 vertice
-                    NEVector3 pointc ;
-//                    if (camera.isOthorgraphics()) {
-//                        pointc = invertOrthographicsProject(point, camera.frustum);
-//                    } else {
-//                        pointc = invertPerspetiveProject(point, camera.frustum);
-//                    }
-                    
-                    pointc = camera.invertProject(point);
-                    
-                    long tColor = FragmentShaderFunc(color, pointc, drawParam,  nullptr);
-                    
-                    long oldIndex = info.additionalInfo;
-                    if (_renderBuffer) {
-                        if (oldIndex > 0) {
-                            oldIndex --;
-                            _renderBuffer[oldIndex] = COMPOSE_RENDER_BUF_VAL(x, y, tColor)
-                            ;
-                        } else {
-                            _renderBuffer[_renderBufferSize] = COMPOSE_RENDER_BUF_VAL(x, y, tColor);
-                            _renderBufferSize ++;
-                            
-                            info.additionalInfo = _renderBufferSize;
-                        }
-                    }
-                    
-                    info.z = point.z;
-                    info.color = tColor;
-                    
-                    _depthBuffer.setInfo(info, x, y);
-                } else {
-//                    int i = 0;
-                }
+//    for (const NEFace & aface : mesh.faces) {
+//        drawFace(aface, mesh, originPosC, drawParam, meshRotationMat_x, meshRotationMat_y, meshRotationMat_z);
+//    }
+    
+    std::vector<std::thread> threads;
+    
+    for (int i = 0; i < threadCount; i++) {
+//        std::thread threadDrawFace([&]{
+//            NEFace face;
+//            ShaderParam adrawParam;
+//
+//            adrawParam.material.hasTexture = mesh.hasTexture;
+//            adrawParam.material.materialIndex = mesh.materialIndex;
+//            adrawParam.material.textureStack.clear();
+//
+//            NEVector3 originW = NEVector3Make(0, 0, 0);
+//            NEVector3 originPosCam = convertToCameraSpace(originW);
+//
+//            while(this->fetchFace(face, mesh.faces)){
+//                this->drawFace(face, mesh, originPosCam, adrawParam, meshRotationMat_x, meshRotationMat_y, meshRotationMat_z);;
+//            }
+//        });
+
+        threads.emplace_back(std::thread([&]{
+            NEFace face;
+            ShaderParam adrawParam;
+            
+            adrawParam.material.hasTexture = mesh.hasTexture;
+            adrawParam.material.materialIndex = mesh.materialIndex;
+            adrawParam.material.textureStack.clear();
+            
+            NEVector3 originW = NEVector3Make(0, 0, 0);
+            NEVector3 originPosCam = convertToCameraSpace(originW);
+            
+            while(this->fetchFace(face, mesh.faces)){
+                this->drawFace(face, mesh, originPosCam, adrawParam, meshRotationMat_x, meshRotationMat_y, meshRotationMat_z);;
             }
-        }
+        }));
+        
     }
+    
+    for (auto &thread:threads) {
+        thread.join();
+    }
+    
+    MTMeshDispatchIndex = 0;
 }
 
 inline float getLightToPointAngle(NEVector3 & point, NEVector3 & lightPosT, NEVector3 & preDefinedNormal){
