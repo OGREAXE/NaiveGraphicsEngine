@@ -415,7 +415,43 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
 }
 
 void NEStandardRenderer::drawMesh(const NEMesh &mesh){
-    NELog("mesh draw begin >>>>>>>>>> faces:%lu\n", mesh.faces.size());
+    if (threadCount <= 1) {
+        drawMeshST(mesh);
+    } else {
+        drawMeshMT(mesh);
+    }
+}
+
+void NEStandardRenderer::drawMeshST(const NEMesh &mesh){
+//    NELog("mesh draw begin >>>>>>>>>> faces:%lu\n", mesh.faces.size());
+    //    CGContextRef context = UIGraphicsGetCurrentContext();
+    //    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
+        
+    NEVector3 originW = NEVector3Make(0, 0, 0);
+    NEVector3 originPosC = convertToCameraSpace(originW);
+    
+    //do invert projection test here
+//    [self testInvertProject:mesh];
+//    return;
+    //end test
+    
+    ShaderParam drawParam;
+    
+    drawParam.material.hasTexture = mesh.hasTexture;
+    drawParam.material.materialIndex = mesh.materialIndex;
+    drawParam.material.textureStack.clear();
+    
+    NEMatrix3 meshRotationMat_x =  makeRotationMatrix(NEVector3Make(1, 0, 0), mesh.roatation.x);
+    NEMatrix3 meshRotationMat_y =  makeRotationMatrix(NEVector3Make(0, 1, 0), mesh.roatation.y);
+    NEMatrix3 meshRotationMat_z =  makeRotationMatrix(NEVector3Make(0, 0, 1), mesh.roatation.z);
+    
+    for (const NEFace & aface : mesh.faces) {
+        drawFace(aface, mesh, originPosC, drawParam, meshRotationMat_x, meshRotationMat_y, meshRotationMat_z);
+    }
+}
+
+void NEStandardRenderer::drawMeshMT(const NEMesh &mesh){
+//    NELog("mesh draw begin >>>>>>>>>> faces:%lu\n", mesh.faces.size());
 //    CGContextRef context = UIGraphicsGetCurrentContext();
 //    CGFloat fillWidth = 1./COORD_AMPLIFY_FACTOR;
     

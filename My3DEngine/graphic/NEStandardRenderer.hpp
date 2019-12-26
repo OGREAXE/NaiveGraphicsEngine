@@ -121,7 +121,7 @@ private:
 
     int MTMeshDispatchIndex = 0;
     
-    int threadCount = 4;
+    int threadCount = 1;
     
     bool fetchMesh(NEMesh & mesh, const std::vector<NEMesh> &meshes);
     bool fetchFace(NEFace & mesh, const std::vector<NEFace> &faces);
@@ -141,6 +141,9 @@ protected:
     int _screenHeight;
     
     void drawMesh(const NEMesh &mesh);
+    
+    void drawMeshMT(const NEMesh &mesh);
+    void drawMeshST(const NEMesh &mesh);
 
 protected:
     //util methods
