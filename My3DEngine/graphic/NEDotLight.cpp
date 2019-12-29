@@ -17,5 +17,5 @@ void NEDotLight::renderIfNeed(const std::vector<NEMesh> &meshes){
     
     _renderer->drawMeshes(meshes);
     
-    _needRedrawMap = false;
+//    _needRedrawMap = false;
 }

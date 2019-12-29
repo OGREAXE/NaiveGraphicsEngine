@@ -25,7 +25,7 @@ class NEDotLight {
     NEVector3 _yAxisInRealCameraSpace;
 public:
     NEDotLight(){
-        _renderer = new NEDotLightRenderer(1500, 1500);
+        _renderer = new NEDotLightRenderer(1000, 1000);
         _needRedrawMap = true;
     }
     ~NEDotLight(){

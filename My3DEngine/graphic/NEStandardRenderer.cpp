@@ -463,11 +463,11 @@ void NEStandardRenderer::drawMeshMT(const NEMesh &mesh){
 //    return;
     //end test
     
-    ShaderParam drawParam;
-    
-    drawParam.material.hasTexture = mesh.hasTexture;
-    drawParam.material.materialIndex = mesh.materialIndex;
-    drawParam.material.textureStack.clear();
+//    ShaderParam drawParam;
+//
+//    drawParam.material.hasTexture = mesh.hasTexture;
+//    drawParam.material.materialIndex = mesh.materialIndex;
+//    drawParam.material.textureStack.clear();
     
     NEMatrix3 meshRotationMat_x =  makeRotationMatrix(NEVector3Make(1, 0, 0), mesh.roatation.x);
     NEMatrix3 meshRotationMat_y =  makeRotationMatrix(NEVector3Make(0, 1, 0), mesh.roatation.y);
