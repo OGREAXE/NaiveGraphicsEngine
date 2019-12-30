@@ -13,13 +13,16 @@ using namespace std;
 int NE_DEPTHBUFFER_OK = 0;
 int NE_DEPTHBUFFER_PARAM_ERROR = 1;
 
+NEDepthBuffer::NEDepthBuffer(int width, int height):m_width(width), m_height(height){
+    m_depthInfoMap = (DepthInfo *)malloc(sizeof(DepthInfo) * width * height);
+}
+
 void NEDepthBuffer::initMap(){
-    m_depthInfoMap.resize(m_height);
+    if (!m_depthInfoMap) {
+        m_depthInfoMap = (DepthInfo *)malloc(sizeof(DepthInfo) * m_width * m_height);
+    }
     
     for (int i = 0; i < m_height; i++) {
-        vector<DepthInfo> aRow(m_width);
-        m_depthInfoMap[i] = aRow;
-        
         for (int j = 0; j < m_width; j++) {
             //set to -2 'cause NDC range is (-1, 1)
             setZ(2, j, i);
@@ -32,7 +35,7 @@ int NEDepthBuffer::setInfo(DepthInfo & info, int x, int y){
         return NE_DEPTHBUFFER_PARAM_ERROR;
     }
     
-    m_depthInfoMap[y][x] = info;
+    m_depthInfoMap[y * m_width + x] = info;
     return NE_DEPTHBUFFER_OK;
 }
 
@@ -42,7 +45,7 @@ DepthInfo NEDepthBuffer::getInfo(int x, int y){
         return {-2, 0, 0};
     }
     
-    return m_depthInfoMap[y][x];
+    return m_depthInfoMap[y * m_width + x];
 }
 
 int NEDepthBuffer::setZ(float zVal, int x, int y){
@@ -58,5 +61,5 @@ float NEDepthBuffer::getZ(int x, int y){
         return 0;
     }
     
-    return m_depthInfoMap[y][x].z;
+    return m_depthInfoMap[y * m_width + x].z;
 }

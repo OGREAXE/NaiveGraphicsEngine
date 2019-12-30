@@ -223,7 +223,7 @@ void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
         }
     }
     
-//    finishDrawMeshes(meshes);
+    finishDrawMeshes(meshes);
     
     MTMeshDispatchIndex = 0;
 }
