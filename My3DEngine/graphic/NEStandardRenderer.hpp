@@ -190,6 +190,9 @@ public:
     void drawMeshes(const std::vector<NEMesh> &meshes);
     
     const RenderBufferType * getRenderBuffer(int &size){ size = _renderBufferSize; return _renderBuffer;}
+    
+public:
+    void setThreadCount(int count){threadCount = count;}
 };
 
 #endif /* NEStandardRenderer_hpp */
