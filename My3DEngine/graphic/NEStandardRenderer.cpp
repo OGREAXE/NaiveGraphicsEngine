@@ -223,7 +223,7 @@ void NEStandardRenderer::drawMeshes(const std::vector<NEMesh> &meshes){
         }
     }
     
-    finishDrawMeshes(meshes);
+//    finishDrawMeshes(meshes);
     
     MTMeshDispatchIndex = 0;
 }
@@ -346,6 +346,7 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
     
     for (int y = boundingBox.startY; y <= boundingBox.endY; y ++) {
         drawParam.newLine = true;
+        float revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
         for (int x = boundingBox.startX; x <= boundingBox.endX; x ++) {
             NEVector2 p = NEVector2Make(x, y);
             //performance bottleneck
@@ -354,7 +355,6 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
             }
                 
             float revertX = revertScreenHorizatalPos(x, reverseHorizontalFactor);
-            float revertY = revertScreenVerticalPos(y, reverseVerticalFactor);
             
             //the point in eye space inside the triangle
             NEVector3 point = getPointInPlane(revertX, revertY, normalRealt, v0t);
@@ -374,14 +374,7 @@ void NEStandardRenderer::drawFace(const NEFace &aface,const NEMesh &mesh,  NEVec
             if (point.z < oldZ) {
                 drawParam.position_t = point;
                 //refering the 3 vertice
-                NEVector3 pointc ;
-//                    if (camera.isOthorgraphics()) {
-//                        pointc = invertOrthographicsProject(point, camera.frustum);
-//                    } else {
-//                        pointc = invertPerspetiveProject(point, camera.frustum);
-//                    }
-                
-                pointc = camera.invertProject(point);
+                NEVector3 pointc = camera.invertProject(point);
                 
                 long tColor = FragmentShaderFunc(color, pointc, drawParam,  nullptr);
                 
